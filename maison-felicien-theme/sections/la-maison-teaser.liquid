@@ -2,9 +2,7 @@
 <section class="manifeste">
   <div class="mani-photo-side">
     <div class="mani-photo"
-      {%- if section.settings.image -%}
-        style="background-image:url('{{ section.settings.image | image_url: width: 1200 }}')"
-      {%- endif -%}></div>
+      style="background-image:url('{% if section.settings.image %}{{ section.settings.image | image_url: width: 1200 }}{% else %}{{ 'mani-photo.jpg' | asset_url }}{% endif %}')"></div>
     <div class="mani-photo-overlay"></div>
     <span class="mani-date-strip">{{ section.settings.date_strip | default: 'Maison Félicien — Paris — Fondée 2023' }}</span>
   </div>
@@ -12,7 +10,7 @@
   <div class="mani-text-side">
     <div class="mani-eyebrow reveal d1">{{ section.settings.eyebrow | default: 'La Maison' }}</div>
     <h2 class="mani-headline reveal d2">{{ section.settings.headline | default: 'Un jardin<br><em>façonné</em><br><strong>à la main.</strong>' }}</h2>
-    <p class="mani-body reveal d3">{{ section.settings.body | default: "Maison Félicien est née d'une conviction : la pâtisserie est un art vivant, saisonnier, ancré dans le geste. Chaque recette est pensée comme un tableau — ingrédients choisis, textures composées, saveurs orchestrées." }}</p>
+    <p class="mani-body reveal d3">{{ section.settings.body | default: "Maison Félicien est née d'une conviction : que la gourmandise peut être un acte de soin. Chaque création naît en atelier, au rythme des saisons, avec des matières choisies pour leur caractère et leur sincérité." }}</p>
     <div class="mani-quote reveal d4">
       <p>{{ section.settings.quote | default: "La nature n'est pas brute. Elle est cultivée, dessinée, sublimée." }}</p>
       <cite>{{ section.settings.quote_author | default: '— La fondatrice' }}</cite>

@@ -1,16 +1,19 @@
 {%- comment -%} ═══ NEWSLETTER / PREFOOTER ═══ {%- endcomment -%}
 <div class="prefooter">
-  <span class="pf-eyebrow reveal">{{ 'newsletter.eyebrow' | t }}</span>
+  <div class="prefooter-deco">
+    {%- render 'svg-logo', width: 160, height: 91, color: 'rgba(240,240,230,.05)', id: 'pf-deco' -%}
+  </div>
+  <span class="pf-eyebrow reveal">{{ 'newsletter.eyebrow' | t | default: 'La lettre de la maison' }}</span>
   <h2 class="pf-title reveal d1">Restez dans<br><em>le jardin.</em></h2>
-  <p class="pf-sub reveal d2">{{ 'newsletter.subtitle' | t }}</p>
+  <p class="pf-sub reveal d2">{{ 'newsletter.subtitle' | t | default: "Nouvelles recettes, saisons, histoires d'atelier. Une lettre rare, jamais banale." }}</p>
   {%- form 'customer', id: 'newsletter-form' -%}
     <input type="hidden" name="contact[tags]" value="newsletter">
     <div class="pf-form reveal d3">
       <input class="pf-input" type="email" name="contact[email]" placeholder="votre@email.com" required>
-      <button class="pf-btn" type="submit">{{ 'general.subscribe' | t }}</button>
+      <button class="pf-btn" type="submit">S'inscrire</button>
     </div>
   {%- endform -%}
-  <span class="pf-rgpd reveal d4">{{ 'general.no_spam' | t }}</span>
+  <span class="pf-rgpd reveal d4">{{ 'general.no_spam' | t | default: 'Pas de spam. Désinscription en un clic.' }}</span>
 </div>
 
 {%- comment -%} ═══ FOOTER ═══ {%- endcomment -%}
@@ -22,7 +25,7 @@
       <a class="fc-logo" href="/">
         {%- render 'svg-logo', width: 48, height: 50, color: '#F0F0E6', id: 'footer' -%}
       </a>
-      <p class="fc-tagline">{{ 'footer.tagline' | t }}</p>
+      <p class="fc-tagline">La nature cultivée, dessinée, sublimée. Un atelier parisien.</p>
       <div class="fc-socials">
         {%- if settings.social_instagram != blank -%}
           <a class="fc-social" href="{{ settings.social_instagram }}" title="Instagram" target="_blank" rel="noopener">Ig</a>
@@ -38,31 +41,31 @@
 
     {%- comment -%} Boutique {%- endcomment -%}
     <div class="fc-nav reveal d1">
-      <h4>{{ 'general.shop' | t }}</h4>
+      <h4>Boutique</h4>
       <ul>
-        <li><a href="/collections">{{ 'footer.all_creations' | t }}</a></li>
-        <li><a href="/collections">{{ 'footer.new_arrivals' | t }}</a></li>
-        <li><a href="/collections">{{ 'footer.gift_boxes' | t }}</a></li>
-        <li><a href="/collections">{{ 'footer.click_collect' | t }}</a></li>
-        <li><a href="/collections">{{ 'footer.delivery' | t }}</a></li>
+        <li><a href="/collections">Toutes les créations</a></li>
+        <li><a href="/collections">Nouveautés</a></li>
+        <li><a href="/collections">Coffrets cadeaux</a></li>
+        <li><a href="/collections">Click & collect</a></li>
+        <li><a href="/collections">Livraison</a></li>
       </ul>
     </div>
 
     {%- comment -%} La Maison {%- endcomment -%}
     <div class="fc-nav reveal d2">
-      <h4>{{ 'general.la_maison' | t }}</h4>
+      <h4>La Maison</h4>
       <ul>
-        <li><a href="{{ pages['la-maison'].url | default: '#' }}">{{ 'footer.our_story' | t }}</a></li>
-        <li><a href="{{ pages['la-maison'].url | default: '#' }}">{{ 'footer.workshop' | t }}</a></li>
-        <li><a href="{{ pages['la-maison'].url | default: '#' }}">{{ 'footer.seasonal_recipes' | t }}</a></li>
-        <li><a href="https://pro.maison-felicien.com">{{ 'footer.pro_space' | t }}</a></li>
-        <li><a href="{{ pages['la-maison'].url | default: '#' }}">{{ 'footer.press' | t }}</a></li>
+        <li><a href="{{ pages['la-maison'].url | default: '#' }}">Notre histoire</a></li>
+        <li><a href="{{ pages['la-maison'].url | default: '#' }}">L'atelier</a></li>
+        <li><a href="{{ pages['la-maison'].url | default: '#' }}">Recettes de saison</a></li>
+        <li><a href="https://pro.maison-felicien.com">Espace pro →</a></li>
+        <li><a href="{{ pages['la-maison'].url | default: '#' }}">Presse</a></li>
       </ul>
     </div>
 
     {%- comment -%} Contact {%- endcomment -%}
     <div class="fc-nav fc-contact reveal d3">
-      <h4>{{ 'footer.contact' | t }}</h4>
+      <h4>Contact</h4>
       <p>
         Paris, Île-de-France<br><br>
         <a href="mailto:contact@maisonfelicien.com">contact@maisonfelicien.com</a><br><br>
@@ -73,11 +76,12 @@
   </div>
 
   <div class="footer-bottom reveal">
-    <span class="fb-copy">{{ 'footer.copyright' | t }}</span>
+    <span class="fb-copy">© 2026 Maison Félicien — Tous droits réservés</span>
     <div class="fb-legal">
-      <a href="/pages/mentions-legales">{{ 'footer.legal' | t }}</a>
-      <a href="/pages/confidentialite">{{ 'footer.privacy' | t }}</a>
-      <a href="/pages/cgv">{{ 'footer.terms' | t }}</a>
+      <a href="/pages/mentions-legales">Mentions légales</a>
+      <a href="/pages/cgv">CGV</a>
+      <a href="/pages/confidentialite">Politique de confidentialité</a>
+      <a href="/pages/cookies">Cookies</a>
     </div>
   </div>
 </footer>
@@ -86,7 +90,7 @@
 {% schema %}
 {
   "name": "Pied de page",
-  "class": "section-footer",
+  "class": "section-pied-de-page",
   "settings": []
 }
 {% endschema %}

@@ -1,0 +1,69 @@
+{%- comment -%} ═══ LISTE DES COLLECTIONS / BOUTIQUE ═══ {%- endcomment -%}
+
+{%- comment -%} Hero éditorial {%- endcomment -%}
+<div class="editorial-hero">
+  <h1 class="eh-headline reveal">Nos<br><em>collections</em></h1>
+  <p class="eh-sub reveal d1">Parcourez nos univers et trouvez la création qui vous ressemble.</p>
+</div>
+
+{%- comment -%} Grille collections {%- endcomment -%}
+<div class="products-section">
+  <div class="products-grid" id="collectionsGrid">
+    {%- for collection in collections -%}
+      {%- unless collection.handle == 'all' -%}
+        {%- assign delay = forloop.index | modulo: 4 | plus: 1 -%}
+        <div class="pcard reveal d{{ delay }}">
+          <a href="{{ collection.url }}" style="text-decoration:none;color:inherit;">
+            <div class="pcard-img">
+              {%- if collection.image -%}
+                <div class="pcard-photo" style="background-image:url('{{ collection.image | image_url: width: 600 }}')"></div>
+              {%- elsif collection.products.first.featured_image -%}
+                <div class="pcard-photo" style="background-image:url('{{ collection.products.first.featured_image | image_url: width: 600 }}')"></div>
+              {%- else -%}
+                <div class="pcard-photo"></div>
+              {%- endif -%}
+              <div class="pcard-overlay">
+                <button class="pcard-quick">{{ 'general.discover' | t | default: 'Découvrir' }}</button>
+              </div>
+            </div>
+            <div class="pcard-name">{{ collection.title }}</div>
+            <div class="pcard-bottom">
+              <span class="pcard-price">{{ collection.products_count }} {{ collection.products_count | pluralize: 'produit', 'produits' }}</span>
+            </div>
+          </a>
+        </div>
+      {%- endunless -%}
+    {%- endfor -%}
+  </div>
+
+  {%- comment -%} Fallback si aucune collection {%- endcomment -%}
+  {%- if collections.size == 0 -%}
+    <p style="text-align:center;padding:60px 20px;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--marron);opacity:.6;">
+      Les collections arrivent bientôt.
+    </p>
+  {%- endif -%}
+</div>
+
+{%- comment -%} Barre livraison {%- endcomment -%}
+<div class="delivery">
+  <span class="di"><span class="di-dot"></span>Livraison nationale</span>
+  <span class="di-sep"></span>
+  <span class="di"><span class="di-dot"></span>Click & collect Paris</span>
+  <span class="di-sep"></span>
+  <span class="di"><span class="di-dot"></span>Emballage cadeau offert dès 35 €</span>
+  <span class="di-sep"></span>
+  <span class="di"><span class="di-dot"></span>Devis pro sous 24h</span>
+</div>
+
+{% schema %}
+{
+  "name": "Liste des collections",
+  "class": "section-list-collections",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Liste des collections"
+    }
+  ]
+}
+{% endschema %}

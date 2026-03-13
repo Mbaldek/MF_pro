@@ -8,12 +8,16 @@
       "type": "produits-vedette",
       "settings": {}
     },
-    "quiz": {
-      "type": "quiz-profil",
-      "settings": {}
-    },
     "la-maison": {
       "type": "la-maison-teaser",
+      "settings": {}
+    },
+    "savoir": {
+      "type": "savoir",
+      "settings": {}
+    },
+    "atelier": {
+      "type": "atelier",
       "settings": {}
     },
     "split-b2b": {
@@ -21,5 +25,5 @@
       "settings": {}
     }
   },
-  "order": ["hero", "produits-vedette", "quiz", "la-maison", "split-b2b"]
+  "order": ["hero", "produits-vedette", "la-maison", "savoir", "atelier", "split-b2b"]
 }

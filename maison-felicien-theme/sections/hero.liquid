@@ -1,9 +1,7 @@
 {%- comment -%} ═══ HERO HOMEPAGE ═══ {%- endcomment -%}
 <section class="hero">
   <div class="hero-photo"
-    {%- if section.settings.hero_image -%}
-      style="background-image:url('{{ section.settings.hero_image | image_url: width: 2000 }}')"
-    {%- endif -%}></div>
+    style="background-image:url('{% if section.settings.hero_image %}{{ section.settings.hero_image | image_url: width: 2000 }}{% else %}{{ 'hero-bg.jpg' | asset_url }}{% endif %}')"></div>
   <div class="hero-overlay"></div>
   <div class="hero-vignette"></div>
 
@@ -16,9 +14,10 @@
       {{ section.settings.cta_text | default: 'Découvrir nos créations' }}
       <span class="cta-arrow">→</span>
     </a>
-    <div class="hero-brand hero-entrance">
-      {%- render 'svg-logo', width: 160, height: 91, color: 'rgba(240,240,230,.12)', id: 'hero-brand' -%}
-    </div>
+  </div>
+
+  <div class="hero-brand hero-entrance">
+    {%- render 'svg-logo-full', width: 320, height: 181, color: 'rgba(240,240,230,.18)', id: 'hero-brand' -%}
   </div>
 
   <div class="hero-bottombar">

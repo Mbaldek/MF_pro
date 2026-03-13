@@ -1,37 +1,92 @@
 {%- comment -%} ═══ SPLIT B2C / B2B ═══ {%- endcomment -%}
-<div class="split">
+<div class="split reveal">
   <div class="split-divider"></div>
-  <div class="split-center-label"><div class="scl-inner">ou</div></div>
+
+  <div class="split-center-label">
+    <div class="scl-inner">ou</div>
+  </div>
 
   {%- comment -%} Panel B2C {%- endcomment -%}
   <div class="panel panel-b2c">
-    <div class="panel-bg"
-      {%- if section.settings.b2c_image -%}
-        style="background-image:url('{{ section.settings.b2c_image | image_url: width: 1000 }}')"
-      {%- endif -%}></div>
+    <div class="panel-photo" style="background-image:url('{% if section.settings.b2c_image %}{{ section.settings.b2c_image | image_url: width: 1200 }}{% else %}{{ 'panel-b2c.jpg' | asset_url }}{% endif %}')"></div>
     <div class="panel-overlay"></div>
+
+    <span class="panel-tag">{{ section.settings.b2c_tag | default: 'Particuliers' }}</span>
+
+    <div class="panel-logo">
+      {%- render 'svg-logo', width: 140, height: 80, color: 'rgba(240,240,230,.15)', id: 'panel-b2c' -%}
+    </div>
+
+    <span class="panel-num">01</span>
+
     <div class="panel-content">
       <span class="panel-eyebrow">{{ section.settings.b2c_eyebrow | default: 'Boutique en ligne' }}</span>
-      <h3 class="panel-title">{{ section.settings.b2c_title | default: 'Pour vous, pour offrir' }}</h3>
-      <p class="panel-desc">{{ section.settings.b2c_desc | default: 'Commandez en ligne, faites-vous livrer ou passez en click & collect. Emballage cadeau offert dès 35 €.' }}</p>
-      <a href="{{ section.settings.b2c_url | default: '/collections' }}" class="panel-cta">Commander</a>
+      <h2 class="panel-title">{{ section.settings.b2c_title | default: 'Pour vous,<br><em>pour offrir.</em>' }}</h2>
+      <p class="panel-desc">{{ section.settings.b2c_desc | default: "Commandez nos créations du moment — livrées fraîches, façonnées le matin même. Idéal pour un dîner, une attention, ou simplement se faire plaisir." }}</p>
+      <div class="panel-services">
+        <span class="svc-tag">Click & collect</span>
+        <span class="svc-tag">Livraison Paris</span>
+        <span class="svc-tag">Coffrets cadeaux</span>
+      </div>
+      <a href="{{ section.settings.b2c_url | default: '/collections' }}" class="panel-cta">
+        {{ section.settings.b2c_cta | default: 'Commander' }}
+        <span class="cta-arrow">→</span>
+      </a>
     </div>
   </div>
 
   {%- comment -%} Panel B2B {%- endcomment -%}
   <div class="panel panel-b2b">
-    <div class="panel-bg"
-      {%- if section.settings.b2b_image -%}
-        style="background-image:url('{{ section.settings.b2b_image | image_url: width: 1000 }}')"
-      {%- endif -%}></div>
+    <div class="panel-photo" style="background-image:url('{% if section.settings.b2b_image %}{{ section.settings.b2b_image | image_url: width: 1200 }}{% else %}{{ 'panel-b2b.jpg' | asset_url }}{% endif %}')"></div>
     <div class="panel-overlay"></div>
+
+    <span class="panel-tag">{{ section.settings.b2b_tag | default: 'Professionnels' }}</span>
+
+    <div class="panel-logo">
+      {%- render 'svg-logo', width: 140, height: 80, color: 'rgba(240,240,230,.15)', id: 'panel-b2b' -%}
+    </div>
+
+    <span class="panel-num">02</span>
+
     <div class="panel-content">
-      <span class="panel-eyebrow">{{ section.settings.b2b_eyebrow | default: 'Espace professionnel' }}</span>
-      <h3 class="panel-title">{{ section.settings.b2b_title | default: "Pour l'entreprise" }}</h3>
-      <p class="panel-desc">{{ section.settings.b2b_desc | default: 'Séminaires, mariages, cadeaux corporate. Devis sous 24h, création sur-mesure, livraison coordonnée.' }}</p>
-      <a href="{{ section.settings.b2b_url | default: 'https://pro.maison-felicien.com' }}" class="panel-cta">Découvrir l'offre pro</a>
+      <span class="panel-eyebrow">{{ section.settings.b2b_eyebrow | default: 'Maison Félicien Pro' }}</span>
+      <h2 class="panel-title">{{ section.settings.b2b_title | default: 'Pour vos<br><em>événements.</em>' }}</h2>
+      <p class="panel-desc">{{ section.settings.b2b_desc | default: "Mariages, séminaires, cocktails d'entreprise, cadeaux clients. Un interlocuteur dédié, des créations sur-mesure, une présentation à la hauteur de vos exigences." }}</p>
+      <div class="panel-services">
+        <span class="svc-tag">Mariages & réceptions</span>
+        <span class="svc-tag">Entreprises</span>
+        <span class="svc-tag">Sur-mesure</span>
+        <span class="svc-tag">Grand volume</span>
+      </div>
+      <a href="{{ section.settings.b2b_url | default: 'https://pro.maison-felicien.com' }}" class="panel-cta">
+        {{ section.settings.b2b_cta | default: 'Faire une demande' }}
+        <span class="cta-arrow">→</span>
+      </a>
     </div>
   </div>
+</div>
+
+{%- comment -%} Bridge band {%- endcomment -%}
+<div class="bridge reveal">
+  <span class="bridge-item">
+    <span class="bridge-dot"></span>
+    Paris & Île-de-France
+  </span>
+  <span class="bridge-sep"></span>
+  <span class="bridge-item">
+    <span class="bridge-dot"></span>
+    Commande 48h à l'avance
+  </span>
+  <span class="bridge-sep"></span>
+  <span class="bridge-item">
+    <span class="bridge-dot"></span>
+    Devis pro sous 24h
+  </span>
+  <span class="bridge-sep"></span>
+  <span class="bridge-item">
+    <span class="bridge-dot"></span>
+    Recettes de saison
+  </span>
 </div>
 
 {% schema %}
@@ -50,15 +105,21 @@
     },
     {
       "type": "text",
+      "id": "b2c_tag",
+      "label": "Tag haut",
+      "default": "Particuliers"
+    },
+    {
+      "type": "text",
       "id": "b2c_eyebrow",
       "label": "Sur-titre",
       "default": "Boutique en ligne"
     },
     {
-      "type": "text",
+      "type": "html",
       "id": "b2c_title",
       "label": "Titre",
-      "default": "Pour vous, pour offrir"
+      "default": "Pour vous,<br><em>pour offrir.</em>"
     },
     {
       "type": "textarea",
@@ -66,10 +127,15 @@
       "label": "Description"
     },
     {
+      "type": "text",
+      "id": "b2c_cta",
+      "label": "Texte bouton",
+      "default": "Commander"
+    },
+    {
       "type": "url",
       "id": "b2c_url",
-      "label": "Lien",
-      "default": "/collections"
+      "label": "Lien"
     },
     {
       "type": "header",
@@ -82,15 +148,21 @@
     },
     {
       "type": "text",
-      "id": "b2b_eyebrow",
-      "label": "Sur-titre",
-      "default": "Espace professionnel"
+      "id": "b2b_tag",
+      "label": "Tag haut",
+      "default": "Professionnels"
     },
     {
       "type": "text",
+      "id": "b2b_eyebrow",
+      "label": "Sur-titre",
+      "default": "Maison Félicien Pro"
+    },
+    {
+      "type": "html",
       "id": "b2b_title",
       "label": "Titre",
-      "default": "Pour l'entreprise"
+      "default": "Pour vos<br><em>événements.</em>"
     },
     {
       "type": "textarea",
@@ -98,10 +170,15 @@
       "label": "Description"
     },
     {
+      "type": "text",
+      "id": "b2b_cta",
+      "label": "Texte bouton",
+      "default": "Faire une demande"
+    },
+    {
       "type": "url",
       "id": "b2b_url",
-      "label": "Lien",
-      "default": "https://pro.maison-felicien.com"
+      "label": "Lien"
     }
   ],
   "presets": [

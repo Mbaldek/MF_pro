@@ -1,0 +1,101 @@
+{%- comment -%} ═══ CHIFFRES / SAVOIR-FAIRE ═══ {%- endcomment -%}
+<section class="savoir">
+  <div class="savoir-deco">
+    {%- render 'svg-logo', width: 600, height: 340, color: 'rgba(240,240,230,.04)', id: 'savoir-deco' -%}
+  </div>
+  <div class="savoir-inner">
+    <div class="savoir-item reveal">
+      <span class="savoir-num"><span class="count-up" data-target="{{ section.settings.stat1_num | default: 100 }}">0</span><em>{{ section.settings.stat1_suffix | default: '%' }}</em></span>
+      <span class="savoir-label">{{ section.settings.stat1_label | default: 'Fait maison' }}</span>
+    </div>
+    <div class="savoir-divider reveal d1"></div>
+    <div class="savoir-item reveal d2">
+      <span class="savoir-num"><span class="count-up" data-target="{{ section.settings.stat2_num | default: 8 }}">0</span>{% if section.settings.stat2_suffix != blank %}<em>{{ section.settings.stat2_suffix }}</em>{% endif %}</span>
+      <span class="savoir-label">{{ section.settings.stat2_label | default: 'Créations au catalogue' }}</span>
+    </div>
+    <div class="savoir-divider reveal d3"></div>
+    <div class="savoir-item reveal d4">
+      <span class="savoir-num"><span class="count-up" data-target="{{ section.settings.stat3_num | default: 52 }}">0</span><em>{{ section.settings.stat3_suffix | default: 'sem' }}</em></span>
+      <span class="savoir-label">{{ section.settings.stat3_label | default: 'Nouvelles recettes par an' }}</span>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Chiffres",
+  "class": "section-savoir",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Chiffre 1"
+    },
+    {
+      "type": "number",
+      "id": "stat1_num",
+      "label": "Nombre",
+      "default": 100
+    },
+    {
+      "type": "text",
+      "id": "stat1_suffix",
+      "label": "Suffixe",
+      "default": "%"
+    },
+    {
+      "type": "text",
+      "id": "stat1_label",
+      "label": "Légende",
+      "default": "Fait maison"
+    },
+    {
+      "type": "header",
+      "content": "Chiffre 2"
+    },
+    {
+      "type": "number",
+      "id": "stat2_num",
+      "label": "Nombre",
+      "default": 8
+    },
+    {
+      "type": "text",
+      "id": "stat2_suffix",
+      "label": "Suffixe"
+    },
+    {
+      "type": "text",
+      "id": "stat2_label",
+      "label": "Légende",
+      "default": "Créations au catalogue"
+    },
+    {
+      "type": "header",
+      "content": "Chiffre 3"
+    },
+    {
+      "type": "number",
+      "id": "stat3_num",
+      "label": "Nombre",
+      "default": 52
+    },
+    {
+      "type": "text",
+      "id": "stat3_suffix",
+      "label": "Suffixe",
+      "default": "sem"
+    },
+    {
+      "type": "text",
+      "id": "stat3_label",
+      "label": "Légende",
+      "default": "Nouvelles recettes par an"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Chiffres"
+    }
+  ]
+}
+{% endschema %}

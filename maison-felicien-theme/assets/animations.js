@@ -31,6 +31,30 @@
     }, { passive: true });
   }
 
+  // ═══ Burger menu — mobile click toggle ═══
+  var burgerBtn = document.querySelector('.nav-burger');
+  var burgerWrap = document.querySelector('.nav-burger-wrap');
+  if (burgerBtn && burgerWrap) {
+    burgerBtn.addEventListener('click', function() {
+      var isOpen = burgerWrap.classList.toggle('open');
+      burgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!burgerWrap.contains(e.target)) {
+        burgerWrap.classList.remove('open');
+        burgerBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+    // Close dropdown when clicking a link inside
+    burgerWrap.querySelectorAll('.nav-dd-link').forEach(function(link) {
+      link.addEventListener('click', function() {
+        burgerWrap.classList.remove('open');
+        burgerBtn.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
   // ═══ Hero entrance stagger ═══
   var heroEls = document.querySelectorAll('.hero-entrance');
   if (heroEls.length) {
@@ -47,6 +71,30 @@
       });
     });
   }
+
+  // ═══ Count-up animation (savoir section) ═══
+  var countObs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (!e.isIntersecting) return;
+      var el = e.target;
+      var target = parseInt(el.dataset.target);
+      var duration = 1600;
+      var start = performance.now();
+      var tick = function(now) {
+        var t = Math.min((now - start) / duration, 1);
+        // easeOutExpo
+        var eased = t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+        el.textContent = Math.round(eased * target);
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+      countObs.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('.count-up').forEach(function(el) {
+    countObs.observe(el);
+  });
 
   // ═══ Filter pills (collection page) ═══
   document.querySelectorAll('.fpill').forEach(function(pill) {

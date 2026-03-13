@@ -1,0 +1,119 @@
+{%- comment -%} ═══ ATELIER — Grille photos ═══ {%- endcomment -%}
+<section class="atelier">
+  <div class="container">
+
+    <div class="atelier-head">
+      <div>
+        <span class="atelier-eyebrow reveal">{{ section.settings.eyebrow | default: 'Savoir-faire' }}</span>
+        <h2 class="atelier-title reveal d1">{{ section.settings.headline | default: "L'atelier,<br><em>au cœur</em><br>de tout." }}</h2>
+      </div>
+      <p class="atelier-body reveal d2">{{ section.settings.body | default: "Chaque matin, avant l'ouverture, les créations prennent forme. Des recettes pensées avec les saisons, des textures travaillées jusqu'à l'évidence, une attention portée à chaque détail comme à chaque client." }}</p>
+    </div>
+
+    <div class="atelier-photos">
+      <div class="ap reveal from-left">
+        <div class="ap-photo" style="background-image:url('{% if section.settings.photo1 %}{{ section.settings.photo1 | image_url: width: 800 }}{% else %}{{ 'atelier-1.jpg' | asset_url }}{% endif %}')"></div>
+        <div class="ap-caption">{{ section.settings.caption1 | default: 'En atelier, chaque matin' }}</div>
+      </div>
+      <div class="ap reveal d1">
+        <div class="ap-photo" style="background-image:url('{% if section.settings.photo2 %}{{ section.settings.photo2 | image_url: width: 600 }}{% else %}{{ 'mosaic-1.jpg' | asset_url }}{% endif %}')"></div>
+        <div class="ap-caption">{{ section.settings.caption2 | default: 'Granoix-là — recette signature' }}</div>
+      </div>
+      <div class="ap reveal d2">
+        <div class="ap-photo" style="background-image:url('{% if section.settings.photo3 %}{{ section.settings.photo3 | image_url: width: 600 }}{% else %}{{ 'mosaic-2.jpg' | asset_url }}{% endif %}')"></div>
+        <div class="ap-caption">{{ section.settings.caption3 | default: 'Carrot Cake — saison automne' }}</div>
+      </div>
+      <div class="ap reveal d3" style="background:rgba(191,100,109,.08)">
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center;gap:12px;">
+          <span style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;font-style:italic;color:var(--rose);line-height:1.2">{{ section.settings.quote | default: '"Chaque création<br>est une éclosion."' }}</span>
+        </div>
+      </div>
+      <div class="ap reveal d4">
+        <div class="ap-photo" style="background-image:url('{% if section.settings.photo4 %}{{ section.settings.photo4 | image_url: width: 600 }}{% else %}{{ 'atelier-2.jpg' | asset_url }}{% endif %}');filter:saturate(.7) sepia(.2)"></div>
+        <div class="ap-caption">{{ section.settings.caption4 | default: 'Ingrédients de saison' }}</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Atelier",
+  "class": "section-atelier",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Sur-titre",
+      "default": "Savoir-faire"
+    },
+    {
+      "type": "html",
+      "id": "headline",
+      "label": "Titre",
+      "default": "L'atelier,<br><em>au cœur</em><br>de tout."
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "Texte"
+    },
+    {
+      "type": "image_picker",
+      "id": "photo1",
+      "label": "Photo 1 (grande)"
+    },
+    {
+      "type": "text",
+      "id": "caption1",
+      "label": "Légende 1",
+      "default": "En atelier, chaque matin"
+    },
+    {
+      "type": "image_picker",
+      "id": "photo2",
+      "label": "Photo 2"
+    },
+    {
+      "type": "text",
+      "id": "caption2",
+      "label": "Légende 2",
+      "default": "Granoix-là — recette signature"
+    },
+    {
+      "type": "image_picker",
+      "id": "photo3",
+      "label": "Photo 3"
+    },
+    {
+      "type": "text",
+      "id": "caption3",
+      "label": "Légende 3",
+      "default": "Carrot Cake — saison automne"
+    },
+    {
+      "type": "image_picker",
+      "id": "photo4",
+      "label": "Photo 4"
+    },
+    {
+      "type": "text",
+      "id": "caption4",
+      "label": "Légende 4",
+      "default": "Ingrédients de saison"
+    },
+    {
+      "type": "text",
+      "id": "quote",
+      "label": "Citation déco",
+      "default": "\"Chaque création<br>est une éclosion.\""
+    }
+  ],
+  "presets": [
+    {
+      "name": "Atelier"
+    }
+  ]
+}
+{% endschema %}

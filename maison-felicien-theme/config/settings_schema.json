@@ -4,8 +4,8 @@
     "theme_name": "Maison Félicien",
     "theme_version": "1.0.0",
     "theme_author": "Maison Félicien",
-    "theme_documentation_url": "",
-    "theme_support_url": ""
+    "theme_documentation_url": "https://maisonfelicien.com",
+    "theme_support_url": "https://maisonfelicien.com"
   },
   {
     "name": "Couleurs",
@@ -45,23 +45,6 @@
         "id": "color_marron",
         "label": "Marron foncé",
         "default": "#392D31"
-      }
-    ]
-  },
-  {
-    "name": "Typographie",
-    "settings": [
-      {
-        "type": "font_picker",
-        "id": "font_body",
-        "label": "Police de corps",
-        "default": "questrial_n4"
-      },
-      {
-        "type": "font_picker",
-        "id": "font_heading",
-        "label": "Police de titres",
-        "default": "cormorant_garamond_n3"
       }
     ]
   },
