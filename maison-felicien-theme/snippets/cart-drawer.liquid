@@ -1,0 +1,38 @@
+{%- comment -%}
+  Cart Drawer — Slide-in AJAX cart
+  Usage: {% render 'cart-drawer' %} in theme.liquid before </body>
+  Controlled by MF.openCartDrawer() / MF.closeCartDrawer()
+{%- endcomment -%}
+
+<div class="cart-drawer-overlay" id="cartDrawerOverlay"></div>
+
+<div class="cart-drawer" id="cartDrawer" aria-label="{{ 'cart_drawer.title' | t }}">
+  <div class="cd-header">
+    <h2 class="cd-title">{{ 'cart_drawer.title' | t }}</h2>
+    <button class="cd-close" id="cdClose" aria-label="Fermer">×</button>
+  </div>
+
+  <div class="cd-shipping" id="cdShipping">
+    {%- comment -%} Free shipping bar rendered by JS {%- endcomment -%}
+  </div>
+
+  <div class="cd-items" id="cdItems">
+    {%- comment -%} Cart items rendered by JS from /cart.js {%- endcomment -%}
+  </div>
+
+  <div class="cd-empty" id="cdEmpty" style="display:none">
+    <p class="cd-empty-msg">{{ 'cart_drawer.empty' | t }}</p>
+    <a href="/collections" class="cd-empty-cta" onclick="MF.closeCartDrawer()">
+      {{ 'cart_drawer.continue_shopping' | t }}
+    </a>
+  </div>
+
+  <div class="cd-footer" id="cdFooter">
+    <div class="cd-subtotal">
+      <span>{{ 'cart_drawer.subtotal' | t }}</span>
+      <span id="cdSubtotal">{{ cart.total_price | money }}</span>
+    </div>
+    <a href="/checkout" class="cd-checkout-btn">{{ 'cart_drawer.checkout' | t }}</a>
+    <a href="/cart" class="cd-view-cart">{{ 'general.cart' | t }}</a>
+  </div>
+</div>

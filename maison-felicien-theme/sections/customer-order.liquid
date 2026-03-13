@@ -1,0 +1,93 @@
+{%- comment -%} ═══ DÉTAIL COMMANDE ═══ {%- endcomment -%}
+
+<div class="account-page">
+  <nav class="breadcrumb">
+    <a href="/">{{ 'general.home' | t }}</a>
+    <span class="bc-sep">›</span>
+    <a href="/account">{{ 'customer.account_title' | t }}</a>
+    <span class="bc-sep">›</span>
+    <span>{{ order.name }}</span>
+  </nav>
+
+  <h1 class="account-title">{{ 'customer.order_detail' | t }} {{ order.name }}</h1>
+  <p class="order-meta">
+    {{ order.created_at | date: "%d/%m/%Y à %H:%M" }}
+    · {{ order.financial_status_label }}
+    {%- if order.fulfillment_status_label %} · {{ order.fulfillment_status_label }}{%- endif -%}
+  </p>
+
+  {%- comment -%} LINE ITEMS {%- endcomment -%}
+  <div class="order-items">
+    {%- for line_item in order.line_items -%}
+      <div class="order-line">
+        <div class="ol-img">
+          {%- if line_item.image -%}
+            <img src="{{ line_item.image | image_url: width: 160 }}" alt="{{ line_item.title }}"
+              width="80" height="100" loading="lazy">
+          {%- endif -%}
+        </div>
+        <div class="ol-info">
+          <span class="ol-name">{{ line_item.title }}</span>
+          {%- if line_item.variant_title != 'Default Title' -%}
+            <span class="ol-variant">{{ line_item.variant_title }}</span>
+          {%- endif -%}
+        </div>
+        <span class="ol-price">{{ line_item.price | money }}</span>
+        <span class="ol-qty">× {{ line_item.quantity }}</span>
+        <span class="ol-total">{{ line_item.line_price | money }}</span>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  {%- comment -%} SUMMARY {%- endcomment -%}
+  <div class="order-summary">
+    <div class="os-row">
+      <span>{{ 'customer.subtotal' | t }}</span>
+      <span>{{ order.subtotal_price | money }}</span>
+    </div>
+    {%- for shipping_method in order.shipping_methods -%}
+      <div class="os-row">
+        <span>{{ 'customer.shipping' | t }} ({{ shipping_method.title }})</span>
+        <span>{{ shipping_method.price | money }}</span>
+      </div>
+    {%- endfor -%}
+    {%- for discount in order.discounts -%}
+      <div class="os-row os-discount">
+        <span>{{ 'customer.discount' | t }} ({{ discount.code }})</span>
+        <span>-{{ discount.savings | money }}</span>
+      </div>
+    {%- endfor -%}
+    <div class="os-row">
+      <span>{{ 'customer.tax' | t }}</span>
+      <span>{{ order.tax_price | money }}</span>
+    </div>
+    <div class="os-row os-total">
+      <span>{{ 'customer.total' | t }}</span>
+      <span>{{ order.total_price | money }}</span>
+    </div>
+  </div>
+
+  {%- comment -%} ADDRESSES {%- endcomment -%}
+  <div class="order-addresses">
+    {%- if order.shipping_address -%}
+      <div class="order-address-card">
+        <h3 class="oa-title">{{ 'customer.shipping_address' | t }}</h3>
+        <p>{{ order.shipping_address | format_address }}</p>
+      </div>
+    {%- endif -%}
+    {%- if order.billing_address -%}
+      <div class="order-address-card">
+        <h3 class="oa-title">{{ 'customer.billing_address' | t }}</h3>
+        <p>{{ order.billing_address | format_address }}</p>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Détail commande",
+  "class": "section-customer-order",
+  "settings": []
+}
+{% endschema %}

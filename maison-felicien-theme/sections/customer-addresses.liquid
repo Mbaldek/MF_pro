@@ -1,0 +1,172 @@
+{%- comment -%} ═══ GESTION ADRESSES CLIENT ═══ {%- endcomment -%}
+
+<div class="account-page">
+  <div class="account-header">
+    <h1 class="account-title">{{ 'customer.addresses' | t }}</h1>
+    <button class="form-btn-sec" id="addAddressBtn">{{ 'customer.add_address' | t }}</button>
+  </div>
+
+  {%- comment -%} ADD / EDIT FORM (hidden by default) {%- endcomment -%}
+  <div class="address-form-wrap" id="addressFormWrap" style="display:none">
+    {%- form 'customer_address', customer.new_address -%}
+      <div class="account-card address-form-card">
+        <h2 class="account-section-title" id="addressFormTitle">{{ 'customer.add_address' | t }}</h2>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label" for="addr-first">{{ 'customer.first_name' | t }}</label>
+            <input class="form-input" type="text" id="addr-first" name="address[first_name]"
+              value="{{ form.first_name }}" autocomplete="given-name">
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="addr-last">{{ 'customer.last_name' | t }}</label>
+            <input class="form-input" type="text" id="addr-last" name="address[last_name]"
+              value="{{ form.last_name }}" autocomplete="family-name">
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label" for="addr-company">{{ 'customer.company' | t }}</label>
+          <input class="form-input" type="text" id="addr-company" name="address[company]"
+            value="{{ form.company }}" autocomplete="organization">
+        </div>
+
+        <div class="form-field">
+          <label class="form-label" for="addr-1">{{ 'customer.address_1' | t }}</label>
+          <input class="form-input" type="text" id="addr-1" name="address[address1]"
+            value="{{ form.address1 }}" autocomplete="address-line1" required>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label" for="addr-2">{{ 'customer.address_2' | t }}</label>
+          <input class="form-input" type="text" id="addr-2" name="address[address2]"
+            value="{{ form.address2 }}" autocomplete="address-line2">
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label" for="addr-city">{{ 'customer.city' | t }}</label>
+            <input class="form-input" type="text" id="addr-city" name="address[city]"
+              value="{{ form.city }}" autocomplete="address-level2" required>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="addr-zip">{{ 'customer.zip' | t }}</label>
+            <input class="form-input" type="text" id="addr-zip" name="address[zip]"
+              value="{{ form.zip }}" autocomplete="postal-code" required>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label" for="addr-country">{{ 'customer.country' | t }}</label>
+          <select class="form-input form-select" id="addr-country" name="address[country]"
+            data-default="{{ form.country }}" autocomplete="country-name">
+            {{ all_country_option_tags }}
+          </select>
+        </div>
+
+        <div class="form-field" id="addr-province-wrap" style="display:none">
+          <label class="form-label" for="addr-province">{{ 'customer.province' | t }}</label>
+          <select class="form-input form-select" id="addr-province" name="address[province]"
+            data-default="{{ form.province }}"></select>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label" for="addr-phone">{{ 'customer.phone' | t }}</label>
+          <input class="form-input" type="tel" id="addr-phone" name="address[phone]"
+            value="{{ form.phone }}" autocomplete="tel">
+        </div>
+
+        <div class="form-field form-checkbox">
+          <label>
+            <input type="checkbox" name="address[default]" value="1"
+              {%- if form == customer.default_address %} checked{%- endif -%}>
+            {{ 'customer.set_default' | t }}
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="form-btn">{{ 'customer.save' | t }}</button>
+          <button type="button" class="form-btn-sec" id="cancelAddress">{{ 'customer.cancel' | t }}</button>
+        </div>
+      </div>
+    {%- endform -%}
+  </div>
+
+  {%- comment -%} ADDRESS LIST {%- endcomment -%}
+  <div class="address-grid" id="addressGrid">
+    {%- for address in customer.addresses -%}
+      <div class="address-card">
+        {%- if address == customer.default_address -%}
+          <span class="address-badge">{{ 'customer.default_address' | t }}</span>
+        {%- endif -%}
+        <p class="address-text">{{ address | format_address }}</p>
+        <div class="address-actions">
+          <a href="/account/addresses/{{ address.id }}" class="address-edit">{{ 'customer.edit_address' | t }}</a>
+          <span class="address-sep">·</span>
+          {%- form 'customer_address', address -%}
+            <input type="hidden" name="_method" value="delete">
+            <button type="submit" class="address-delete"
+              onclick="return confirm('{{ 'customer.delete_confirm' | t }}')">
+              {{ 'customer.delete_address' | t }}
+            </button>
+          {%- endform -%}
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+<script>
+(function() {
+  var wrap = document.getElementById('addressFormWrap');
+  var grid = document.getElementById('addressGrid');
+
+  document.getElementById('addAddressBtn').addEventListener('click', function() {
+    wrap.style.display = '';
+    grid.style.display = 'none';
+    this.style.display = 'none';
+  });
+
+  document.getElementById('cancelAddress').addEventListener('click', function() {
+    wrap.style.display = 'none';
+    grid.style.display = '';
+    document.getElementById('addAddressBtn').style.display = '';
+  });
+
+  // Country/province selector
+  var countryEl = document.getElementById('addr-country');
+  var provinceEl = document.getElementById('addr-province');
+  var provinceWrap = document.getElementById('addr-province-wrap');
+
+  if (countryEl) {
+    countryEl.addEventListener('change', function() {
+      // Simple province visibility toggle
+      var selected = countryEl.options[countryEl.selectedIndex];
+      var provinces = selected ? selected.getAttribute('data-provinces') : null;
+      if (provinces && provinces !== '[]') {
+        var parsed = JSON.parse(provinces);
+        provinceEl.innerHTML = '';
+        for (var i = 0; i < parsed.length; i++) {
+          var opt = document.createElement('option');
+          opt.value = parsed[i][0];
+          opt.textContent = parsed[i][1];
+          provinceEl.appendChild(opt);
+        }
+        provinceWrap.style.display = '';
+      } else {
+        provinceWrap.style.display = 'none';
+      }
+    });
+    // Trigger on load
+    countryEl.dispatchEvent(new Event('change'));
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Mes adresses",
+  "class": "section-customer-addresses",
+  "settings": []
+}
+{% endschema %}

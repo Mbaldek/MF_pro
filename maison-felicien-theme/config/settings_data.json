@@ -1,0 +1,20 @@
+{
+  "current": {
+    "color_rose": "#8B3A43",
+    "color_vieux": "#BF646D",
+    "color_poudre": "#E5B7B3",
+    "color_vert": "#968A42",
+    "color_blanc": "#F0F0E6",
+    "color_marron": "#392D31",
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {}
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {}
+      }
+    }
+  }
+}

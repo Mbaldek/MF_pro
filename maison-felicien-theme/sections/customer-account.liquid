@@ -1,0 +1,49 @@
+{%- comment -%} ═══ DASHBOARD COMPTE CLIENT ═══ {%- endcomment -%}
+
+<div class="account-page account-dashboard">
+  <div class="account-header">
+    <h1 class="account-title">{{ 'customer.account_title' | t }}</h1>
+    <div class="account-nav">
+      <a href="/account/addresses" class="account-nav-link">{{ 'customer.addresses' | t }}</a>
+      <a href="{{ routes.account_logout_url }}" class="account-nav-link">{{ 'customer.logout' | t }}</a>
+    </div>
+  </div>
+
+  <p class="account-welcome">{{ 'customer.welcome' | t: name: customer.first_name }}</p>
+
+  <h2 class="account-section-title">{{ 'customer.order_history' | t }}</h2>
+
+  {%- if customer.orders.size > 0 -%}
+    <div class="account-orders">
+      <div class="account-table-head">
+        <span>{{ 'customer.order' | t }}</span>
+        <span>{{ 'customer.date' | t }}</span>
+        <span>{{ 'customer.payment_status' | t }}</span>
+        <span>{{ 'customer.fulfillment_status' | t }}</span>
+        <span>{{ 'customer.total' | t }}</span>
+      </div>
+      {%- for order in customer.orders -%}
+        <a href="{{ order.customer_url }}" class="account-order-row">
+          <span class="order-name">{{ order.name }}</span>
+          <span class="order-date">{{ order.created_at | date: "%d/%m/%Y" }}</span>
+          <span class="order-status">{{ order.financial_status_label }}</span>
+          <span class="order-fulfillment">{{ order.fulfillment_status_label | default: '—' }}</span>
+          <span class="order-total">{{ order.total_price | money }}</span>
+        </a>
+      {%- endfor -%}
+    </div>
+  {%- else -%}
+    <div class="account-empty">
+      <p class="account-empty-msg">{{ 'customer.no_orders' | t }}</p>
+      <a href="/collections" class="account-empty-cta">{{ 'customer.start_shopping' | t }}</a>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Mon compte",
+  "class": "section-customer-account",
+  "settings": []
+}
+{% endschema %}

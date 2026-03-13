@@ -1,0 +1,54 @@
+{%- comment -%} ═══ INSCRIPTION CLIENT ═══ {%- endcomment -%}
+
+<div class="account-page">
+  <div class="account-card">
+    <h1 class="account-title">{{ 'customer.register_title' | t }}</h1>
+
+    {%- form 'create_customer' -%}
+      {%- if form.errors -%}
+        <div class="form-error">{{ form.errors | default_errors }}</div>
+      {%- endif -%}
+
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-label" for="reg-first">{{ 'customer.first_name' | t }}</label>
+          <input class="form-input" type="text" id="reg-first" name="customer[first_name]"
+            autocomplete="given-name" required>
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="reg-last">{{ 'customer.last_name' | t }}</label>
+          <input class="form-input" type="text" id="reg-last" name="customer[last_name]"
+            autocomplete="family-name" required>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="reg-email">{{ 'customer.email' | t }}</label>
+        <input class="form-input" type="email" id="reg-email" name="customer[email]"
+          autocomplete="email" required>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="reg-password">{{ 'customer.password' | t }}</label>
+        <input class="form-input" type="password" id="reg-password" name="customer[password]"
+          autocomplete="new-password" required>
+      </div>
+
+      <button type="submit" class="form-btn">{{ 'customer.register_button' | t }}</button>
+
+      <div class="form-links">
+        <span class="form-link-text">{{ 'customer.already_have_account' | t }}
+          <a href="/account/login" class="form-link">{{ 'customer.login' | t }}</a>
+        </span>
+      </div>
+    {%- endform -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Inscription client",
+  "class": "section-customer-register",
+  "settings": []
+}
+{% endschema %}

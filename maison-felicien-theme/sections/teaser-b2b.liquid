@@ -1,0 +1,113 @@
+{%- comment -%} ═══ SPLIT B2C / B2B ═══ {%- endcomment -%}
+<div class="split">
+  <div class="split-divider"></div>
+  <div class="split-center-label"><div class="scl-inner">ou</div></div>
+
+  {%- comment -%} Panel B2C {%- endcomment -%}
+  <div class="panel panel-b2c">
+    <div class="panel-bg"
+      {%- if section.settings.b2c_image -%}
+        style="background-image:url('{{ section.settings.b2c_image | image_url: width: 1000 }}')"
+      {%- endif -%}></div>
+    <div class="panel-overlay"></div>
+    <div class="panel-content">
+      <span class="panel-eyebrow">{{ section.settings.b2c_eyebrow | default: 'Boutique en ligne' }}</span>
+      <h3 class="panel-title">{{ section.settings.b2c_title | default: 'Pour vous, pour offrir' }}</h3>
+      <p class="panel-desc">{{ section.settings.b2c_desc | default: 'Commandez en ligne, faites-vous livrer ou passez en click & collect. Emballage cadeau offert dès 35 €.' }}</p>
+      <a href="{{ section.settings.b2c_url | default: '/collections' }}" class="panel-cta">Commander</a>
+    </div>
+  </div>
+
+  {%- comment -%} Panel B2B {%- endcomment -%}
+  <div class="panel panel-b2b">
+    <div class="panel-bg"
+      {%- if section.settings.b2b_image -%}
+        style="background-image:url('{{ section.settings.b2b_image | image_url: width: 1000 }}')"
+      {%- endif -%}></div>
+    <div class="panel-overlay"></div>
+    <div class="panel-content">
+      <span class="panel-eyebrow">{{ section.settings.b2b_eyebrow | default: 'Espace professionnel' }}</span>
+      <h3 class="panel-title">{{ section.settings.b2b_title | default: "Pour l'entreprise" }}</h3>
+      <p class="panel-desc">{{ section.settings.b2b_desc | default: 'Séminaires, mariages, cadeaux corporate. Devis sous 24h, création sur-mesure, livraison coordonnée.' }}</p>
+      <a href="{{ section.settings.b2b_url | default: 'https://pro.maison-felicien.com' }}" class="panel-cta">Découvrir l'offre pro</a>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Split B2C / B2B",
+  "class": "section-split",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Panneau Boutique (B2C)"
+    },
+    {
+      "type": "image_picker",
+      "id": "b2c_image",
+      "label": "Image B2C"
+    },
+    {
+      "type": "text",
+      "id": "b2c_eyebrow",
+      "label": "Sur-titre",
+      "default": "Boutique en ligne"
+    },
+    {
+      "type": "text",
+      "id": "b2c_title",
+      "label": "Titre",
+      "default": "Pour vous, pour offrir"
+    },
+    {
+      "type": "textarea",
+      "id": "b2c_desc",
+      "label": "Description"
+    },
+    {
+      "type": "url",
+      "id": "b2c_url",
+      "label": "Lien",
+      "default": "/collections"
+    },
+    {
+      "type": "header",
+      "content": "Panneau Pro (B2B)"
+    },
+    {
+      "type": "image_picker",
+      "id": "b2b_image",
+      "label": "Image B2B"
+    },
+    {
+      "type": "text",
+      "id": "b2b_eyebrow",
+      "label": "Sur-titre",
+      "default": "Espace professionnel"
+    },
+    {
+      "type": "text",
+      "id": "b2b_title",
+      "label": "Titre",
+      "default": "Pour l'entreprise"
+    },
+    {
+      "type": "textarea",
+      "id": "b2b_desc",
+      "label": "Description"
+    },
+    {
+      "type": "url",
+      "id": "b2b_url",
+      "label": "Lien",
+      "default": "https://pro.maison-felicien.com"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Split B2C / B2B"
+    }
+  ]
+}
+{% endschema %}

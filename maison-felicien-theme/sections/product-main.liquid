@@ -1,0 +1,317 @@
+{%- comment -%} ═══ PAGE PRODUIT ═══ {%- endcomment -%}
+
+{%- comment -%} JSON-LD Product + BreadcrumbList {%- endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "description": {{ product.description | strip_html | truncatewords: 60 | json }},
+  "url": "{{ shop.url }}{{ product.url }}",
+  {%- if product.featured_image -%}
+  "image": "https:{{ product.featured_image | image_url: width: 1200 }}",
+  {%- endif -%}
+  "brand": { "@type": "Brand", "name": {{ shop.name | json }} },
+  "offers": {
+    "@type": "Offer",
+    "url": "{{ shop.url }}{{ product.url }}",
+    "priceCurrency": "{{ shop.currency }}",
+    "price": "{{ product.selected_or_first_available_variant.price | money_without_currency | strip_html }}",
+    "availability": "https://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": {{ 'general.home' | t | json }}, "item": "{{ shop.url }}" },
+    { "@type": "ListItem", "position": 2, "name": {{ 'general.shop' | t | json }}, "item": "{{ shop.url }}/collections" },
+    { "@type": "ListItem", "position": 3, "name": {{ product.title | json }} }
+  ]
+}
+</script>
+
+{%- comment -%} Breadcrumb {%- endcomment -%}
+<div class="breadcrumb">
+  <a href="/">{{ 'general.home' | t }}</a>
+  <span class="bc-sep">—</span>
+  <a href="/collections">{{ 'general.shop' | t }}</a>
+  <span class="bc-sep">—</span>
+  <span style="color:var(--rose)">{{ product.title }}</span>
+</div>
+
+<div class="product-layout" style="padding-top:40px;padding-bottom:80px;">
+
+  {%- comment -%} ── GALERIE ─────────────────────── {%- endcomment -%}
+  <div class="gallery reveal">
+    <div class="gallery-main" id="mainPhoto">
+      {%- if product.featured_image -%}
+        <div class="gallery-main-photo" id="mainPhotoImg"
+          style="background-image:url('{{ product.featured_image | image_url: width: 1200 }}')"></div>
+      {%- else -%}
+        <div class="gallery-main-photo" id="mainPhotoImg"></div>
+      {%- endif -%}
+
+      {%- for tag in product.tags -%}
+        {%- if tag == 'signature' -%}
+          <span class="gallery-badge">{{ 'product.signature' | t }}</span>
+          {%- break -%}
+        {%- elsif tag == 'nouveaute' -%}
+          <span class="gallery-badge" style="background:var(--vert)">{{ 'product.new' | t }}</span>
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+      <span class="zoom-hint">+ Agrandir</span>
+    </div>
+
+    {%- if product.images.size > 1 -%}
+      <div class="gallery-thumbs">
+        {%- for image in product.images -%}
+          <div class="gthumb{% if forloop.first %} active{% endif %}"
+            data-image-url="{{ image | image_url: width: 1200 }}">
+            <div class="gthumb-photo" style="background-image:url('{{ image | image_url: width: 300 }}')"></div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} ── PANEL PRODUIT ────────────────── {%- endcomment -%}
+  <div class="product-panel">
+
+    <div class="reveal">
+      <div class="pp-eyebrow">{{ product.vendor | default: 'Pâtisserie maison' }}</div>
+      <h1 class="pp-title">{{ product.title }}</h1>
+
+      {%- comment -%} Avis (si app avis installée) {%- endcomment -%}
+      <div class="pp-rating">
+        <span class="pp-stars">★★★★★</span>
+        <span class="pp-rating-count">{{ product.metafields.reviews.rating_count | default: '' }}</span>
+      </div>
+
+      {%- comment -%} Prix {%- endcomment -%}
+      <div class="pp-price-row">
+        <span class="pp-price" id="currentPrice">{{ product.selected_or_first_available_variant.price | money }}</span>
+        <span class="pp-price-note">Par pièce · TVA incluse</span>
+      </div>
+    </div>
+
+    {%- comment -%} Formulaire d'ajout au panier {%- endcomment -%}
+    {%- form 'product', product, id: 'product-form' -%}
+
+      {%- comment -%} Variantes (portions/formats) {%- endcomment -%}
+      {%- if product.variants.size > 1 -%}
+        <div class="reveal d1">
+          <div class="pp-section-label">
+            <span>{{ 'general.format' | t }}</span>
+            <span class="pp-size-guide">{{ 'general.size_guide' | t }}</span>
+          </div>
+          <div class="pp-sizes">
+            {%- for variant in product.variants -%}
+              <button type="button"
+                class="ppsize{% if variant == product.selected_or_first_available_variant %} active{% endif %}"
+                data-variant-id="{{ variant.id }}"
+                data-variant-price="{{ variant.price | money }}"
+                {%- unless variant.available %}disabled{% endunless %}>
+                {{ variant.title }}
+              </button>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      <input type="hidden" name="id" id="variant-id" value="{{ product.selected_or_first_available_variant.id }}">
+
+      {%- comment -%} Livraison {%- endcomment -%}
+      <div class="pp-delivery-note reveal d1">
+        📦 {{ 'product.delivery_note' | t }}<br>
+        {{ 'product.click_collect' | t }}
+      </div>
+
+      {%- comment -%} Quantité {%- endcomment -%}
+      <div class="pp-qty-row reveal d1">
+        <span class="pp-qty-label">{{ 'general.quantity' | t }}</span>
+        <button type="button" class="qty-btn" onclick="MF.updateQty(-1)">−</button>
+        <span class="qty-num" id="qtyDisplay">1</span>
+        <button type="button" class="qty-btn" onclick="MF.updateQty(1)">+</button>
+        <input type="hidden" name="quantity" id="qty-input" value="1">
+      </div>
+
+      {%- comment -%} CTAs {%- endcomment -%}
+      <button type="submit" class="pp-cta-main reveal d1">
+        {{ 'general.add_to_cart' | t }}
+        <span class="arrow">→</span>
+      </button>
+      <button type="button" class="pp-cta-sec reveal d1">☆ &nbsp;{{ 'general.add_to_wishlist' | t }}</button>
+    {%- endform -%}
+
+    {%- comment -%} Trust badges {%- endcomment -%}
+    <div class="pp-trust reveal d2">
+      <div class="ptrust"><span class="ptrust-icon">🌿</span>Façonné le matin même</div>
+      <div class="ptrust"><span class="ptrust-icon">📦</span>Livraison nationale</div>
+      <div class="ptrust"><span class="ptrust-icon">🎁</span>Emballage cadeau offert</div>
+      <div class="ptrust"><span class="ptrust-icon">↩</span>Satisfait ou remboursé</div>
+    </div>
+
+    <div class="pp-sep"></div>
+
+    {%- comment -%} Description {%- endcomment -%}
+    <div class="reveal d2">
+      <div class="pp-desc-title">La création</div>
+      <div class="pp-desc-body">{{ product.description }}</div>
+
+      {%- if product.metafields.custom.ingredients != blank -%}
+        <div class="pp-ingredients">
+          {%- assign ingredients = product.metafields.custom.ingredients | split: ',' -%}
+          {%- for ing in ingredients -%}
+            <span class="pp-ing">{{ ing | strip }}</span>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Accordéons {%- endcomment -%}
+    <div class="pp-accordion reveal d3">
+      <div class="acc-item">
+        <button type="button" class="acc-trigger" onclick="MF.toggleAcc(this)">
+          Livraison & délais <span class="acc-icon">+</span>
+        </button>
+        <div class="acc-body">
+          <ul>
+            <li>Livraison nationale Colissimo suivi — 3 à 5 jours ouvrés</li>
+            <li>Click & collect Paris — disponible sous 48h</li>
+            <li>Conditionnement isotherme inclus</li>
+            <li>DLC de 5 jours à réception</li>
+          </ul>
+        </div>
+      </div>
+      <div class="acc-item">
+        <button type="button" class="acc-trigger" onclick="MF.toggleAcc(this)">
+          Conservation <span class="acc-icon">+</span>
+        </button>
+        <div class="acc-body">
+          <p>À conserver à température ambiante dans son emballage d'origine, à l'abri de la lumière. Consommer dans les 5 jours. Peut se congeler jusqu'à 1 mois.</p>
+        </div>
+      </div>
+      <div class="acc-item">
+        <button type="button" class="acc-trigger" onclick="MF.toggleAcc(this)">
+          Allergènes <span class="acc-icon">+</span>
+        </button>
+        <div class="acc-body">
+          <p>{{ product.metafields.custom.allergens | default: "Fabriqué dans un atelier pouvant contenir des traces de gluten, œufs, lait, fruits à coque, arachides et soja." }}</p>
+        </div>
+      </div>
+      <div class="acc-item">
+        <button type="button" class="acc-trigger" onclick="MF.toggleAcc(this)">
+          Personnalisation & grands volumes <span class="acc-icon">+</span>
+        </button>
+        <div class="acc-body">
+          <p>Pour un mariage, un séminaire ou un cadeau d'entreprise, contactez-nous via <a href="https://pro.maison-felicien.com">l'espace Pro</a>. Devis sous 24h, création sur-mesure possible.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{%- comment -%} ═══ VOUS AIMEREZ AUSSI ═══ {%- endcomment -%}
+{%- if product.collections.first -%}
+  <div class="reco-section">
+    <div class="reco-head reveal">
+      <h2 class="reco-title">{{ 'product.you_may_also_like' | t | replace: 'aussi', '<em>aussi</em>' }}</h2>
+      <a href="/collections" class="reco-link">Voir tout →</a>
+    </div>
+    <div class="reco-grid">
+      {%- assign current_product = product -%}
+      {%- for reco in product.collections.first.products limit: 4 -%}
+        {%- unless reco.id == current_product.id -%}
+          <div class="rcard reveal d{{ forloop.index }}">
+            <a href="{{ reco.url }}" style="text-decoration:none;color:inherit;">
+              <div class="rcard-img">
+                {%- if reco.featured_image -%}
+                  <div class="rcard-photo" style="background-image:url('{{ reco.featured_image | image_url: width: 600 }}')"></div>
+                {%- else -%}
+                  <div class="rcard-photo"></div>
+                {%- endif -%}
+                <div class="rcard-overlay">
+                  <button class="rcard-quick">{{ 'general.see_product' | t }}</button>
+                </div>
+              </div>
+              <h3 class="rcard-name">{{ reco.title }}</h3>
+              <p class="rcard-price">{{ reco.price | money }}</p>
+            </a>
+          </div>
+        {%- endunless -%}
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}
+
+<script>
+  // Variant selector
+  document.querySelectorAll('.ppsize').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.ppsize').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('variant-id').value = btn.dataset.variantId;
+      document.getElementById('currentPrice').textContent = btn.dataset.variantPrice;
+    });
+  });
+
+  // Gallery thumbnails
+  document.querySelectorAll('.gthumb').forEach(function(thumb) {
+    thumb.addEventListener('click', function() {
+      document.querySelectorAll('.gthumb').forEach(function(t) { t.classList.remove('active'); });
+      thumb.classList.add('active');
+      var main = document.getElementById('mainPhotoImg');
+      main.style.opacity = '0';
+      setTimeout(function() {
+        main.style.backgroundImage = "url('" + thumb.dataset.imageUrl + "')";
+        main.style.opacity = '1';
+      }, 200);
+    });
+  });
+
+  // Quantity
+  MF.updateQty = function(delta) {
+    var el = document.getElementById('qtyDisplay');
+    var input = document.getElementById('qty-input');
+    var qty = Math.max(1, parseInt(el.textContent) + delta);
+    el.textContent = qty;
+    input.value = qty;
+  };
+
+  // Accordions
+  MF.toggleAcc = function(trigger) {
+    var body = trigger.nextElementSibling;
+    var isOpen = trigger.classList.contains('open');
+    document.querySelectorAll('.acc-trigger.open').forEach(function(t) {
+      t.classList.remove('open');
+      t.nextElementSibling.classList.remove('open');
+    });
+    if (!isOpen) { trigger.classList.add('open'); body.classList.add('open'); }
+  };
+
+  // AJAX add to cart
+  document.getElementById('product-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var variantId = document.getElementById('variant-id').value;
+    var qty = parseInt(document.getElementById('qty-input').value);
+    MF.addToCart(parseInt(variantId), qty);
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Page produit",
+  "class": "section-product",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Page produit"
+    }
+  ]
+}
+{% endschema %}

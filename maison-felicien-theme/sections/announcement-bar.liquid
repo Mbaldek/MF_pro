@@ -1,0 +1,152 @@
+{%- comment -%} ═══ ANNOUNCEMENT BAR — Messages rotatifs ═══ {%- endcomment -%}
+
+{%- if section.blocks.size > 0 -%}
+<div class="announcement-bar" id="announcementBar" role="region" aria-label="Annonces">
+  <div class="ab-track" id="abTrack">
+    {%- for block in section.blocks -%}
+      <div class="ab-slide{% if forloop.first %} active{% endif %}" {{ block.shopify_attributes }}>
+        {%- if block.settings.icon != blank -%}
+          <span class="ab-icon">{{ block.settings.icon }}</span>
+        {%- endif -%}
+        <span class="ab-text">{{ block.settings.text }}</span>
+        {%- if block.settings.link != blank -%}
+          <a href="{{ block.settings.link }}" class="ab-link">{{ block.settings.link_text | default: 'Voir →' }}</a>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+
+  {%- if section.blocks.size > 1 -%}
+    <div class="ab-dots" id="abDots">
+      {%- for block in section.blocks -%}
+        <button class="ab-dot{% if forloop.first %} active{% endif %}"
+          data-index="{{ forloop.index0 }}"
+          aria-label="Message {{ forloop.index }}"></button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  <button class="ab-close" id="abClose" aria-label="Fermer">×</button>
+</div>
+
+<script>
+(function() {
+  var bar = document.getElementById('announcementBar');
+  if (!bar) return;
+
+  // Check if dismissed within 24h
+  var dismissed = localStorage.getItem('mf_ab_dismissed');
+  if (dismissed && Date.now() - parseInt(dismissed) < 86400000) {
+    bar.style.display = 'none';
+    return;
+  }
+
+  var slides = bar.querySelectorAll('.ab-slide');
+  var dots = bar.querySelectorAll('.ab-dot');
+  var current = 0;
+  var total = slides.length;
+  var interval;
+
+  function goTo(idx) {
+    slides[current].classList.remove('active');
+    if (dots[current]) dots[current].classList.remove('active');
+    current = idx % total;
+    slides[current].classList.add('active');
+    if (dots[current]) dots[current].classList.add('active');
+  }
+
+  function next() { goTo(current + 1); }
+
+  // Auto-rotate every 5s
+  if (total > 1) {
+    interval = setInterval(next, 5000);
+  }
+
+  // Dots click
+  dots.forEach(function(dot) {
+    dot.addEventListener('click', function() {
+      clearInterval(interval);
+      goTo(parseInt(dot.dataset.index));
+      interval = setInterval(next, 5000);
+    });
+  });
+
+  // Touch swipe
+  var startX = 0;
+  bar.addEventListener('touchstart', function(e) {
+    startX = e.touches[0].clientX;
+  }, { passive: true });
+  bar.addEventListener('touchend', function(e) {
+    var diff = startX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) {
+      clearInterval(interval);
+      if (diff > 0) next(); else goTo(current - 1 < 0 ? total - 1 : current - 1);
+      interval = setInterval(next, 5000);
+    }
+  }, { passive: true });
+
+  // Close
+  document.getElementById('abClose').addEventListener('click', function() {
+    bar.style.transform = 'translateY(-100%)';
+    setTimeout(function() { bar.style.display = 'none'; }, 350);
+    localStorage.setItem('mf_ab_dismissed', Date.now().toString());
+    // Shift body padding
+    document.body.classList.remove('has-announcement');
+  });
+
+  // Show
+  bar.style.display = '';
+  document.body.classList.add('has-announcement');
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Barre d'annonces",
+  "class": "section-announcement",
+  "max_blocks": 5,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Message",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icône (emoji)",
+          "default": "📦"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texte",
+          "default": "Commandez avant lundi 18h — livré mercredi"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Lien (optionnel)"
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Texte du lien",
+          "default": "Voir →"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Barre d'annonces",
+      "blocks": [
+        { "type": "message", "settings": { "icon": "📦", "text": "Commandez avant lundi 18h — livré mercredi" } },
+        { "type": "message", "settings": { "icon": "🌿", "text": "Nouvelle collection printemps — édition limitée" } },
+        { "type": "message", "settings": { "icon": "🎁", "text": "Emballage cadeau offert dès 35 €" } },
+        { "type": "message", "settings": { "icon": "⚡", "text": "Livraison offerte dès 50 €" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,71 @@
+{% layout none %}
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ 'gift_card.title' | t }} — {{ shop.name }}</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Questrial&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+  {{ content_for_header }}
+
+  <style>
+    :root {
+      --rose:   {{ settings.color_rose }};
+      --vieux:  {{ settings.color_vieux }};
+      --poudre: {{ settings.color_poudre }};
+      --vert:   {{ settings.color_vert }};
+      --blanc:  {{ settings.color_blanc }};
+      --marron: {{ settings.color_marron }};
+    }
+  </style>
+</head>
+<body class="template-gift-card">
+
+<div class="gift-card-page">
+  <div class="gc-header">
+    {% render 'svg-logo', width: 60, height: 60, color: 'var(--marron)' %}
+    <h1 class="gc-title">{{ 'gift_card.title' | t }}</h1>
+  </div>
+
+  <div class="gc-card">
+    <div class="gc-visual">
+      {%- if gift_card.enabled -%}
+        <span class="gc-badge gc-active">{{ 'gift_card.active' | t }}</span>
+      {%- else -%}
+        <span class="gc-badge gc-expired">{{ 'gift_card.expired' | t }}</span>
+      {%- endif -%}
+    </div>
+
+    <div class="gc-balance-wrap">
+      <span class="gc-balance-label">{{ 'gift_card.balance' | t }}</span>
+      <span class="gc-balance">{{ gift_card.balance | money }}</span>
+      {%- if gift_card.balance != gift_card.initial_value -%}
+        <span class="gc-initial">/ {{ gift_card.initial_value | money }}</span>
+      {%- endif -%}
+    </div>
+
+    <div class="gc-code-wrap">
+      <span class="gc-code-label">{{ 'gift_card.code_label' | t }}</span>
+      <span class="gc-code" id="gcCode">{{ gift_card.code | format_code }}</span>
+    </div>
+
+    <p class="gc-redeem">{{ 'gift_card.redeem' | t }}</p>
+
+    {%- if gift_card.qr_url -%}
+      <img src="{{ gift_card.qr_url }}" alt="QR Code" class="gc-qr" width="120" height="120">
+    {%- endif -%}
+  </div>
+
+  <div class="gc-actions">
+    <button class="gc-print-btn" onclick="window.print()">{{ 'gift_card.print' | t }}</button>
+    <a href="/collections" class="gc-shop-btn">{{ 'gift_card.shop_now' | t }}</a>
+  </div>
+</div>
+
+</body>
+</html>

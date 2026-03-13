@@ -1,0 +1,88 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Maison Félicien",
+    "theme_version": "1.0.0",
+    "theme_author": "Maison Félicien",
+    "theme_documentation_url": "",
+    "theme_support_url": ""
+  },
+  {
+    "name": "Couleurs",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_rose",
+        "label": "Rose (primaire)",
+        "default": "#8B3A43"
+      },
+      {
+        "type": "color",
+        "id": "color_vieux",
+        "label": "Vieux rose",
+        "default": "#BF646D"
+      },
+      {
+        "type": "color",
+        "id": "color_poudre",
+        "label": "Rose poudré",
+        "default": "#E5B7B3"
+      },
+      {
+        "type": "color",
+        "id": "color_vert",
+        "label": "Vert",
+        "default": "#968A42"
+      },
+      {
+        "type": "color",
+        "id": "color_blanc",
+        "label": "Blanc cassé",
+        "default": "#F0F0E6"
+      },
+      {
+        "type": "color",
+        "id": "color_marron",
+        "label": "Marron foncé",
+        "default": "#392D31"
+      }
+    ]
+  },
+  {
+    "name": "Typographie",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "label": "Police de corps",
+        "default": "questrial_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_heading",
+        "label": "Police de titres",
+        "default": "cormorant_garamond_n3"
+      }
+    ]
+  },
+  {
+    "name": "Réseaux sociaux",
+    "settings": [
+      {
+        "type": "url",
+        "id": "social_instagram",
+        "label": "Instagram"
+      },
+      {
+        "type": "url",
+        "id": "social_facebook",
+        "label": "Facebook"
+      },
+      {
+        "type": "url",
+        "id": "social_pinterest",
+        "label": "Pinterest"
+      }
+    ]
+  }
+]

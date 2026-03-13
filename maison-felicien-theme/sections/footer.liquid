@@ -1,0 +1,92 @@
+{%- comment -%} ═══ NEWSLETTER / PREFOOTER ═══ {%- endcomment -%}
+<div class="prefooter">
+  <span class="pf-eyebrow reveal">{{ 'newsletter.eyebrow' | t }}</span>
+  <h2 class="pf-title reveal d1">Restez dans<br><em>le jardin.</em></h2>
+  <p class="pf-sub reveal d2">{{ 'newsletter.subtitle' | t }}</p>
+  {%- form 'customer', id: 'newsletter-form' -%}
+    <input type="hidden" name="contact[tags]" value="newsletter">
+    <div class="pf-form reveal d3">
+      <input class="pf-input" type="email" name="contact[email]" placeholder="votre@email.com" required>
+      <button class="pf-btn" type="submit">{{ 'general.subscribe' | t }}</button>
+    </div>
+  {%- endform -%}
+  <span class="pf-rgpd reveal d4">{{ 'general.no_spam' | t }}</span>
+</div>
+
+{%- comment -%} ═══ FOOTER ═══ {%- endcomment -%}
+<footer>
+  <div class="footer-inner">
+
+    {%- comment -%} Colonne marque {%- endcomment -%}
+    <div class="fc-brand reveal">
+      <a class="fc-logo" href="/">
+        {%- render 'svg-logo', width: 48, height: 50, color: '#F0F0E6', id: 'footer' -%}
+      </a>
+      <p class="fc-tagline">{{ 'footer.tagline' | t }}</p>
+      <div class="fc-socials">
+        {%- if settings.social_instagram != blank -%}
+          <a class="fc-social" href="{{ settings.social_instagram }}" title="Instagram" target="_blank" rel="noopener">Ig</a>
+        {%- endif -%}
+        {%- if settings.social_facebook != blank -%}
+          <a class="fc-social" href="{{ settings.social_facebook }}" title="Facebook" target="_blank" rel="noopener">Fb</a>
+        {%- endif -%}
+        {%- if settings.social_pinterest != blank -%}
+          <a class="fc-social" href="{{ settings.social_pinterest }}" title="Pinterest" target="_blank" rel="noopener">Pi</a>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- comment -%} Boutique {%- endcomment -%}
+    <div class="fc-nav reveal d1">
+      <h4>{{ 'general.shop' | t }}</h4>
+      <ul>
+        <li><a href="/collections">{{ 'footer.all_creations' | t }}</a></li>
+        <li><a href="/collections">{{ 'footer.new_arrivals' | t }}</a></li>
+        <li><a href="/collections">{{ 'footer.gift_boxes' | t }}</a></li>
+        <li><a href="/collections">{{ 'footer.click_collect' | t }}</a></li>
+        <li><a href="/collections">{{ 'footer.delivery' | t }}</a></li>
+      </ul>
+    </div>
+
+    {%- comment -%} La Maison {%- endcomment -%}
+    <div class="fc-nav reveal d2">
+      <h4>{{ 'general.la_maison' | t }}</h4>
+      <ul>
+        <li><a href="{{ pages['la-maison'].url | default: '#' }}">{{ 'footer.our_story' | t }}</a></li>
+        <li><a href="{{ pages['la-maison'].url | default: '#' }}">{{ 'footer.workshop' | t }}</a></li>
+        <li><a href="{{ pages['la-maison'].url | default: '#' }}">{{ 'footer.seasonal_recipes' | t }}</a></li>
+        <li><a href="https://pro.maison-felicien.com">{{ 'footer.pro_space' | t }}</a></li>
+        <li><a href="{{ pages['la-maison'].url | default: '#' }}">{{ 'footer.press' | t }}</a></li>
+      </ul>
+    </div>
+
+    {%- comment -%} Contact {%- endcomment -%}
+    <div class="fc-nav fc-contact reveal d3">
+      <h4>{{ 'footer.contact' | t }}</h4>
+      <p>
+        Paris, Île-de-France<br><br>
+        <a href="mailto:contact@maisonfelicien.com">contact@maisonfelicien.com</a><br><br>
+        Commandes pro :<br>
+        <a href="mailto:pro@maisonfelicien.com">pro@maisonfelicien.com</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="footer-bottom reveal">
+    <span class="fb-copy">{{ 'footer.copyright' | t }}</span>
+    <div class="fb-legal">
+      <a href="/pages/mentions-legales">{{ 'footer.legal' | t }}</a>
+      <a href="/pages/confidentialite">{{ 'footer.privacy' | t }}</a>
+      <a href="/pages/cgv">{{ 'footer.terms' | t }}</a>
+    </div>
+  </div>
+</footer>
+<div class="footer-signature"><span>Maison Félicien</span></div>
+
+{% schema %}
+{
+  "name": "Pied de page",
+  "class": "section-footer",
+  "settings": []
+}
+{% endschema %}

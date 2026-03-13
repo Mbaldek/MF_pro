@@ -1,0 +1,100 @@
+{%- comment -%} ═══ STICKY MOBILE CTA — Barre fixe bas mobile ═══ {%- endcomment -%}
+
+{%- comment -%} Page produit : prix + bouton ajouter {%- endcomment -%}
+{%- if template.name == 'product' -%}
+<div class="sticky-cta" id="stickyMobileCta" aria-hidden="true">
+  <span class="sticky-price">{{ product.selected_or_first_available_variant.price | money }}</span>
+  <button class="sticky-btn" id="stickyAddBtn"
+    data-variant-id="{{ product.selected_or_first_available_variant.id }}">
+    {{ 'general.add_to_cart' | t }} <span class="arrow">→</span>
+  </button>
+</div>
+
+<script>
+(function() {
+  var sticky = document.getElementById('stickyMobileCta');
+  var mainCta = document.querySelector('.pp-cta-main');
+  if (!sticky || !mainCta || window.innerWidth > 768) return;
+
+  // Register with engagement manager for popup coordination
+  var mgr = (window.MF && MF.engagement) || null;
+  var shouldBeVisible = false;
+
+  function updateVisibility(visible) {
+    shouldBeVisible = visible;
+    // Don't show if popup is blocking us
+    if (mgr && mgr.state.popupVisible && visible) return;
+    if (visible) {
+      sticky.classList.add('visible');
+      sticky.setAttribute('aria-hidden', 'false');
+    } else {
+      sticky.classList.remove('visible');
+      sticky.setAttribute('aria-hidden', 'true');
+    }
+    if (mgr) mgr.notify('sticky-cta', visible);
+  }
+
+  if (mgr) {
+    mgr.register('sticky-cta', {
+      hide: function() { sticky.classList.remove('visible'); sticky.setAttribute('aria-hidden', 'true'); },
+      restore: function() { if (shouldBeVisible) { sticky.classList.add('visible'); sticky.setAttribute('aria-hidden', 'false'); } }
+    });
+  }
+
+  // Show/hide based on main CTA visibility
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      updateVisibility(!e.isIntersecting);
+    });
+  }, { threshold: 0 });
+  obs.observe(mainCta);
+
+  // Sync variant
+  document.querySelectorAll('.ppsize').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var vid = btn.dataset.variantId;
+      var price = btn.dataset.variantPrice;
+      if (vid) document.getElementById('stickyAddBtn').dataset.variantId = vid;
+      if (price) document.querySelector('.sticky-price').textContent = price;
+    });
+  });
+
+  // Add to cart
+  document.getElementById('stickyAddBtn').addEventListener('click', function() {
+    var vid = parseInt(this.dataset.variantId);
+    var qty = parseInt(document.getElementById('qty-input').value || '1');
+    MF.addToCart(vid, qty);
+  });
+})();
+</script>
+
+{%- elsif template.name == 'collection' -%}
+{%- comment -%} Page collection : compteur articles + voir panier {%- endcomment -%}
+<div class="sticky-cta sticky-cart-bar" id="stickyMobileCta">
+  <span class="sticky-cart-count">
+    🛒 <span id="stickyCartCount">{{ cart.item_count }}</span> article{{ cart.item_count | pluralize: '', 's' }}
+  </span>
+  <a href="/cart" class="sticky-btn">
+    Voir panier <span class="arrow">→</span>
+  </a>
+</div>
+
+<script>
+(function() {
+  var sticky = document.getElementById('stickyMobileCta');
+  if (!sticky || window.innerWidth > 768) return;
+  // Show only when cart has items
+  if ({{ cart.item_count }} > 0) {
+    sticky.classList.add('visible');
+  }
+})();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Sticky mobile CTA",
+  "class": "section-sticky-cta",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,18 @@
+{%- comment -%}
+  Social proof toast — "Marie · Paris vient de commander Le Brownie"
+  Usage: {% render 'social-proof-toast' %}
+  Only on homepage + collection pages (pas sur product/checkout)
+{%- endcomment -%}
+
+{%- if template.name == 'index' or template.name == 'collection' -%}
+<div class="sp-toast" id="socialProofToast" aria-live="polite" aria-atomic="true">
+  <span class="sp-dot">●</span>
+  <div class="sp-content">
+    <span class="sp-name" id="spName"></span>
+    <span class="sp-action">vient de commander</span>
+    <span class="sp-product" id="spProduct"></span>
+  </div>
+</div>
+
+<script src="{{ 'social-proof.js' | asset_url }}" defer></script>
+{%- endif -%}

@@ -1,0 +1,30 @@
+{%- comment -%} ═══ PAGE 404 — Page introuvable ═══ {%- endcomment -%}
+
+<div class="error-page">
+  <div class="error-content">
+    <span class="error-code">404</span>
+    <h1 class="error-title">{{ 'errors.page_not_found' | t }}</h1>
+    <p class="error-message">{{ 'errors.page_not_found_message' | t }}</p>
+    <a href="/collections" class="error-cta">{{ 'errors.go_to_shop' | t }}</a>
+  </div>
+
+  {%- assign suggestions = collections.all.products | limit: 3 -%}
+  {%- if suggestions.size > 0 -%}
+    <div class="error-suggestions">
+      <h2 class="error-suggestions-title">{{ 'errors.suggestions' | t }}</h2>
+      <div class="products-grid">
+        {%- for product in collections.all.products limit: 3 -%}
+          {% render 'product-card', product: product %}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Page 404",
+  "class": "section-404",
+  "settings": []
+}
+{% endschema %}

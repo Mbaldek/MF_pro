@@ -1,0 +1,39 @@
+{%- comment -%}
+  Countdown timer — two modes:
+  1. "drop" — countdown to a target date (next collection, event)
+  2. "delivery" — daily cutoff countdown (e.g. order before 18h for next-day delivery)
+
+  Usage:
+    {% render 'countdown', mode: 'drop', target: '2026-04-01T10:00:00+02:00', label: 'Nouvelle collection dans' %}
+    {% render 'countdown', mode: 'delivery', cutoff_hour: 18, label: 'Commandez dans', after_label: 'pour livraison mercredi' %}
+{%- endcomment -%}
+
+{%- assign cd_mode = mode | default: 'delivery' -%}
+{%- assign cd_label = label | default: 'Commandez dans' -%}
+{%- assign cd_after = after_label | default: 'pour livraison rapide' -%}
+{%- assign cd_cutoff = cutoff_hour | default: 18 -%}
+
+<div class="countdown" id="countdown-{{ cd_mode }}"
+  data-mode="{{ cd_mode }}"
+  data-target="{{ target }}"
+  data-cutoff="{{ cd_cutoff }}"
+  data-label="{{ cd_label }}"
+  data-after="{{ cd_after }}">
+  <span class="cd-label">{{ cd_label }}</span>
+  <div class="cd-digits">
+    {%- if cd_mode == 'drop' -%}
+      <div class="cd-unit"><span class="cd-num" data-days>00</span><span class="cd-lbl">j</span></div>
+      <span class="cd-sep">:</span>
+    {%- endif -%}
+    <div class="cd-unit"><span class="cd-num" data-hours>00</span><span class="cd-lbl">h</span></div>
+    <span class="cd-sep">:</span>
+    <div class="cd-unit"><span class="cd-num" data-mins>00</span><span class="cd-lbl">min</span></div>
+    {%- if cd_mode == 'delivery' -%}
+      <span class="cd-sep">:</span>
+      <div class="cd-unit"><span class="cd-num" data-secs>00</span><span class="cd-lbl">sec</span></div>
+    {%- endif -%}
+  </div>
+  <span class="cd-after">{{ cd_after }}</span>
+</div>
+
+<script src="{{ 'countdown.js' | asset_url }}" defer></script>

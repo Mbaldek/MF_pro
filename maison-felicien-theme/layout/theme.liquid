@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page_title }}{% unless page_title contains shop.name %} — {{ shop.name }}{% endunless %}</title>
+  <meta name="description" content="{{ page_description | escape }}">
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  {%- comment -%} Open Graph {%- endcomment -%}
+  <meta property="og:site_name" content="{{ shop.name }}">
+  <meta property="og:type" content="{%- if template.name == 'product' -%}product{%- else -%}website{%- endif -%}">
+  <meta property="og:title" content="{{ page_title }}">
+  <meta property="og:description" content="{{ page_description | escape }}">
+  <meta property="og:url" content="{{ canonical_url }}">
+  {%- if product.featured_image -%}
+    <meta property="og:image" content="https:{{ product.featured_image | image_url: width: 1200 }}">
+  {%- elsif collection.image -%}
+    <meta property="og:image" content="https:{{ collection.image | image_url: width: 1200 }}">
+  {%- endif -%}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ page_title }}">
+  <meta name="twitter:description" content="{{ page_description | escape }}">
+
+  {%- comment -%} JSON-LD Organization {%- endcomment -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": {{ shop.name | json }},
+    "url": {{ shop.url | json }}
+    {%- if settings.social_instagram -%}
+    , "sameAs": [{{ settings.social_instagram | json }}
+      {%- if settings.social_facebook -%}, {{ settings.social_facebook | json }}{%- endif -%}
+      {%- if settings.social_pinterest -%}, {{ settings.social_pinterest | json }}{%- endif -%}
+    ]
+    {%- endif -%}
+  }
+  </script>
+
+  {%- comment -%} Google Fonts {%- endcomment -%}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Questrial&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap" rel="stylesheet">
+
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+  {{ 'popup.css' | asset_url | stylesheet_tag }}
+
+  {%- if template.name == 'index' -%}
+    {{ 'hero.css' | asset_url | stylesheet_tag }}
+  {%- endif -%}
+
+  {{ content_for_header }}
+
+  <style>
+    :root {
+      --rose:   {{ settings.color_rose }};
+      --vieux:  {{ settings.color_vieux }};
+      --poudre: {{ settings.color_poudre }};
+      --vert:   {{ settings.color_vert }};
+      --blanc:  {{ settings.color_blanc }};
+      --marron: {{ settings.color_marron }};
+    }
+  </style>
+</head>
+<body class="template-{{ template.name }}{% if template.suffix %} template-{{ template.name }}-{{ template.suffix }}{% endif %}">
+
+  {%- comment -%} ═══ ANNOUNCEMENT BAR ═══ {%- endcomment -%}
+  {%- section 'announcement-bar' -%}
+
+  {%- section 'header' -%}
+
+  <main id="main" role="main">
+    {{ content_for_layout }}
+  </main>
+
+  {%- section 'footer' -%}
+
+  {%- comment -%} ═══ ENGAGEMENT OVERLAYS ═══ {%- endcomment -%}
+  {%- section 'popup-email' -%}
+  {%- section 'sticky-mobile-cta' -%}
+  {% render 'social-proof-toast' %}
+
+  {%- comment -%} Toast notification (add to cart) {%- endcomment -%}
+  <div id="toast">
+    <span style="color:var(--vert);font-size:15px">✓</span>
+    <span id="toastMsg">{{ 'product.added' | t }}</span>
+  </div>
+
+  {%- comment -%} ═══ CART DRAWER ═══ {%- endcomment -%}
+  {% render 'cart-drawer' %}
+
+  {{ 'animations.js' | asset_url | script_tag }}
+
+  {%- comment -%} Engagement manager — must load before popup/social-proof/quiz {%- endcomment -%}
+  <script src="{{ 'engagement-manager.js' | asset_url }}"></script>
+
+  <script>
+    // Cart API helpers
+    window.MF = window.MF || {};
+
+    // ═══ CART DRAWER ═══
+    MF.openCartDrawer = function() {
+      fetch('/cart.js').then(function(r) { return r.json(); }).then(function(cart) {
+        MF.renderCartDrawer(cart);
+        document.getElementById('cartDrawer').classList.add('open');
+        document.getElementById('cartDrawerOverlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    };
+
+    MF.closeCartDrawer = function() {
+      document.getElementById('cartDrawer').classList.remove('open');
+      document.getElementById('cartDrawerOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    };
+
+    MF.renderCartDrawer = function(cart) {
+      var items = document.getElementById('cdItems');
+      var empty = document.getElementById('cdEmpty');
+      var footer = document.getElementById('cdFooter');
+      var subtotal = document.getElementById('cdSubtotal');
+      var shipping = document.getElementById('cdShipping');
+      var countEl = document.getElementById('cartCount');
+      if (countEl) countEl.textContent = cart.item_count;
+
+      if (cart.item_count === 0) {
+        items.innerHTML = '';
+        items.style.display = 'none';
+        empty.style.display = '';
+        footer.style.display = 'none';
+        shipping.innerHTML = '';
+        return;
+      }
+
+      items.style.display = '';
+      empty.style.display = 'none';
+      footer.style.display = '';
+
+      // Free shipping bar
+      var threshold = 5000; // 50€ in cents
+      var remaining = threshold - cart.total_price;
+      var progress = Math.min(100, Math.round(cart.total_price * 100 / threshold));
+      if (remaining > 0) {
+        shipping.innerHTML = '<div class="fsb"><div class="fsb-text"><span class="fsb-icon">🚚</span> Plus que <strong>' + (remaining / 100).toFixed(2).replace('.', ',') + ' €</strong> pour la livraison offerte !</div><div class="fsb-track"><div class="fsb-fill" style="width:' + progress + '%"></div></div></div>';
+      } else {
+        shipping.innerHTML = '<div class="fsb"><div class="fsb-text fsb-complete"><span class="fsb-icon">✓</span> Livraison offerte !</div><div class="fsb-track"><div class="fsb-fill" style="width:100%"></div></div></div>';
+      }
+
+      // Items
+      var html = '';
+      for (var i = 0; i < cart.items.length; i++) {
+        var item = cart.items[i];
+        var imgSrc = item.image ? item.image.replace(/(\.[^.]+)$/, '_160x$1') : '';
+        html += '<div class="cd-line">';
+        if (imgSrc) html += '<img class="cd-line-img" src="' + imgSrc + '" alt="" width="60" height="75" loading="lazy">';
+        html += '<div class="cd-line-info">';
+        html += '<span class="cd-line-name">' + item.product_title + '</span>';
+        if (item.variant_title && item.variant_title !== 'Default Title') {
+          html += '<span class="cd-line-variant">' + item.variant_title + '</span>';
+        }
+        html += '<span class="cd-line-price">' + (item.price / 100).toFixed(2).replace('.', ',') + ' €</span>';
+        html += '</div>';
+        html += '<div class="cd-line-qty">';
+        html += '<button class="cd-qty-btn" onclick="MF.updateDrawerQty(' + item.key + ',' + (item.quantity - 1) + ')">−</button>';
+        html += '<span class="cd-qty-val">' + item.quantity + '</span>';
+        html += '<button class="cd-qty-btn" onclick="MF.updateDrawerQty(' + item.key + ',' + (item.quantity + 1) + ')">+</button>';
+        html += '</div>';
+        html += '</div>';
+      }
+      items.innerHTML = html;
+      subtotal.textContent = (cart.total_price / 100).toFixed(2).replace('.', ',') + ' €';
+    };
+
+    MF.updateDrawerQty = function(key, qty) {
+      fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: String(key), quantity: qty })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(cart) { MF.renderCartDrawer(cart); });
+    };
+
+    // Close drawer events
+    document.getElementById('cdClose').addEventListener('click', MF.closeCartDrawer);
+    document.getElementById('cartDrawerOverlay').addEventListener('click', MF.closeCartDrawer);
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && document.getElementById('cartDrawer').classList.contains('open')) {
+        MF.closeCartDrawer();
+      }
+    });
+
+    // ═══ ADD TO CART ═══
+    MF.addToCart = function(variantId, qty) {
+      qty = qty || 1;
+      return fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: variantId, quantity: qty })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(item) {
+        return fetch('/cart.js').then(function(r) { return r.json(); });
+      })
+      .then(function(cart) {
+        var el = document.getElementById('cartCount');
+        if (el) el.textContent = cart.item_count;
+        // Open cart drawer instead of just toast
+        MF.renderCartDrawer(cart);
+        document.getElementById('cartDrawer').classList.add('open');
+        document.getElementById('cartDrawerOverlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+        return cart;
+      });
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+{%- comment -%} ═══ LA MAISON — Section manifeste ═══ {%- endcomment -%}
+<section class="manifeste">
+  <div class="mani-photo-side">
+    <div class="mani-photo"
+      {%- if section.settings.image -%}
+        style="background-image:url('{{ section.settings.image | image_url: width: 1200 }}')"
+      {%- endif -%}></div>
+    <div class="mani-photo-overlay"></div>
+    <span class="mani-date-strip">{{ section.settings.date_strip | default: 'Maison Félicien — Paris — Fondée 2023' }}</span>
+  </div>
+
+  <div class="mani-text-side">
+    <div class="mani-eyebrow reveal d1">{{ section.settings.eyebrow | default: 'La Maison' }}</div>
+    <h2 class="mani-headline reveal d2">{{ section.settings.headline | default: 'Un jardin<br><em>façonné</em><br><strong>à la main.</strong>' }}</h2>
+    <p class="mani-body reveal d3">{{ section.settings.body | default: "Maison Félicien est née d'une conviction : la pâtisserie est un art vivant, saisonnier, ancré dans le geste. Chaque recette est pensée comme un tableau — ingrédients choisis, textures composées, saveurs orchestrées." }}</p>
+    <div class="mani-quote reveal d4">
+      <p>{{ section.settings.quote | default: "La nature n'est pas brute. Elle est cultivée, dessinée, sublimée." }}</p>
+      <cite>{{ section.settings.quote_author | default: '— La fondatrice' }}</cite>
+    </div>
+    <a href="{{ section.settings.cta_url | default: pages['la-maison'].url }}" class="mani-cta reveal d5">
+      <span class="mani-cta-line"></span>
+      {{ section.settings.cta_text | default: 'Notre histoire' }}
+    </a>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "La Maison",
+  "class": "section-la-maison",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Sur-titre",
+      "default": "La Maison"
+    },
+    {
+      "type": "html",
+      "id": "headline",
+      "label": "Titre",
+      "default": "Un jardin<br><em>façonné</em><br><strong>à la main.</strong>"
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "Texte"
+    },
+    {
+      "type": "text",
+      "id": "quote",
+      "label": "Citation"
+    },
+    {
+      "type": "text",
+      "id": "quote_author",
+      "label": "Auteur citation",
+      "default": "— La fondatrice"
+    },
+    {
+      "type": "text",
+      "id": "date_strip",
+      "label": "Bandeau date",
+      "default": "Maison Félicien — Paris — Fondée 2023"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Texte lien",
+      "default": "Notre histoire"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "URL lien"
+    }
+  ],
+  "presets": [
+    {
+      "name": "La Maison"
+    }
+  ]
+}
+{% endschema %}

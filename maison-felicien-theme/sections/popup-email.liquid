@@ -1,0 +1,80 @@
+{%- comment -%} ═══ POPUP EMAIL INTELLIGENTE — Bottom sheet mobile ═══ {%- endcomment -%}
+
+<div class="popup-overlay" id="popupOverlay"></div>
+<div class="popup-email" id="popupEmail" role="dialog" aria-modal="true" aria-label="Inscription newsletter">
+  <button class="popup-close" id="popupClose" aria-label="Fermer">×</button>
+
+  <div class="popup-content">
+    <div class="popup-eyebrow">
+      <span class="popup-leaf">🌿</span>
+    </div>
+    <h3 class="popup-title">{{ section.settings.title | default: 'Recevez en avant-première nos créations de saison' }}</h3>
+    <p class="popup-desc">{{ section.settings.description | default: "Accès prioritaire aux nouvelles collections, recettes de l'atelier et éditions limitées." }}</p>
+
+    {%- form 'customer', id: 'popup-newsletter-form' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter,popup">
+      <div class="popup-form">
+        <input class="popup-input" type="email" name="contact[email]"
+          placeholder="votre@email.com" required autocomplete="email">
+        <button class="popup-btn" type="submit">
+          {{ section.settings.cta_text | default: 'Rejoindre le jardin →' }}
+        </button>
+      </div>
+    {%- endform -%}
+
+    <span class="popup-rgpd">{{ section.settings.rgpd | default: 'Pas de spam · 1 lettre par mois · Désinscription en un clic' }}</span>
+  </div>
+</div>
+
+<script src="{{ 'popup.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Popup email",
+  "class": "section-popup",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Recevez en avant-première nos créations de saison"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Accès prioritaire aux nouvelles collections, recettes de l'atelier et éditions limitées."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Texte du bouton",
+      "default": "Rejoindre le jardin →"
+    },
+    {
+      "type": "text",
+      "id": "rgpd",
+      "label": "Texte RGPD",
+      "default": "Pas de spam · 1 lettre par mois · Désinscription en un clic"
+    },
+    {
+      "type": "range",
+      "id": "scroll_trigger",
+      "label": "Déclenchement au scroll (%)",
+      "min": 20,
+      "max": 90,
+      "step": 5,
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "inactivity_seconds",
+      "label": "Déclenchement après inactivité (secondes)",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "default": 30
+    }
+  ]
+}
+{% endschema %}

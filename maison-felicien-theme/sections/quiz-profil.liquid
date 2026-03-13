@@ -1,0 +1,185 @@
+{%- comment -%}
+  Quiz « Trouvez votre création » — 3 étapes + résultats
+  Collecte email, préférences goût, intention achat
+  Tags le customer Shopify avec les réponses
+{%- endcomment -%}
+
+<section class="quiz-section" id="quizSection">
+  <div class="quiz-container">
+
+    {%- comment -%} ═══ STEP 0 : INTRO ═══ {%- endcomment -%}
+    <div class="quiz-step quiz-intro active" data-step="0">
+      <span class="quiz-eyebrow">{{ section.settings.eyebrow | default: '✦ Votre profil gourmand' }}</span>
+      <h2 class="quiz-headline">{{ section.settings.headline | default: 'Trouvez votre création idéale' }}</h2>
+      <p class="quiz-sub">{{ section.settings.subtitle | default: 'Répondez à 3 questions et découvrez les pâtisseries faites pour vous.' }}</p>
+      <button class="quiz-start-btn" data-quiz-next>
+        {{ section.settings.start_cta | default: 'Commencer →' }}
+      </button>
+    </div>
+
+    {%- comment -%} ═══ STEP 1 : GOÛT ═══ {%- endcomment -%}
+    <div class="quiz-step" data-step="1">
+      <div class="quiz-progress"><div class="quiz-progress-fill" style="width:33%"></div></div>
+      <span class="quiz-step-label">1 / 3</span>
+      <h3 class="quiz-question">{{ section.settings.q1 | default: 'Vous êtes plutôt…' }}</h3>
+      <div class="quiz-options" data-field="gout">
+        <button class="quiz-option" data-value="chocolat">
+          <span class="quiz-option-icon">🍫</span>
+          <span class="quiz-option-label">Chocolat intense</span>
+        </button>
+        <button class="quiz-option" data-value="fruite">
+          <span class="quiz-option-icon">🍋</span>
+          <span class="quiz-option-label">Fruité & léger</span>
+        </button>
+        <button class="quiz-option" data-value="classique">
+          <span class="quiz-option-icon">🧈</span>
+          <span class="quiz-option-label">Classique revisité</span>
+        </button>
+      </div>
+    </div>
+
+    {%- comment -%} ═══ STEP 2 : INTENTION ═══ {%- endcomment -%}
+    <div class="quiz-step" data-step="2">
+      <div class="quiz-progress"><div class="quiz-progress-fill" style="width:66%"></div></div>
+      <span class="quiz-step-label">2 / 3</span>
+      <h3 class="quiz-question">{{ section.settings.q2 | default: "C'est pour…" }}</h3>
+      <div class="quiz-options" data-field="intention">
+        <button class="quiz-option" data-value="plaisir">
+          <span class="quiz-option-icon">💛</span>
+          <span class="quiz-option-label">Me faire plaisir</span>
+        </button>
+        <button class="quiz-option" data-value="offrir">
+          <span class="quiz-option-icon">🎁</span>
+          <span class="quiz-option-label">Offrir</span>
+        </button>
+        <button class="quiz-option" data-value="evenement">
+          <span class="quiz-option-icon">🥂</span>
+          <span class="quiz-option-label">Un événement</span>
+        </button>
+      </div>
+    </div>
+
+    {%- comment -%} ═══ STEP 3 : EMAIL ═══ {%- endcomment -%}
+    <div class="quiz-step" data-step="3">
+      <div class="quiz-progress"><div class="quiz-progress-fill" style="width:100%"></div></div>
+      <span class="quiz-step-label">3 / 3</span>
+      <h3 class="quiz-question">{{ section.settings.q3 | default: 'Votre email pour découvrir vos recommandations' }}</h3>
+      {%- form 'customer', id: 'quiz-email-form' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter,quiz" id="quizTags">
+        <div class="quiz-email-wrap">
+          <input class="quiz-email-input" type="email" name="contact[email]"
+            placeholder="votre@email.com" required autocomplete="email" id="quizEmail">
+          <button class="quiz-email-btn" type="submit">
+            {{ section.settings.email_cta | default: 'Découvrir →' }}
+          </button>
+        </div>
+        <span class="quiz-rgpd">{{ section.settings.rgpd | default: 'Pas de spam · Désinscription en un clic' }}</span>
+      {%- endform -%}
+    </div>
+
+    {%- comment -%} ═══ STEP 4 : RÉSULTATS ═══ {%- endcomment -%}
+    <div class="quiz-step quiz-results" data-step="4">
+      <span class="quiz-eyebrow">🌿 Vos recommandations</span>
+      <h3 class="quiz-results-title">Voici ce que nous avons choisi pour vous</h3>
+      <div class="quiz-reco-grid" id="quizRecoGrid">
+        {%- comment -%} Filled by JS based on answers {%- endcomment -%}
+      </div>
+      <a class="quiz-browse-btn" href="/collections/all">
+        {{ section.settings.browse_cta | default: 'Voir toute la boutique →' }}
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<script src="{{ 'quiz.js' | asset_url }}" defer></script>
+<link rel="stylesheet" href="{{ 'quiz.css' | asset_url }}" media="print" onload="this.media='all'">
+
+{% schema %}
+{
+  "name": "Quiz profil",
+  "class": "section-quiz",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "✦ Votre profil gourmand"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Titre",
+      "default": "Trouvez votre création idéale"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Sous-titre",
+      "default": "Répondez à 3 questions et découvrez les pâtisseries faites pour vous."
+    },
+    {
+      "type": "text",
+      "id": "start_cta",
+      "label": "Bouton commencer",
+      "default": "Commencer →"
+    },
+    {
+      "type": "text",
+      "id": "q1",
+      "label": "Question 1",
+      "default": "Vous êtes plutôt…"
+    },
+    {
+      "type": "text",
+      "id": "q2",
+      "label": "Question 2",
+      "default": "C'est pour…"
+    },
+    {
+      "type": "text",
+      "id": "q3",
+      "label": "Question 3",
+      "default": "Votre email pour découvrir vos recommandations"
+    },
+    {
+      "type": "text",
+      "id": "email_cta",
+      "label": "Bouton email",
+      "default": "Découvrir →"
+    },
+    {
+      "type": "text",
+      "id": "rgpd",
+      "label": "Texte RGPD",
+      "default": "Pas de spam · Désinscription en un clic"
+    },
+    {
+      "type": "text",
+      "id": "browse_cta",
+      "label": "Bouton voir boutique",
+      "default": "Voir toute la boutique →"
+    },
+    {
+      "type": "collection",
+      "id": "collection_chocolat",
+      "label": "Collection chocolat"
+    },
+    {
+      "type": "collection",
+      "id": "collection_fruite",
+      "label": "Collection fruité"
+    },
+    {
+      "type": "collection",
+      "id": "collection_classique",
+      "label": "Collection classique"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Quiz profil"
+    }
+  ]
+}
+{% endschema %}

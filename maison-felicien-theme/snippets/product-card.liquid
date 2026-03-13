@@ -1,0 +1,46 @@
+{%- comment -%}
+  Carte produit réutilisable — utilisée dans collection-grid et produits-vedette.
+  Variables attendues : product (objet Shopify product)
+  Optionnel : card_class (string), delay_class (string, ex: "d1")
+{%- endcomment -%}
+
+<div class="pcard reveal {{ delay_class }}">
+  <a href="{{ product.url }}" class="pcard-link">
+    <div class="pcard-img">
+      {%- if product.featured_image -%}
+        <div class="pcard-photo" style="background-image:url('{{ product.featured_image | image_url: width: 800 }}')"></div>
+      {%- else -%}
+        <div class="pcard-photo" style="background:var(--marron)"></div>
+      {%- endif -%}
+      <div class="pcard-overlay">
+        <button class="pcard-quick" data-product-url="{{ product.url }}">{{ 'general.see_product' | t }}</button>
+      </div>
+
+      <div class="pcard-badges">
+        {%- for tag in product.tags -%}
+          {%- if tag == 'signature' -%}
+            <span class="badge badge-sig">{{ 'product.signature' | t }}</span>
+          {%- elsif tag == 'nouveaute' -%}
+            <span class="badge badge-new">{{ 'product.new' | t }}</span>
+          {%- elsif tag == 'best-seller' -%}
+            <span class="badge badge-best">{{ 'product.best_seller' | t }}</span>
+          {%- elsif tag == 'saison' -%}
+            <span class="badge badge-saison">{{ 'product.season' | t }}</span>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="pcard-name">{{ product.title }}</div>
+    <div class="pcard-bottom">
+      <span class="pcard-price">{{ product.price | money }}</span>
+      {%- if product.variants.size > 1 -%}
+        <div class="pcard-sizes">
+          {%- for variant in product.variants -%}
+            <span class="psize{% if forloop.first %} active{% endif %}">{{ variant.title }}</span>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </a>
+</div>

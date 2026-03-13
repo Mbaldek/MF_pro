@@ -1,0 +1,28 @@
+{%- comment -%}
+  Free shipping progress bar
+  Usage: {% render 'free-shipping-bar' %}
+  Configure threshold via theme settings or hardcode
+{%- endcomment -%}
+
+{%- assign threshold = 5000 -%}{%- comment -%} 50€ en centimes {%- endcomment -%}
+{%- assign current = cart.total_price -%}
+{%- assign remaining = threshold | minus: current -%}
+{%- assign progress = current | times: 100 | divided_by: threshold -%}
+{%- if progress > 100 -%}{%- assign progress = 100 -%}{%- endif -%}
+
+<div class="fsb" data-threshold="{{ threshold }}">
+  {%- if remaining > 0 -%}
+    <div class="fsb-text">
+      <span class="fsb-icon">🚚</span>
+      Plus que <strong>{{ remaining | money }}</strong> pour la livraison offerte !
+    </div>
+  {%- else -%}
+    <div class="fsb-text fsb-complete">
+      <span class="fsb-icon">✓</span>
+      Livraison offerte !
+    </div>
+  {%- endif -%}
+  <div class="fsb-track">
+    <div class="fsb-fill" style="width:{{ progress }}%"></div>
+  </div>
+</div>

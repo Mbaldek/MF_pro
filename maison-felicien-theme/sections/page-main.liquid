@@ -1,0 +1,23 @@
+{%- comment -%} ═══ PAGE STATIQUE — CGV, mentions légales, À propos ═══ {%- endcomment -%}
+
+<div class="page-content">
+  <nav class="breadcrumb">
+    <a href="/">{{ 'general.home' | t }}</a>
+    <span class="bc-sep">›</span>
+    <span>{{ page.title }}</span>
+  </nav>
+
+  <h1 class="page-title">{{ page.title }}</h1>
+
+  <div class="page-body rte">
+    {{ page.content }}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Page statique",
+  "class": "section-page",
+  "settings": []
+}
+{% endschema %}

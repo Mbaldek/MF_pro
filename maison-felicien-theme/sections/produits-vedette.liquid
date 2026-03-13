@@ -1,0 +1,61 @@
+{%- comment -%} ═══ PRODUITS VEDETTE — Homepage ═══ {%- endcomment -%}
+<section class="section">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-head-left">
+        <span class="eyebrow">{{ 'general.shop' | t }}</span>
+        <h2 class="section-title">Nos <em>créations</em></h2>
+      </div>
+      <a href="/collections" class="voir-tout reveal d2">{{ 'general.view_all' | t }}</a>
+    </div>
+
+    <div class="mosaic">
+      {%- assign featured = section.settings.collection | default: collections['all'] -%}
+      {%- if featured -%}
+        {%- for product in featured.products limit: 3 -%}
+          <div class="mc reveal d{{ forloop.index }}">
+            <div class="mc-photo"
+              {%- if product.featured_image -%}
+                style="background-image:url('{{ product.featured_image | image_url: width: 800 }}')"
+              {%- endif -%}></div>
+            <div class="mc-overlay"></div>
+            <div class="mc-content">
+              <h3 class="mc-title">{{ product.title }}</h3>
+              <p class="mc-desc">{{ product.metafields.custom.short_description | default: product.description | strip_html | truncate: 80 }}</p>
+              <a href="{{ product.url }}" class="mc-cta">Commander</a>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+    <div class="section-footer reveal d4">
+      <span class="sf-count">
+        {%- if featured -%}
+          {{ featured.products_count }} créations
+        {%- endif -%}
+      </span>
+      <span class="sf-sep">·</span>
+      <span class="sf-note">Livrées fraîches partout en France</span>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Produits vedette",
+  "class": "section-produits-vedette",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection à afficher"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Produits vedette"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,47 @@
+{%- comment -%}
+  Header / Navigation — deux variantes :
+  - Homepage : nav transparente qui devient compacte au scroll
+  - Autres pages : nav sticky simple (style boutique)
+{%- endcomment -%}
+
+{%- if template.name == 'index' -%}
+{%- comment -%} ═══ NAV HOMEPAGE — transparente sur hero ═══ {%- endcomment -%}
+<nav id="nav">
+  <div class="nav-mono">
+    {%- render 'svg-logo', width: 38, height: 39, color: '#F0F0E6', id: 'nav-mono' -%}
+  </div>
+  <div class="nav-logo-scroll">
+    {%- render 'svg-logo', width: 32, height: 33, color: '#8B3A43', id: 'nav-scroll' -%}
+  </div>
+  <div class="nav-right">
+    <a href="{{ pages['la-maison'].url | default: '#' }}" class="nav-link">{{ 'general.la_maison' | t }}</a>
+    <a href="{{ collections.all.url | default: '/collections' }}" class="nav-btn">Commander</a>
+  </div>
+</nav>
+
+{%- else -%}
+{%- comment -%} ═══ NAV INTÉRIEURE — sticky simple ═══ {%- endcomment -%}
+<nav class="nav">
+  <a class="nav-logo" href="/">
+    {%- render 'svg-logo', width: 28, height: 29, color: '#8B3A43', id: 'nav-inner' -%}
+    <span class="nav-wordmark">Maison Félicien</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/"{% if template.name == 'index' %} class="active"{% endif %}>{{ 'general.home' | t }}</a></li>
+    <li><a href="/collections"{% if template.name == 'collection' or template.name == 'list-collections' %} class="active"{% endif %}>{{ 'general.shop' | t }}</a></li>
+    <li><a href="{{ pages['la-maison'].url | default: '/pages/la-maison' }}"{% if page.handle == 'la-maison' %} class="active"{% endif %}>{{ 'general.la_maison' | t }}</a></li>
+    <li><a href="https://pro.maison-felicien.com">{{ 'general.pro' | t }}</a></li>
+  </ul>
+  <a href="/cart" class="nav-cart" onclick="event.preventDefault(); MF.openCartDrawer();">
+    {{ 'general.cart' | t }} <span class="cart-pill" id="cartCount">{{ cart.item_count }}</span>
+  </a>
+</nav>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "En-tête",
+  "class": "section-header",
+  "settings": []
+}
+{% endschema %}

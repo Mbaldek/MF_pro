@@ -1,0 +1,25 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {}
+    },
+    "produits-vedette": {
+      "type": "produits-vedette",
+      "settings": {}
+    },
+    "quiz": {
+      "type": "quiz-profil",
+      "settings": {}
+    },
+    "la-maison": {
+      "type": "la-maison-teaser",
+      "settings": {}
+    },
+    "split-b2b": {
+      "type": "teaser-b2b",
+      "settings": {}
+    }
+  },
+  "order": ["hero", "produits-vedette", "quiz", "la-maison", "split-b2b"]
+}

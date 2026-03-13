@@ -1,0 +1,90 @@
+{%- comment -%} ═══ CONNEXION CLIENT ═══ {%- endcomment -%}
+
+<div class="account-page">
+  {%- comment -%} LOGIN FORM {%- endcomment -%}
+  <div class="account-card" id="loginForm">
+    <h1 class="account-title">{{ 'customer.login_title' | t }}</h1>
+
+    {%- form 'customer_login' -%}
+      {%- if form.errors -%}
+        <div class="form-error">{{ form.errors | default_errors }}</div>
+      {%- endif -%}
+
+      <div class="form-field">
+        <label class="form-label" for="login-email">{{ 'customer.email' | t }}</label>
+        <input class="form-input" type="email" id="login-email" name="customer[email]"
+          autocomplete="email" autocorrect="off" autocapitalize="off" required>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="login-password">{{ 'customer.password' | t }}</label>
+        <input class="form-input" type="password" id="login-password" name="customer[password]"
+          autocomplete="current-password" required>
+      </div>
+
+      <button type="submit" class="form-btn">{{ 'customer.sign_in' | t }}</button>
+
+      <div class="form-links">
+        <a href="#" class="form-link" id="showRecover">{{ 'customer.forgot_password' | t }}</a>
+        <span class="form-link-sep">·</span>
+        <span class="form-link-text">{{ 'customer.no_account' | t }}
+          <a href="/account/register" class="form-link">{{ 'customer.create_account' | t }}</a>
+        </span>
+      </div>
+    {%- endform -%}
+  </div>
+
+  {%- comment -%} RECOVER PASSWORD FORM {%- endcomment -%}
+  <div class="account-card" id="recoverForm" style="display:none">
+    <h1 class="account-title">{{ 'customer.recover_password' | t }}</h1>
+    <p class="account-desc">{{ 'customer.recover_message' | t }}</p>
+
+    {%- form 'recover_customer_password' -%}
+      {%- if form.posted_successfully? -%}
+        <div class="form-success">{{ 'customer.recover_success' | t }}</div>
+      {%- endif -%}
+
+      <div class="form-field">
+        <label class="form-label" for="recover-email">{{ 'customer.email' | t }}</label>
+        <input class="form-input" type="email" id="recover-email" name="email"
+          autocomplete="email" required>
+      </div>
+
+      <button type="submit" class="form-btn">{{ 'customer.recover_button' | t }}</button>
+
+      <div class="form-links">
+        <a href="#" class="form-link" id="showLogin">{{ 'customer.back_to_login' | t }}</a>
+      </div>
+    {%- endform -%}
+  </div>
+</div>
+
+<script>
+(function() {
+  var login = document.getElementById('loginForm');
+  var recover = document.getElementById('recoverForm');
+  document.getElementById('showRecover').addEventListener('click', function(e) {
+    e.preventDefault();
+    login.style.display = 'none';
+    recover.style.display = '';
+  });
+  document.getElementById('showLogin').addEventListener('click', function(e) {
+    e.preventDefault();
+    recover.style.display = 'none';
+    login.style.display = '';
+  });
+  // Auto-show recover if URL has #recover
+  if (window.location.hash === '#recover') {
+    login.style.display = 'none';
+    recover.style.display = '';
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Connexion client",
+  "class": "section-customer-login",
+  "settings": []
+}
+{% endschema %}

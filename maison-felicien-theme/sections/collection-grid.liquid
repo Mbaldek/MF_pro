@@ -1,0 +1,115 @@
+{%- comment -%} ═══ GRILLE COLLECTION / BOUTIQUE ═══ {%- endcomment -%}
+
+{%- comment -%} Hero éditorial {%- endcomment -%}
+<div class="editorial-hero">
+  <h1 class="eh-headline reveal">
+    {%- if collection.handle == 'all' -%}
+      Toutes nos<br><em>créations</em>
+    {%- else -%}
+      {{ collection.title }}
+    {%- endif -%}
+  </h1>
+  {%- if collection.description != blank -%}
+    <p class="eh-sub reveal d1">{{ collection.description }}</p>
+  {%- else -%}
+    <p class="eh-sub reveal d1">Chaque recette est un chapitre. Un ingrédient observé, dessiné, interprété. La saison dicte, l'atelier sublime.</p>
+  {%- endif -%}
+
+  {%- comment -%} Filtres par tags {%- endcomment -%}
+  <div class="filter-pills reveal d2">
+    <button class="fpill active" data-filter="all">Tout</button>
+    {%- assign all_tags = '' -%}
+    {%- for product in collection.products -%}
+      {%- for tag in product.tags -%}
+        {%- unless all_tags contains tag -%}
+          {%- assign all_tags = all_tags | append: tag | append: ',' -%}
+        {%- endunless -%}
+      {%- endfor -%}
+    {%- endfor -%}
+    {%- assign tag_list = all_tags | split: ',' -%}
+    {%- for tag in tag_list -%}
+      {%- if tag != blank -%}
+        <button class="fpill" data-filter="{{ tag | handleize }}">{{ tag | capitalize }}</button>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{%- comment -%} Grille produits {%- endcomment -%}
+<div class="products-section">
+  <div class="products-grid" id="productsGrid">
+    {%- for product in collection.products -%}
+      {%- assign delay = forloop.index | modulo: 4 | plus: 1 -%}
+      <div class="pcard reveal d{{ delay }}" data-cats="{{ product.tags | join: ' ' | handleize }}">
+        <a href="{{ product.url }}" style="text-decoration:none;color:inherit;">
+          <div class="pcard-img">
+            {%- if product.featured_image -%}
+              <div class="pcard-photo" style="background-image:url('{{ product.featured_image | image_url: width: 600 }}')"></div>
+            {%- else -%}
+              <div class="pcard-photo"></div>
+            {%- endif -%}
+            <div class="pcard-overlay">
+              <button class="pcard-quick">{{ 'general.see_product' | t }}</button>
+            </div>
+
+            <div class="pcard-badges">
+              {%- for tag in product.tags -%}
+                {%- if tag == 'signature' -%}
+                  <span class="badge badge-sig">{{ 'product.signature' | t }}</span>
+                {%- elsif tag == 'nouveaute' -%}
+                  <span class="badge badge-new">{{ 'product.new' | t }}</span>
+                {%- elsif tag == 'best-seller' -%}
+                  <span class="badge badge-best">{{ 'product.best_seller' | t }}</span>
+                {%- elsif tag == 'saison' -%}
+                  <span class="badge badge-saison">{{ 'product.season' | t }}</span>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+
+          <div class="pcard-name">{{ product.title }}</div>
+          <div class="pcard-bottom">
+            <span class="pcard-price">
+              {%- if product.price_varies -%}
+                Dès {{ product.price_min | money }}
+              {%- else -%}
+                {{ product.price | money }}
+              {%- endif -%}
+            </span>
+            {%- if product.variants.size > 1 -%}
+              <div class="pcard-sizes">
+                {%- for variant in product.variants -%}
+                  <span class="psize{% if forloop.first %} active{% endif %}">{{ variant.title }}</span>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+          </div>
+        </a>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{%- comment -%} Barre livraison {%- endcomment -%}
+<div class="delivery">
+  <span class="di"><span class="di-dot"></span>Livraison nationale</span>
+  <span class="di-sep"></span>
+  <span class="di"><span class="di-dot"></span>Click & collect Paris</span>
+  <span class="di-sep"></span>
+  <span class="di"><span class="di-dot"></span>Emballage cadeau offert dès 35 €</span>
+  <span class="di-sep"></span>
+  <span class="di"><span class="di-dot"></span>Devis pro sous 24h</span>
+</div>
+
+{% schema %}
+{
+  "name": "Grille collection",
+  "class": "section-collection-grid",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Grille collection"
+    }
+  ]
+}
+{% endschema %}
