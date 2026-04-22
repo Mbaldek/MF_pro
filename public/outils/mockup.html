@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Mockup v3 · Catalogue Maison Félicien</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Questrial&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #8B3A43;
+    --vieux-rose: #BF646D;
+    --poudre: #E5B7B3;
+    --poudre-clair: #F5E0DE;
+    --vert: #968A42;
+    --blanc: #F0F0E6;
+    --creme: #FAFAF7;
+    --marron: #392D31;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Questrial', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--sans);
+    background: var(--creme);
+    color: var(--marron);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* TOPBAR démonstrative */
+  .topbar {
+    background: var(--marron);
+    color: var(--blanc);
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .brand-name {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.3rem;
+  }
+  .brand-sub {
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    color: var(--poudre);
+    text-transform: uppercase;
+    margin-left: 10px;
+  }
+  .mockup-tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border: 1px solid var(--poudre);
+    border-radius: 100px;
+    color: var(--poudre);
+  }
+
+  /* MAIN area — nouveau fond crème */
+  .main {
+    padding: 32px 40px 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  /* HEADER catégorie avec chiffre watermark */
+  .cat-head {
+    position: relative;
+    padding: 40px 0 24px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid rgba(57,45,49,0.08);
+  }
+  .cat-head-number {
+    position: absolute;
+    top: -10px; left: -10px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 9rem;
+    font-weight: 400;
+    color: var(--marron);
+    opacity: 0.05;
+    line-height: 0.9;
+    z-index: 0;
+    user-select: none;
+    pointer-events: none;
+  }
+  .cat-head-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .cat-title {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 2.4rem;
+    color: var(--rose);
+    line-height: 1;
+  }
+  .cat-stats {
+    font-size: 0.72rem;
+    color: var(--marron);
+    opacity: 0.7;
+    letter-spacing: 0.08em;
+    margin-top: 8px;
+  }
+  .cat-stats .dot {
+    color: var(--vert);
+    margin: 0 10px;
+  }
+  .cat-actions {
+    display: flex;
+    gap: 10px;
+  }
+  .btn-main {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 11px 20px;
+    border: 1px solid var(--rose);
+    background: var(--rose);
+    color: var(--blanc);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-main:hover { background: var(--marron); border-color: var(--marron); }
+
+  /* Filet décoratif avant la grille */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 8px 0 24px;
+    opacity: 0.6;
+  }
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--poudre), transparent);
+  }
+  .divider-star {
+    color: var(--rose);
+    font-size: 0.9rem;
+    letter-spacing: 0.4em;
+  }
+
+  /* GRID */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  /* CARD */
+  .card {
+    background: white;
+    border: 1px solid rgba(57,45,49,0.08);
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(.2,.8,.2,1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 1px 2px rgba(57,45,49,0.03), 0 2px 8px rgba(57,45,49,0.02);
+    position: relative;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 32px rgba(139,58,67,0.14), 0 2px 4px rgba(57,45,49,0.06);
+    border-color: rgba(139,58,67,0.2);
+  }
+
+  /* THUMBNAIL avec gradient + SVG botanique */
+  .thumb {
+    aspect-ratio: 4/3;
+    background: linear-gradient(135deg, var(--poudre-clair) 0%, var(--poudre) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .thumb svg {
+    width: 80px;
+    height: 80px;
+    opacity: 0.28;
+    stroke: var(--rose);
+    stroke-width: 1.4;
+    fill: none;
+  }
+  .thumb.has-image { background: var(--blanc); padding: 0; }
+  .thumb.has-image img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* Code pill (vert olive, top-left) */
+  .code-pill {
+    position: absolute;
+    top: 10px; left: 10px;
+    background: var(--vert);
+    color: var(--blanc);
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    padding: 4px 9px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 6px rgba(150,138,66,0.28);
+  }
+
+  /* Status badge (top-right) */
+  .status-badge {
+    position: absolute;
+    top: 10px; right: 10px;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 100px;
+    background: rgba(255,255,255,0.95);
+    color: var(--marron);
+    backdrop-filter: blur(4px);
+  }
+  .status-badge.pause { background: rgba(191,100,109,0.92); color: white; }
+  .status-badge.archive { background: rgba(57,45,49,0.85); color: var(--poudre); }
+
+  /* BODY */
+  .body {
+    padding: 16px 18px 18px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .name {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 1.2rem;
+    color: var(--marron);
+    line-height: 1.2;
+  }
+  .subtitle {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.88rem;
+    color: var(--marron);
+    opacity: 0.6;
+    line-height: 1.3;
+  }
+  .origin {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.82rem;
+    color: var(--rose);
+  }
+  .origin::before {
+    content: '◆';
+    color: var(--vert);
+    font-size: 0.7rem;
+  }
+
+  /* PACKAGING compact info */
+  .pack-info {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+    font-size: 0.72rem;
+    color: var(--marron);
+    opacity: 0.75;
+    font-variant-numeric: tabular-nums;
+  }
+  .pack-info strong { color: var(--marron); opacity: 1; font-weight: 500; }
+  .pack-info .sep { color: var(--poudre); }
+
+  /* PRICE BLOCK (hiérarchisé) */
+  .price-block {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px dashed rgba(57,45,49,0.12);
+  }
+  .ppc {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--marron);
+    line-height: 1;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+  .ppc-currency {
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    color: var(--vert);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-left: 2px;
+  }
+  .channel-line {
+    margin-top: 4px;
+    font-size: 0.72rem;
+    color: var(--marron);
+    opacity: 0.65;
+    font-variant-numeric: tabular-nums;
+  }
+  .channel-line .tag {
+    display: inline-block;
+    padding: 1px 6px;
+    background: rgba(139,58,67,0.08);
+    color: var(--rose);
+    border-radius: 2px;
+    font-size: 0.66rem;
+    letter-spacing: 0.06em;
+    margin-right: 6px;
+    font-family: var(--sans);
+    text-transform: uppercase;
+  }
+  .price-missing {
+    font-size: 0.72rem;
+    color: #B38B00;
+    background: rgba(234,179,8,0.1);
+    padding: 6px 10px;
+    border-left: 2px solid #EAB308;
+    border-radius: 3px;
+  }
+
+  /* COMPARE panel en haut pour contexte */
+  .compare {
+    background: linear-gradient(135deg, rgba(139,58,67,0.04), rgba(150,138,66,0.04));
+    border: 1px solid rgba(57,45,49,0.06);
+    padding: 14px 20px;
+    border-radius: 6px;
+    margin: 32px 40px 0;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 0.82rem;
+    color: var(--marron);
+    line-height: 1.55;
+  }
+  .compare strong { color: var(--rose); }
+  .compare code { background: var(--blanc); padding: 1px 5px; border-radius: 2px; font-size: 0.78rem; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div>
+    <span class="brand-name">Maison Félicien</span>
+    <span class="brand-sub">· Catalogue · Mockup v3</span>
+  </div>
+  <span class="mockup-tag">Aperçu redesign — non connecté à la DB</span>
+</header>
+
+<div class="compare">
+  <strong>Comparaison :</strong> voici le rendu proposé pour la zone centrale + les cards produit.
+  Les 6 exemples ci-dessous simulent la catégorie <strong>Cub'Cakes</strong> avec les données réelles du seed.
+  Fond <code>#FAFAF7</code>, cards avec ombre colorée rose au hover, emblème botanique SVG par défaut,
+  chiffre watermark <strong>01</strong> derrière le titre, prix hiérarchisé PPR/canaux.
+</div>
+
+<main class="main">
+
+  <div class="cat-head">
+    <div class="cat-head-number">01</div>
+    <div class="cat-head-inner">
+      <div>
+        <h1 class="cat-title">Cub'Cakes</h1>
+        <div class="cat-stats">
+          Format cube · fournée hebdomadaire numérotée
+          <span class="dot">·</span>7 produits
+          <span class="dot">·</span>7 actifs
+          <span class="dot">·</span>85 g · MOQ 6 · DLC 5 j · frigo
+        </div>
+      </div>
+      <div class="cat-actions">
+        <button class="btn-main">+ Nouveau produit</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-star">✦ ✦ ✦</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="product-grid">
+
+    <!-- CC-001 Chocolat -->
+    <div class="card">
+      <div class="thumb">
+        <span class="code-pill">CC-001</span>
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M50 10 Q35 25 35 45 Q35 60 50 68 Q65 60 65 45 Q65 25 50 10 Z"/>
+          <path d="M50 32 Q42 38 42 48 Q42 55 50 60 Q58 55 58 48 Q58 38 50 32 Z"/>
+          <path d="M50 68 L50 92"/>
+          <path d="M30 82 Q40 78 50 82"/>
+          <path d="M70 82 Q60 78 50 82"/>
+          <circle cx="50" cy="45" r="2" fill="currentColor" stroke="none"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="name">Cub'Cake Chocolat Noir 72%</div>
+        <div class="subtitle">Arriba Nacional · Équateur</div>
+        <div class="origin">Chocolat d'Esmeraldas, Équateur</div>
+        <div class="pack-info">
+          <span><strong>85 g</strong></span>
+          <span class="sep">·</span>
+          <span>MOQ <strong>6</strong></span>
+          <span class="sep">·</span>
+          <span>DLC <strong>5 j</strong></span>
+        </div>
+        <div class="price-block">
+          <div class="ppc">5,50<span class="ppc-currency">€ TTC</span></div>
+          <div class="channel-line"><span class="tag">Grossiste</span>2,15 € HT · <span class="tag" style="background:rgba(150,138,66,0.1);color:var(--vert);">Épicier</span>2,59 € HT</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CC-002 Citron -->
+    <div class="card">
+      <div class="thumb">
+        <span class="code-pill">CC-002</span>
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <ellipse cx="50" cy="50" rx="28" ry="20"/>
+          <path d="M22 50 Q50 38 78 50"/>
+          <path d="M22 50 Q50 62 78 50"/>
+          <path d="M50 30 L50 70"/>
+          <path d="M35 35 Q40 50 35 65"/>
+          <path d="M65 35 Q60 50 65 65"/>
+          <path d="M22 42 L15 38"/>
+          <circle cx="12" cy="36" r="2" fill="currentColor" stroke="none"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="name">Cub'Cake Citron de Menton</div>
+        <div class="subtitle">IGP · Côte d'Azur</div>
+        <div class="origin">Citrons IGP de Menton</div>
+        <div class="pack-info">
+          <span><strong>85 g</strong></span>
+          <span class="sep">·</span>
+          <span>MOQ <strong>6</strong></span>
+          <span class="sep">·</span>
+          <span>DLC <strong>5 j</strong></span>
+        </div>
+        <div class="price-block">
+          <div class="ppc">5,00<span class="ppc-currency">€ TTC</span></div>
+          <div class="channel-line"><span class="tag">Grossiste</span>1,95 € HT · <span class="tag" style="background:rgba(150,138,66,0.1);color:var(--vert);">Épicier</span>2,36 € HT</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CC-003 Pistache -->
+    <div class="card">
+      <div class="thumb">
+        <span class="code-pill">CC-003</span>
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M50 15 Q25 30 30 55 Q35 78 50 85 Q65 78 70 55 Q75 30 50 15 Z"/>
+          <path d="M50 30 Q40 40 40 55"/>
+          <path d="M50 30 Q60 40 60 55"/>
+          <path d="M50 30 L50 75"/>
+          <path d="M35 60 L65 60"/>
+          <circle cx="50" cy="48" r="1.5" fill="currentColor" stroke="none"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="name">Cub'Cake Pistache Sicilienne</div>
+        <div class="subtitle">Bronte IGP · Sicile</div>
+        <div class="origin">Pistaches Bronte IGP, Catane</div>
+        <div class="pack-info">
+          <span><strong>85 g</strong></span>
+          <span class="sep">·</span>
+          <span>MOQ <strong>6</strong></span>
+          <span class="sep">·</span>
+          <span>DLC <strong>5 j</strong></span>
+        </div>
+        <div class="price-block">
+          <div class="ppc">6,50<span class="ppc-currency">€ TTC</span></div>
+          <div class="channel-line"><span class="tag">Grossiste</span>2,54 € HT · <span class="tag" style="background:rgba(150,138,66,0.1);color:var(--vert);">Épicier</span>3,07 € HT</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CC-004 Matcha -->
+    <div class="card">
+      <div class="thumb">
+        <span class="code-pill">CC-004</span>
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="50" cy="50" r="30"/>
+          <path d="M30 40 Q50 20 70 40"/>
+          <path d="M25 50 Q50 45 75 50"/>
+          <path d="M30 60 Q50 80 70 60"/>
+          <path d="M50 20 L50 80"/>
+          <path d="M40 25 Q45 50 40 75"/>
+          <path d="M60 25 Q55 50 60 75"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="name">Cub'Cake Matcha d'Uji</div>
+        <div class="subtitle">Cérémonial · Kyoto</div>
+        <div class="origin">Matcha cérémonial d'Uji, Japon</div>
+        <div class="pack-info">
+          <span><strong>85 g</strong></span>
+          <span class="sep">·</span>
+          <span>MOQ <strong>6</strong></span>
+          <span class="sep">·</span>
+          <span>DLC <strong>5 j</strong></span>
+        </div>
+        <div class="price-block">
+          <div class="ppc">6,00<span class="ppc-currency">€ TTC</span></div>
+          <div class="channel-line"><span class="tag">Grossiste</span>2,34 € HT · <span class="tag" style="background:rgba(150,138,66,0.1);color:var(--vert);">Épicier</span>2,83 € HT</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CC-007 Noisette avec status pause (exemple) -->
+    <div class="card">
+      <div class="thumb">
+        <span class="code-pill">CC-007</span>
+        <span class="status-badge pause">Pause</span>
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <ellipse cx="50" cy="55" rx="22" ry="28"/>
+          <path d="M50 27 L50 22 Q50 15 55 15 Q60 15 58 22"/>
+          <path d="M38 55 Q50 48 62 55"/>
+          <path d="M38 68 Q50 62 62 68"/>
+          <path d="M42 40 Q50 35 58 40"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="name">Cub'Cake Noisette du Piémont</div>
+        <div class="subtitle">IGP · Langhe, Italie</div>
+        <div class="origin">Noisettes IGP des Langhe</div>
+        <div class="pack-info">
+          <span><strong>85 g</strong></span>
+          <span class="sep">·</span>
+          <span>MOQ <strong>6</strong></span>
+          <span class="sep">·</span>
+          <span>DLC <strong>5 j</strong></span>
+        </div>
+        <div class="price-block">
+          <div class="ppc">6,00<span class="ppc-currency">€ TTC</span></div>
+          <div class="channel-line"><span class="tag">Grossiste</span>2,34 € HT · <span class="tag" style="background:rgba(150,138,66,0.1);color:var(--vert);">Épicier</span>2,83 € HT</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exemple "prix à saisir" -->
+    <div class="card">
+      <div class="thumb">
+        <span class="code-pill">CC-008</span>
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M50 18 Q30 30 30 55 Q30 78 50 82 Q70 78 70 55 Q70 30 50 18 Z"/>
+          <path d="M50 35 L50 70"/>
+          <path d="M40 45 Q50 50 60 45"/>
+          <path d="M40 58 Q50 63 60 58"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="name">Cub'Cake Praliné Noisette</div>
+        <div class="subtitle">Nouveau · à valider</div>
+        <div class="origin">Origine à renseigner</div>
+        <div class="pack-info">
+          <span><strong>85 g</strong></span>
+          <span class="sep">·</span>
+          <span>MOQ <strong>6</strong></span>
+          <span class="sep">·</span>
+          <span>DLC <strong>5 j</strong></span>
+        </div>
+        <div class="price-block">
+          <div class="price-missing">⚠ PPR à définir — ouvrir la fiche</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+</body>
+</html>
