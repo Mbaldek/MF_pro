@@ -1,0 +1,2028 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catalogue Builder · Maison Félicien</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Questrial&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #8B3A43;
+    --vieux-rose: #BF646D;
+    --poudre: #E5B7B3;
+    --vert: #968A42;
+    --blanc: #F0F0E6;
+    --marron: #392D31;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Questrial', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--blanc);
+    color: var(--marron);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    background: var(--marron);
+    color: var(--blanc);
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 30;
+  }
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .brand-maison {
+    font-family: var(--sans);
+    font-size: 0.66rem;
+    letter-spacing: 0.4em;
+    color: var(--poudre);
+    text-transform: uppercase;
+  }
+  .brand-name {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--blanc);
+    font-weight: 500;
+  }
+  .brand-sub {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--poudre);
+    margin-left: 10px;
+    text-transform: uppercase;
+  }
+  .topbar-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border: 1px solid var(--poudre);
+    background: transparent;
+    color: var(--blanc);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn:hover { background: var(--poudre); color: var(--marron); }
+  .btn-primary {
+    background: var(--poudre);
+    color: var(--marron);
+    border-color: var(--poudre);
+  }
+  .btn-primary:hover { background: var(--blanc); border-color: var(--blanc); }
+  .btn-danger { border-color: #BF646D; color: #fff; }
+  .btn-danger:hover { background: #BF646D; color: #fff; }
+
+  /* LAYOUT */
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    min-height: calc(100vh - 60px);
+  }
+  @media (min-width: 900px) {
+    .layout { grid-template-columns: 280px 1fr; }
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: white;
+    border-right: 1px solid var(--poudre);
+    padding: 20px 16px;
+    overflow-y: auto;
+  }
+  .side-label {
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--vert);
+    margin: 20px 0 10px;
+    font-weight: 500;
+  }
+  .side-label:first-child { margin-top: 0; }
+
+  .cat-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .cat-item {
+    padding: 10px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.84rem;
+    color: var(--marron);
+  }
+  .cat-item:hover { background: var(--blanc); }
+  .cat-item.active {
+    background: var(--rose);
+    color: var(--blanc);
+  }
+  .cat-code {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+    font-family: ui-monospace, monospace;
+  }
+  .cat-count {
+    background: var(--blanc);
+    color: var(--marron);
+    font-size: 0.62rem;
+    padding: 2px 7px;
+    border-radius: 100px;
+  }
+  .cat-item.active .cat-count { background: var(--poudre); color: var(--marron); }
+
+  .side-stats {
+    background: var(--blanc);
+    padding: 14px;
+    border-radius: 4px;
+    margin-top: 24px;
+  }
+  .side-stat-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.76rem;
+    padding: 5px 0;
+    border-bottom: 1px dashed var(--poudre);
+  }
+  .side-stat-row:last-child { border: 0; }
+  .side-stat-row strong {
+    color: var(--rose);
+    font-weight: 500;
+  }
+
+  /* MAIN */
+  .main {
+    padding: 24px 20px 80px;
+    overflow-y: auto;
+  }
+  .main-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--poudre);
+    flex-wrap: wrap;
+  }
+  .main-head h1 {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 2rem;
+    color: var(--rose);
+  }
+  .main-head-sub {
+    font-size: 0.78rem;
+    color: var(--marron);
+    opacity: 0.7;
+    margin-top: 4px;
+  }
+
+  .btn-main {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    border: 1px solid var(--rose);
+    background: var(--rose);
+    color: var(--blanc);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .btn-main:hover { background: var(--marron); border-color: var(--marron); }
+
+  /* PRODUCT GRID */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .product-card {
+    background: white;
+    border: 1px solid var(--poudre);
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    flex-direction: column;
+  }
+  .product-card:hover {
+    border-color: var(--rose);
+    transform: translateY(-2px);
+  }
+  .product-thumb {
+    aspect-ratio: 4/3;
+    background: var(--blanc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--vert);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 2rem;
+    overflow: hidden;
+    position: relative;
+  }
+  .product-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .product-body {
+    padding: 14px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .product-code {
+    font-family: ui-monospace, monospace;
+    font-size: 0.68rem;
+    color: var(--vert);
+    letter-spacing: 0.1em;
+  }
+  .product-name {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 1.08rem;
+    color: var(--marron);
+    line-height: 1.2;
+  }
+  .product-subtitle {
+    font-size: 0.76rem;
+    color: var(--marron);
+    opacity: 0.6;
+  }
+  .product-price {
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px dashed var(--poudre);
+    font-size: 0.76rem;
+    color: var(--rose);
+    font-weight: 500;
+  }
+  .product-status {
+    position: absolute;
+    top: 8px; right: 8px;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 100px;
+    background: rgba(255,255,255,0.9);
+    color: var(--marron);
+  }
+  .product-status.pause { background: rgba(191,100,109,0.9); color: white; }
+  .product-status.archive { opacity: 0.5; }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    border: 1px dashed var(--poudre);
+    border-radius: 6px;
+    background: white;
+  }
+  .empty-state p {
+    color: var(--marron);
+    opacity: 0.6;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+  }
+
+  /* MODAL */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(57, 45, 49, 0.55);
+    display: none;
+    align-items: stretch;
+    justify-content: flex-end;
+    z-index: 50;
+    backdrop-filter: blur(3px);
+  }
+  .modal-backdrop.open { display: flex; }
+
+  .modal {
+    background: var(--blanc);
+    width: 100%;
+    max-width: 720px;
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-head {
+    background: white;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--poudre);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+  .modal-title {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.35rem;
+    color: var(--rose);
+    font-weight: 500;
+  }
+  .modal-close {
+    background: transparent;
+    border: 0;
+    font-size: 1.6rem;
+    color: var(--marron);
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px 10px;
+  }
+
+  /* TABS */
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    background: white;
+    border-bottom: 1px solid var(--poudre);
+    position: sticky;
+    top: 57px;
+    z-index: 4;
+  }
+  .tab {
+    padding: 14px 6px;
+    border: 0;
+    background: transparent;
+    font-family: var(--sans);
+    font-size: 0.64rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--marron);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.15s;
+    opacity: 0.55;
+    text-align: center;
+    line-height: 1.2;
+  }
+  .tab:hover { opacity: 0.85; background: var(--blanc); }
+  .tab.active {
+    border-bottom-color: var(--rose);
+    color: var(--rose);
+    opacity: 1;
+    background: var(--blanc);
+  }
+  .tab-num {
+    display: block;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.9rem;
+    opacity: 0.6;
+    margin-bottom: 2px;
+  }
+  .tab.active .tab-num { opacity: 1; color: var(--rose); }
+  @media (min-width: 600px) {
+    .tab {
+      font-size: 0.72rem;
+      padding: 14px 10px;
+    }
+  }
+
+  .modal-body {
+    padding: 20px;
+    flex: 1;
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* PANEL NAV - bottom of each panel */
+  .panel-nav {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--poudre);
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 12px;
+    align-items: center;
+  }
+  .panel-nav .btn {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .panel-nav .btn-ghost {
+    background: white;
+    color: var(--marron);
+    border: 1px solid var(--poudre);
+    justify-self: start;
+  }
+  .panel-nav .btn-ghost:hover {
+    background: var(--blanc);
+  }
+  .panel-nav .panel-nav-next,
+  .panel-nav .btn-main {
+    background: var(--rose);
+    color: var(--blanc);
+    border: 1px solid var(--rose);
+    justify-self: end;
+  }
+  .panel-nav .panel-nav-next:hover {
+    background: var(--marron);
+    border-color: var(--marron);
+  }
+  .panel-nav-dots {
+    display: flex;
+    gap: 6px;
+    justify-self: center;
+  }
+  .panel-nav-dots .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--poudre);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .panel-nav-dots .dot.active {
+    background: var(--rose);
+    transform: scale(1.3);
+  }
+  .panel-nav-dots .dot:hover { background: var(--vert); }
+
+  /* FORM */
+  .field {
+    margin-bottom: 16px;
+  }
+  .field-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--vert);
+    margin-bottom: 6px;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .field-hint {
+    font-size: 0.7rem;
+    color: var(--marron);
+    opacity: 0.5;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+  }
+  .input, .textarea, .select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--poudre);
+    border-radius: 4px;
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    color: var(--marron);
+    background: white;
+    transition: border-color 0.15s;
+  }
+  .input:focus, .textarea:focus, .select:focus {
+    outline: none;
+    border-color: var(--rose);
+  }
+  .textarea {
+    min-height: 80px;
+    resize: vertical;
+    line-height: 1.5;
+  }
+  .textarea-lg { min-height: 120px; }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  @media (min-width: 520px) {
+    .row.cols-2 { grid-template-columns: 1fr 1fr; }
+    .row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .row.cols-4 { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  .card-section {
+    background: white;
+    border: 1px solid var(--poudre);
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .card-section-title {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--rose);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--poudre);
+  }
+
+  /* PHOTO UPLOAD */
+  .photo-zone {
+    border: 2px dashed var(--poudre);
+    border-radius: 6px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .photo-zone:hover { border-color: var(--rose); }
+  .photo-zone.has-image {
+    padding: 0;
+    border-style: solid;
+  }
+  .photo-zone img {
+    width: 100%;
+    display: block;
+  }
+  .photo-zone-text {
+    color: var(--marron);
+    opacity: 0.6;
+    font-size: 0.85rem;
+  }
+  .photo-zone .remove-btn {
+    position: absolute;
+    top: 8px; right: 8px;
+    background: rgba(57, 45, 49, 0.85);
+    color: white;
+    border: 0;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  /* AI BUTTON */
+  .ai-btn {
+    background: linear-gradient(135deg, var(--vert) 0%, var(--rose) 100%);
+    color: var(--blanc);
+    border: 0;
+    padding: 6px 12px;
+    font-size: 0.64rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+  .ai-btn:hover { transform: scale(1.04); }
+  .ai-btn:disabled { opacity: 0.5; cursor: wait; }
+
+  /* MODAL FOOTER */
+  .modal-foot {
+    padding: 14px 20px;
+    background: white;
+    border-top: 1px solid var(--poudre);
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    position: sticky;
+    bottom: 0;
+    flex-wrap: wrap;
+  }
+  .modal-foot-left, .modal-foot-right {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--marron);
+    border-color: var(--poudre);
+  }
+  .btn-ghost:hover { background: var(--blanc); color: var(--marron); }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 20px; left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--vert);
+    color: var(--blanc);
+    padding: 12px 24px;
+    border-radius: 100px;
+    font-size: 0.76rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: transform 0.3s;
+    z-index: 60;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* PRICE TABLE */
+  .price-table {
+    background: var(--blanc);
+    border-radius: 4px;
+    padding: 12px;
+    margin-top: 8px;
+  }
+  .price-row {
+    display: grid;
+    grid-template-columns: 1fr 100px 80px;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .price-row:last-child { margin-bottom: 0; }
+  .price-label {
+    font-size: 0.8rem;
+    color: var(--marron);
+  }
+  .price-label strong {
+    font-family: var(--serif);
+    font-weight: 500;
+    color: var(--rose);
+    font-style: italic;
+    display: block;
+    font-size: 0.9rem;
+  }
+  .price-input {
+    padding: 6px 8px;
+    font-size: 0.85rem;
+    text-align: right;
+    border: 1px solid var(--poudre);
+    border-radius: 3px;
+    background: white;
+    font-family: var(--sans);
+  }
+  .price-unit {
+    font-size: 0.7rem;
+    color: var(--vert);
+    letter-spacing: 0.08em;
+  }
+
+  /* EMPTY & HELP */
+  .hint-box {
+    background: var(--poudre);
+    padding: 12px 14px;
+    border-left: 3px solid var(--rose);
+    border-radius: 0 4px 4px 0;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+  .hint-box strong { color: var(--rose); font-weight: 500; }
+
+  /* PREVIEW */
+  .preview-box {
+    background: white;
+    border: 1px solid var(--poudre);
+    padding: 20px;
+    border-radius: 6px;
+    margin-top: 16px;
+  }
+  .preview-label {
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--vert);
+    margin-bottom: 10px;
+  }
+  .preview-content {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--rose);
+    line-height: 1.3;
+  }
+  .preview-desc {
+    font-family: var(--sans);
+    font-style: normal;
+    font-size: 0.9rem;
+    color: var(--marron);
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  /* EXPORT PANEL */
+  .export-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+  .export-card {
+    background: white;
+    border: 1px solid var(--poudre);
+    border-radius: 6px;
+    padding: 18px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .export-card:hover {
+    border-color: var(--rose);
+    transform: translateY(-2px);
+  }
+  .export-card-title {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--rose);
+    margin-bottom: 6px;
+  }
+  .export-card-desc {
+    font-size: 0.8rem;
+    color: var(--marron);
+    opacity: 0.7;
+    line-height: 1.5;
+  }
+
+  /* CATALOG PREVIEW */
+  @media print {
+    .no-print { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-maison">Maison</span>
+    <span class="brand-name">Félicien</span>
+    <span class="brand-sub">· Catalogue Builder</span>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn" id="btn-export-json">Export JSON</button>
+    <button class="btn" id="btn-import-json">Import JSON</button>
+    <input type="file" id="file-import" accept=".json" style="display:none">
+    <button class="btn btn-primary" id="btn-catalog-preview">Aperçu catalogue</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="side-label">Catégories</div>
+    <ul class="cat-list" id="cat-list"></ul>
+
+    <div class="side-label">Synthèse</div>
+    <div class="side-stats" id="side-stats"></div>
+
+    <div class="side-label">Actions</div>
+    <button class="btn btn-ghost" style="width:100%;color:var(--marron);border-color:var(--poudre);background:white;margin-bottom:6px;" id="btn-reset">Réinitialiser</button>
+    <button class="btn btn-ghost" style="width:100%;color:var(--marron);border-color:var(--poudre);background:white;" id="btn-seed">Charger données démo</button>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="main-head">
+      <div>
+        <h1 id="cat-title">Cub'Cakes</h1>
+        <div class="main-head-sub" id="cat-subtitle">Format cube · fournée hebdomadaire numérotée</div>
+      </div>
+      <button class="btn-main" id="btn-new-product">+ Nouveau produit</button>
+    </div>
+
+    <div id="product-area"></div>
+  </main>
+</div>
+
+<!-- MODAL ÉDITION PRODUIT -->
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="modal-title">Nouveau produit</div>
+      <button class="modal-close" id="modal-close">×</button>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="identite"><span class="tab-num">1</span>Identité</button>
+      <button class="tab" data-tab="packaging"><span class="tab-num">2</span>Packaging</button>
+      <button class="tab" data-tab="tarifs"><span class="tab-num">3</span>Tarifs</button>
+      <button class="tab" data-tab="marketing"><span class="tab-num">4</span>Photo</button>
+      <button class="tab" data-tab="logistique"><span class="tab-num">5</span>Logistique</button>
+    </div>
+
+    <div class="modal-body">
+
+      <!-- IDENTITÉ -->
+      <div class="panel active" data-panel="identite">
+        <div class="card-section">
+          <div class="card-section-title">Identification</div>
+          <div class="row cols-2">
+            <div class="field">
+              <div class="field-label">Code produit <span class="field-hint">auto</span></div>
+              <input type="text" class="input" id="f-code" readonly style="background:var(--blanc);font-family:ui-monospace,monospace;">
+            </div>
+            <div class="field">
+              <div class="field-label">Statut</div>
+              <select class="select" id="f-statut">
+                <option value="actif">Actif</option>
+                <option value="pause">En pause</option>
+                <option value="archive">Archivé</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-label">Nom du produit</div>
+            <input type="text" class="input" id="f-nom" placeholder="Ex : Cub'Cake Chocolat Noir 72%">
+          </div>
+          <div class="field">
+            <div class="field-label">Sous-titre · baseline</div>
+            <input type="text" class="input" id="f-sous-titre" placeholder="Ex : Arriba Nacional · Équateur">
+          </div>
+          <div class="field">
+            <div class="field-label">Saison / disponibilité</div>
+            <select class="select" id="f-saison">
+              <option value="permanente">Permanente</option>
+              <option value="printemps-ete">Printemps–Été</option>
+              <option value="ete">Été (juin–août)</option>
+              <option value="automne-hiver">Automne–Hiver (sept–fév)</option>
+              <option value="fete">Fêtes de fin d'année</option>
+              <option value="ponctuelle">Collection ponctuelle</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="card-section">
+          <div class="card-section-title">Descriptions</div>
+          <div class="field">
+            <div class="field-label">
+              Description courte
+              <span class="field-hint">~30 mots · pour fiches grossistes & site</span>
+            </div>
+            <textarea class="textarea" id="f-desc-courte" placeholder="Une phrase d'accroche qui situe le produit : profil de goût, origine, signature."></textarea>
+            <button class="ai-btn" style="margin-top:6px;" data-ai="desc-courte">✦ Enrichir avec l'IA</button>
+          </div>
+          <div class="field">
+            <div class="field-label">
+              Description longue
+              <span class="field-hint">~100 mots · pour catalogue & storytelling</span>
+            </div>
+            <textarea class="textarea textarea-lg" id="f-desc-longue" placeholder="Texte narratif : histoire du produit, technique, inspiration, pourquoi ce choix d'ingrédient."></textarea>
+            <button class="ai-btn" style="margin-top:6px;" data-ai="desc-longue">✦ Enrichir avec l'IA</button>
+          </div>
+          <div class="field">
+            <div class="field-label">
+              Rationnel commercial
+              <span class="field-hint">3 bullets · argumentaire vendeur</span>
+            </div>
+            <textarea class="textarea" id="f-rationnel" placeholder="• Argument marge / rotation&#10;• Argument différenciation&#10;• Argument client final"></textarea>
+            <button class="ai-btn" style="margin-top:6px;" data-ai="rationnel">✦ Enrichir avec l'IA</button>
+          </div>
+        </div>
+
+        <div class="card-section">
+          <div class="card-section-title">Composition</div>
+          <div class="field">
+            <div class="field-label">Ingrédients</div>
+            <textarea class="textarea" id="f-ingredients" placeholder="Farine de blé T65, beurre AOP Poitou-Charentes, sucre de canne bio, chocolat noir 72% Équateur, œufs frais de poules élevées en plein air, levure chimique, sel de Guérande."></textarea>
+          </div>
+          <div class="field">
+            <div class="field-label">Allergènes majeurs</div>
+            <input type="text" class="input" id="f-allergenes" placeholder="Gluten · œufs · lait · fruits à coque">
+          </div>
+          <div class="field">
+            <div class="field-label">Origine tracée · signature</div>
+            <input type="text" class="input" id="f-origine" placeholder="Chocolat Arriba Nacional, région d'Esmeraldas, Équateur">
+          </div>
+          <div class="field">
+            <div class="field-label">Recette & storytelling <span class="field-hint">optionnel</span></div>
+            <textarea class="textarea" id="f-recette" placeholder="Le choix de ce cacao, la rencontre avec le producteur, la technique de mise en œuvre…"></textarea>
+            <button class="ai-btn" style="margin-top:6px;" data-ai="recette">✦ Enrichir avec l'IA</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PACKAGING -->
+      <div class="panel" data-panel="packaging">
+        <div class="hint-box">
+          <strong>Rappel archi :</strong> un produit = un packaging unique. Si tu veux vendre la même recette en unité ET en boîte 6, crée deux produits distincts (ex. <code>CC-001</code> = Cube chocolat unité · <code>CC-001B</code> = Coffret 6 cubes chocolat).
+        </div>
+
+        <div class="card-section">
+          <div class="card-section-title">Format de vente</div>
+          <div class="row cols-2">
+            <div class="field">
+              <div class="field-label">Type de packaging</div>
+              <select class="select" id="f-pack-type">
+                <option value="UNITE">À l'unité</option>
+                <option value="BOITE_4">Boîte de 4</option>
+                <option value="BOITE_6">Boîte de 6</option>
+                <option value="BOITE_8">Boîte de 8</option>
+                <option value="BOITE_12">Boîte de 12</option>
+                <option value="POT">Pot</option>
+                <option value="SACHET">Sachet</option>
+                <option value="COFFRET">Coffret dégustation</option>
+                <option value="PRESENTOIR">Présentoir PLV</option>
+                <option value="KIT">Kit (PLV composite)</option>
+              </select>
+            </div>
+            <div class="field">
+              <div class="field-label">Libellé commercial</div>
+              <input type="text" class="input" id="f-pack-libelle" placeholder="Ex : Boîte de 6 cubes">
+            </div>
+          </div>
+          <div class="row cols-2">
+            <div class="field">
+              <div class="field-label">Nombre d'unités dans le pack</div>
+              <input type="number" class="input" id="f-pack-unites" min="1" value="1">
+            </div>
+            <div class="field">
+              <div class="field-label">MOQ minimum d'achat <span class="field-hint">en nombre de packs</span></div>
+              <input type="number" class="input" id="f-pack-moq" min="1" value="1" placeholder="Ex : 5 boîtes minimum">
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-label">DLC moyenne <span class="field-hint">en jours à réception</span></div>
+            <input type="number" class="input" id="f-pack-dlc" min="1" placeholder="5">
+          </div>
+        </div>
+
+        <div class="card-section">
+          <div class="card-section-title">Poids & dimensions <span style="color:var(--vert);font-size:0.7rem;letter-spacing:0.1em;margin-left:8px;">OPTIONNEL</span></div>
+          <div class="row cols-4">
+            <div class="field">
+              <div class="field-label">Poids net <span class="field-hint">g</span></div>
+              <input type="number" class="input" id="f-pack-poids">
+            </div>
+            <div class="field">
+              <div class="field-label">Long <span class="field-hint">cm</span></div>
+              <input type="number" class="input" id="f-pack-l">
+            </div>
+            <div class="field">
+              <div class="field-label">Larg <span class="field-hint">cm</span></div>
+              <input type="number" class="input" id="f-pack-w">
+            </div>
+            <div class="field">
+              <div class="field-label">Haut <span class="field-hint">cm</span></div>
+              <input type="number" class="input" id="f-pack-h">
+            </div>
+          </div>
+        </div>
+
+        <div class="card-section">
+          <div class="card-section-title">Codification</div>
+          <div class="row cols-2">
+            <div class="field">
+              <div class="field-label">EAN / GTIN 13 <span class="field-hint">optionnel</span></div>
+              <input type="text" class="input" id="f-pack-ean" placeholder="3770xxxxxxxx">
+            </div>
+            <div class="field">
+              <div class="field-label">Code interne / SKU</div>
+              <input type="text" class="input" id="f-pack-sku" placeholder="CC-001-B6">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TARIFS -->
+      <div class="panel" data-panel="tarifs">
+        <div class="hint-box">
+          <strong>4 canaux de prix</strong> pour ce produit. Tous les prix sont HT, par packaging (pas par unité interne). Le PPC est le prix public TTC conseillé au consommateur final.
+        </div>
+
+        <div class="card-section">
+          <div class="card-section-title">Prix de revient interne</div>
+          <div class="row cols-2">
+            <div class="field">
+              <div class="field-label">Coût de revient HT <span class="field-hint">€ / pack</span></div>
+              <input type="number" step="0.01" class="input" id="f-cost" placeholder="0.00">
+            </div>
+            <div class="field">
+              <div class="field-label">PPC conseillé TTC <span class="field-hint">€ / pack</span></div>
+              <input type="number" step="0.01" class="input" id="f-ppc" placeholder="0.00">
+            </div>
+          </div>
+        </div>
+
+        <div class="card-section">
+          <div class="card-section-title">Tarifs par canal</div>
+
+          <div class="price-table">
+            <div class="price-row">
+              <div class="price-label"><strong>Grossiste</strong>Achète · stocke · revend</div>
+              <input type="number" step="0.01" class="price-input" id="f-px-grossiste" placeholder="0.00">
+              <span class="price-unit">€ HT · pack</span>
+            </div>
+            <div class="price-row">
+              <div class="price-label"><strong>Agent commercial</strong>Commissionne · ~12%</div>
+              <input type="number" step="0.01" class="price-input" id="f-px-agent" placeholder="0.00">
+              <span class="price-unit">€ HT · pack</span>
+            </div>
+            <div class="price-row">
+              <div class="price-label"><strong>Épicier direct</strong>Commande chez vous</div>
+              <input type="number" step="0.01" class="price-input" id="f-px-epicier" placeholder="0.00">
+              <span class="price-unit">€ HT · pack</span>
+            </div>
+            <div class="price-row">
+              <div class="price-label"><strong>Plateforme B2B</strong>Ankorstore · Faire</div>
+              <input type="number" step="0.01" class="price-input" id="f-px-plateforme" placeholder="0.00">
+              <span class="price-unit">€ HT · pack</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-section">
+          <div class="card-section-title">Marges calculées</div>
+          <div id="margin-preview" style="font-size:0.85rem;line-height:1.8;color:var(--marron);">
+            Remplir les prix pour voir les marges.
+          </div>
+        </div>
+      </div>
+
+      <!-- MARKETING -->
+      <div class="panel" data-panel="marketing">
+        <div class="card-section">
+          <div class="card-section-title">Photo principale</div>
+          <label class="photo-zone" id="photo-zone">
+            <input type="file" id="f-photo" accept="image/*" style="display:none">
+            <div class="photo-zone-text" id="photo-zone-text">
+              Glisser une photo ici ou cliquer pour sélectionner<br>
+              <span style="font-size:0.75rem;opacity:0.7;">JPG, PNG · max 2 Mo conseillé</span>
+            </div>
+          </label>
+        </div>
+
+        <div class="card-section">
+          <div class="card-section-title">Tags et mots-clés</div>
+          <div class="field">
+            <div class="field-label">Mots-clés <span class="field-hint">séparés par des virgules</span></div>
+            <input type="text" class="input" id="f-tags" placeholder="artisanal, chocolat, équateur, cake, snacking premium">
+          </div>
+          <div class="field">
+            <div class="field-label">Profil de goût</div>
+            <input type="text" class="input" id="f-gout" placeholder="Intense, cacaoté, notes de fruits rouges, finale longue">
+          </div>
+        </div>
+      </div>
+
+      <!-- LOGISTIQUE -->
+      <div class="panel" data-panel="logistique">
+        <div class="hint-box">
+          Ces informations s'affichent sur la fiche grossiste et le BDC. Renseigner au moins la DLC et le mode d'expédition.
+        </div>
+
+        <div class="card-section">
+          <div class="card-section-title">Expédition</div>
+          <div class="field">
+            <div class="field-label">Mode d'expédition</div>
+            <select class="select" id="f-expedition">
+              <option value="frigo">Transporteur frigo (J+1 depuis Paris)</option>
+              <option value="ambiant">Transporteur ambiant standard</option>
+              <option value="express">Express J+1 ambiant</option>
+              <option value="retrait">Retrait atelier uniquement</option>
+            </select>
+          </div>
+          <div class="row cols-2">
+            <div class="field">
+              <div class="field-label">Seuil franco <span class="field-hint">€ HT</span></div>
+              <input type="number" step="0.01" class="input" id="f-franco" placeholder="250">
+            </div>
+            <div class="field">
+              <div class="field-label">Délai réassort <span class="field-hint">jours ouvrés</span></div>
+              <input type="number" class="input" id="f-delai" placeholder="3">
+            </div>
+          </div>
+        </div>
+
+        <div class="card-section">
+          <div class="card-section-title">Conditions</div>
+          <div class="field">
+            <div class="field-label">Conditions paiement</div>
+            <select class="select" id="f-paiement">
+              <option value="30fdm">30 jours fin de mois</option>
+              <option value="comptant">Comptant à la commande</option>
+              <option value="15j">15 jours net</option>
+              <option value="45fdm">45 jours fin de mois</option>
+              <option value="autre">Autre (à préciser en négo)</option>
+            </select>
+          </div>
+          <div class="field">
+            <div class="field-label">Reprise invendus</div>
+            <select class="select" id="f-reprise">
+              <option value="aucune">Aucune reprise</option>
+              <option value="lancement">Garantie 4 premières semaines</option>
+              <option value="50pct">50% des invendus toujours</option>
+              <option value="integrale">Intégrale toujours</option>
+            </select>
+          </div>
+          <div class="field">
+            <div class="field-label">Notes logistiques particulières</div>
+            <textarea class="textarea" id="f-notes-logistique" placeholder="Ex : livraison lundi matin uniquement, palette Europe acceptée, etc."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-box">
+        <div class="preview-label">Aperçu</div>
+        <div class="preview-content" id="preview-name">—</div>
+        <div class="preview-desc" id="preview-desc"></div>
+      </div>
+    </div>
+
+    <div class="modal-foot">
+      <div class="modal-foot-left">
+        <button class="btn btn-danger" id="btn-delete" style="display:none;">Supprimer</button>
+      </div>
+      <div class="modal-foot-right">
+        <button class="btn btn-ghost" id="btn-cancel">Annuler</button>
+        <button class="btn btn-primary" id="btn-save" style="color:var(--marron);background:var(--poudre);border-color:var(--poudre);">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EXPORT / APERÇU -->
+<div class="modal-backdrop" id="modal-export">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Aperçu & exports</div>
+      <button class="modal-close" data-close-export>×</button>
+    </div>
+    <div class="modal-body">
+      <div class="hint-box">
+        <strong>Phase 1 · maquette validation</strong> — tout fonctionne en localStorage et HTML. Une fois la saisie validée, on passe à Next.js + Supabase + exports PDF serveur.
+      </div>
+      <h3 style="font-family:var(--serif);font-style:italic;color:var(--rose);font-size:1.3rem;margin-bottom:12px;">Exports disponibles</h3>
+      <div class="export-grid">
+        <div class="export-card" data-export="catalog-html">
+          <div class="export-card-title">Catalogue complet</div>
+          <div class="export-card-desc">HTML imprimable A4, identité Maison Félicien, toutes catégories et produits actifs</div>
+        </div>
+        <div class="export-card" data-export="fiche-grossiste">
+          <div class="export-card-title">Fiche grossiste</div>
+          <div class="export-card-desc">HTML 4 pages · tarifs canal Grossiste uniquement</div>
+        </div>
+        <div class="export-card" data-export="json">
+          <div class="export-card-title">Base JSON</div>
+          <div class="export-card-desc">Export brut de toutes les données · pour migration Supabase</div>
+        </div>
+        <div class="export-card" data-export="csv-ankorstore">
+          <div class="export-card-title">CSV Ankorstore</div>
+          <div class="export-card-desc">Import direct dans votre brand portal Ankorstore</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Sauvegardé</div>
+
+<script>
+// =================================================
+// CATALOGUE BUILDER - Phase 1 maquette
+// Persistance localStorage, validation avant migration Supabase
+// =================================================
+
+const STORAGE_KEY = 'mf_catalogue_v1';
+
+// Modèle de données
+const DEFAULT_STATE = {
+  categories: [
+    { code: 'CC', nom: "Cub'Cakes", subtitle: "Format cube · fournée hebdomadaire numérotée", ordre: 1 },
+    { code: 'CK', nom: "Cakes", subtitle: "Grands formats, tradition pâtissière", ordre: 2 },
+    { code: 'CB', nom: "Cookies & Brownie", subtitle: "Gourmandises individuelles", ordre: 3 },
+    { code: 'GR', nom: "Granola", subtitle: "Artisanal, petites productions", ordre: 4 },
+    { code: 'AV', nom: "Marketing & PLV", subtitle: "Aide à la vente pour distributeurs", ordre: 5 }
+  ],
+  produits: []
+};
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return JSON.parse(JSON.stringify(DEFAULT_STATE));
+}
+
+function saveState(s) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+}
+
+let state = loadState();
+let currentCatCode = state.categories[0].code;
+let editing = null; // { produit_index: -1 for new, or index }
+
+// =========================================
+// SEED DATA (données démo)
+// =========================================
+const SEED = [
+  // CUB'CAKES
+  {code:'CC-001', categorie:'CC', statut:'actif', nom:"Cub'Cake Chocolat Noir 72%", sousTitre:"Arriba Nacional · Équateur", saison:'permanente',
+    descCourte:"Cube de cake intense au chocolat noir d'origine, fondant et cacaoté, signé d'une fève Arriba d'Équateur.",
+    descLongue:"",
+    rationnel:"• Rotation prouvée 3,8j/MOQ 6\n• Chocolat origine tracée = différenciation immédiate\n• Format snacking premium, marge 40%",
+    ingredients:"Farine de blé T65, beurre AOP, sucre de canne bio, chocolat noir 72% Équateur, œufs plein air, sel de Guérande.",
+    allergenes:"Gluten · œufs · lait",
+    origine:"Chocolat Arriba Nacional, région d'Esmeraldas, Équateur",
+    recette:"", tags:"chocolat, équateur, noir, snacking, artisanal", gout:"Intense, cacaoté, notes de fruits rouges",
+    packType:'UNITE', packLibelle:"À l'unité", packUnites:1, packMOQ:6, packDLC:5, packPoids:85, packL:5, packW:5, packH:5, packEAN:'', packSKU:'CC-001',
+    cost:1.20, ppc:6.50, pxGrossiste:2.60, pxAgent:2.90, pxEpicier:3.20, pxPlateforme:2.80,
+    expedition:'frigo', franco:250, delai:3, paiement:'30fdm', reprise:'lancement', notesLog:'Livraison lundi matin uniquement.', photo:null
+  },
+  {code:'CC-002', categorie:'CC', statut:'actif', nom:"Cub'Cake Pistache Sicilienne", sousTitre:"Bronte IGP · Sicile", saison:'permanente',
+    descCourte:"Cube de cake à la pistache de Bronte IGP, pâte dense et parfumée, notes de beurre et de pistache torréfiée.",
+    descLongue:"",
+    rationnel:"• Pistache Bronte IGP = argument premium vendeur\n• Clientèle italienne / gastronome\n• Se marie avec cafés, vins doux",
+    ingredients:"Farine T65, beurre AOP, sucre canne bio, pâte de pistache Bronte IGP, œufs plein air, sel de Guérande.",
+    allergenes:"Gluten · œufs · lait · fruits à coque",
+    origine:"Pistaches de Bronte IGP, province de Catane, Sicile",
+    recette:"", tags:"pistache, sicile, bronte, italie, artisanal", gout:"Doux, beurré, notes torréfiées, finale verte",
+    packType:'UNITE', packLibelle:"À l'unité", packUnites:1, packMOQ:6, packDLC:5, packPoids:85, packL:5, packW:5, packH:5, packEAN:'', packSKU:'CC-002',
+    cost:1.60, ppc:7.50, pxGrossiste:3.10, pxAgent:3.40, pxEpicier:3.80, pxPlateforme:3.30,
+    expedition:'frigo', franco:250, delai:3, paiement:'30fdm', reprise:'lancement', notesLog:'', photo:null
+  },
+  // CAKES
+  {code:'CK-001', categorie:'CK', statut:'actif', nom:"Cake Marbré Chocolat Vanille", sousTitre:"Grand format familial · 500 g", saison:'permanente',
+    descCourte:"Cake marbré généreux, pâte vanille Madagascar et chocolat d'Équateur, à partager.",
+    descLongue:"",
+    rationnel:"• Format 500 g = panier moyen élevé\n• Incontournable de l'assortiment\n• Conservation 6 jours",
+    ingredients:"Farine T65, beurre AOP, sucre canne bio, chocolat 72% Équateur, vanille Madagascar, œufs plein air, sel Guérande.",
+    allergenes:"Gluten · œufs · lait",
+    origine:"Vanille Bourbon Madagascar · Cacao Équateur",
+    recette:"", tags:"cake, familial, marbré, vanille, chocolat", gout:"Moelleux, parfumé, équilibré",
+    packType:'UNITE', packLibelle:"Cake entier 500 g", packUnites:1, packMOQ:3, packDLC:6, packPoids:500, packL:22, packW:9, packH:7, packEAN:'', packSKU:'CK-001',
+    cost:3.80, ppc:18.00, pxGrossiste:7.50, pxAgent:8.20, pxEpicier:9.00, pxPlateforme:8.00,
+    expedition:'ambiant', franco:250, delai:3, paiement:'30fdm', reprise:'aucune', notesLog:'', photo:null
+  },
+  // COOKIES & BROWNIE
+  {code:'CB-001', categorie:'CB', statut:'actif', nom:"Brownie aux Pécans", sousTitre:"Individuel · Pécans du Périgord", saison:'permanente',
+    descCourte:"Brownie individuel dense, très chocolaté, pécans entiers caramélisés.",
+    descLongue:"",
+    rationnel:"• Snacking impulsif chaud/froid\n• Rotation très rapide caisse\n• Marge élevée unité",
+    ingredients:"Chocolat 70%, beurre AOP, sucre roux, farine T65, œufs plein air, pécans du Périgord, sel Guérande.",
+    allergenes:"Gluten · œufs · lait · fruits à coque",
+    origine:"Pécans du Périgord",
+    recette:"", tags:"brownie, pecans, individuel, snacking", gout:"Très chocolaté, dense, croquant",
+    packType:'UNITE', packLibelle:"À l'unité", packUnites:1, packMOQ:10, packDLC:7, packPoids:90, packL:8, packW:6, packH:3, packEAN:'', packSKU:'CB-001',
+    cost:0.95, ppc:4.50, pxGrossiste:1.80, pxAgent:2.00, pxEpicier:2.20, pxPlateforme:1.95,
+    expedition:'ambiant', franco:200, delai:3, paiement:'30fdm', reprise:'aucune', notesLog:'', photo:null
+  },
+  // GRANOLA
+  {code:'GR-001', categorie:'GR', statut:'actif', nom:"Granola Chocolat-Noisette", sousTitre:"250 g · artisanal", saison:'permanente',
+    descCourte:"Granola croustillant, éclats de chocolat noir et noisettes du Piémont torréfiées.",
+    descLongue:"",
+    rationnel:"• Rayon petit-déjeuner premium\n• DLC longue, peu de risque\n• Cross-sell avec gammes froides",
+    ingredients:"Flocons d'avoine, noisettes du Piémont, sucre de canne, miel, huile de tournesol, chocolat noir 72%, vanille, sel.",
+    allergenes:"Gluten · fruits à coque",
+    origine:"Noisettes IGP du Piémont",
+    recette:"", tags:"granola, petit-déjeuner, noisette, chocolat", gout:"Croustillant, équilibré, torréfié",
+    packType:'POT', packLibelle:"Pot 250 g", packUnites:1, packMOQ:6, packDLC:90, packPoids:250, packL:10, packW:10, packH:12, packEAN:'', packSKU:'GR-001',
+    cost:2.50, ppc:11.00, pxGrossiste:4.60, pxAgent:5.00, pxEpicier:5.50, pxPlateforme:4.90,
+    expedition:'ambiant', franco:250, delai:5, paiement:'30fdm', reprise:'aucune', notesLog:'', photo:null
+  },
+  // AIDE À LA VENTE
+  {code:'AV-001', categorie:'AV', statut:'actif', nom:"Présentoir bois 5 formules Cub'Cakes", sousTitre:"PLV comptoir · bois massif", saison:'permanente',
+    descCourte:"Présentoir comptoir en bois massif, 5 emplacements repérés avec étiquettes origines.",
+    descLongue:"",
+    rationnel:"• +30% de conversion en caisse mesurée\n• Upgrade immédiat du rayon\n• Offert pour 15 premiers comptes",
+    ingredients:"",
+    allergenes:"",
+    origine:"Fabrication française",
+    recette:"", tags:"plv, présentoir, bois, comptoir", gout:"",
+    packType:'UNITE', packLibelle:"Présentoir unité", packUnites:1, packMOQ:1, packDLC:null, packPoids:1200, packL:40, packW:15, packH:20, packEAN:'', packSKU:'AV-001',
+    cost:45, ppc:0, pxGrossiste:0, pxAgent:0, pxEpicier:0, pxPlateforme:0,
+    expedition:'ambiant', franco:0, delai:7, paiement:'offert', reprise:'aucune', notesLog:'Offert aux 15 premiers comptes signés. Au-delà : 80€ HT ou 10% première commande.', photo:null
+  },
+  {code:'AV-002', categorie:'AV', statut:'actif', nom:"Fiches origines A5 (lot 50)", sousTitre:"Cartonnées, impression fine", saison:'permanente',
+    descCourte:"Lot de 50 fiches A5 cartonnées présentant les origines de chaque formule pour le comptoir.",
+    descLongue:"",
+    rationnel:"• Support storytelling visuel\n• Educate le client en 5 secondes\n• Relance conversations avec personnel",
+    ingredients:"", allergenes:"", origine:"",
+    recette:"", tags:"plv, fiches, a5, origines", gout:"",
+    packType:'KIT', packLibelle:"Lot de 50", packUnites:50, packMOQ:1, packDLC:null, packPoids:400, packL:21, packW:15, packH:3, packEAN:'', packSKU:'AV-002',
+    cost:12, ppc:0, pxGrossiste:0, pxAgent:0, pxEpicier:0, pxPlateforme:0,
+    expedition:'ambiant', franco:0, delai:5, paiement:'offert', reprise:'aucune', notesLog:'Inclus dans le kit de lancement.', photo:null
+  },
+  {code:'AV-003', categorie:'AV', statut:'actif', nom:"Stickers DLC & fournée numérotée", sousTitre:"Rouleau 500 unités", saison:'permanente',
+    descCourte:"Rouleau de 500 stickers pré-découpés pour apposition DLC + numéro de fournée hebdomadaire.",
+    descLongue:"",
+    rationnel:"• Professionnalise l'étiquetage en magasin\n• Renforce storytelling 'fournée numérotée'\n• Consommable périodique = réassort naturel",
+    ingredients:"", allergenes:"", origine:"",
+    recette:"", tags:"stickers, dlc, étiquettes, plv", gout:"",
+    packType:'KIT', packLibelle:"Rouleau 500", packUnites:500, packMOQ:1, packDLC:null, packPoids:150, packL:10, packW:10, packH:5, packEAN:'', packSKU:'AV-003',
+    cost:4.50, ppc:0, pxGrossiste:12, pxAgent:12, pxEpicier:15, pxPlateforme:14,
+    expedition:'ambiant', franco:0, delai:5, paiement:'30fdm', reprise:'aucune', notesLog:'Rouleaux sur mesure avec vos formules.', photo:null
+  },
+  {code:'AV-004', categorie:'AV', statut:'actif', nom:"Carte menu format carte postale", sousTitre:"Lot 100 · recto-verso", saison:'permanente',
+    descCourte:"Carte postale A6 recto-verso pour dégustation, promotion ou communication d'une nouveauté.",
+    descLongue:"",
+    rationnel:"• Support flyer élégant, cohérent avec la marque\n• Utilisable en dégustation événement\n• Personnalisable à chaque fournée",
+    ingredients:"", allergenes:"", origine:"",
+    recette:"", tags:"plv, carte, flyer, menu", gout:"",
+    packType:'KIT', packLibelle:"Lot 100", packUnites:100, packMOQ:1, packDLC:null, packPoids:400, packL:15, packW:11, packH:2, packEAN:'', packSKU:'AV-004',
+    cost:6, ppc:0, pxGrossiste:22, pxAgent:22, pxEpicier:28, pxPlateforme:25,
+    expedition:'ambiant', franco:0, delai:10, paiement:'30fdm', reprise:'aucune', notesLog:'Délai de production 10 jours ouvrés. Personnalisation incluse.', photo:null
+  },
+  {code:'AV-005', categorie:'AV', statut:'actif', nom:"Kit dégustation mini-cubes (5 formules)", sousTitre:"Pour prospection terrain", saison:'permanente',
+    descCourte:"Boîte de 25 mini-cubes (5 formules × 5) pour dégustations clients, événements ou démarchage.",
+    descLongue:"",
+    rationnel:"• Outil de prospection terrain premium\n• Permet dégustation sur 4 prospects différents\n• Renforce conversion rendez-vous",
+    ingredients:"Voir produits individuels.", allergenes:"Variable selon formules",
+    origine:"Voir produits individuels.",
+    recette:"", tags:"dégustation, échantillons, prospection, kit", gout:"Découverte",
+    packType:'COFFRET', packLibelle:"Coffret 25 mini-cubes", packUnites:25, packMOQ:1, packDLC:5, packPoids:650, packL:22, packW:22, packH:5, packEAN:'', packSKU:'AV-005',
+    cost:15, ppc:0, pxGrossiste:35, pxAgent:35, pxEpicier:45, pxPlateforme:40,
+    expedition:'frigo', franco:0, delai:3, paiement:'comptant', reprise:'aucune', notesLog:'Livré le lundi matin. Commande avant vendredi 17h.', photo:null
+  }
+];
+
+// =========================================
+// RENDER
+// =========================================
+
+function render() {
+  renderSidebar();
+  renderMain();
+  saveState(state);
+}
+
+function renderSidebar() {
+  const list = document.getElementById('cat-list');
+  list.innerHTML = '';
+  state.categories.forEach(c => {
+    const count = state.produits.filter(p => p.categorie === c.code).length;
+    const li = document.createElement('li');
+    li.className = 'cat-item' + (c.code === currentCatCode ? ' active' : '');
+    li.innerHTML = `
+      <span><span class="cat-code">${c.code}</span> · ${c.nom}</span>
+      <span class="cat-count">${count}</span>
+    `;
+    li.onclick = () => { currentCatCode = c.code; render(); };
+    list.appendChild(li);
+  });
+
+  // Stats
+  const total = state.produits.length;
+  const actifs = state.produits.filter(p => p.statut === 'actif').length;
+  const enPause = state.produits.filter(p => p.statut === 'pause').length;
+  const sansPhoto = state.produits.filter(p => !p.photo).length;
+  const sansPrixGross = state.produits.filter(p => !p.pxGrossiste || p.pxGrossiste === 0).length;
+  document.getElementById('side-stats').innerHTML = `
+    <div class="side-stat-row"><span>Produits total</span><strong>${total}</strong></div>
+    <div class="side-stat-row"><span>Actifs</span><strong>${actifs}</strong></div>
+    <div class="side-stat-row"><span>En pause</span><strong>${enPause}</strong></div>
+    <div class="side-stat-row"><span>Sans photo</span><strong>${sansPhoto}</strong></div>
+    <div class="side-stat-row"><span>Sans prix gross.</span><strong>${sansPrixGross}</strong></div>
+  `;
+}
+
+function renderMain() {
+  const cat = state.categories.find(c => c.code === currentCatCode);
+  if (!cat) return;
+  document.getElementById('cat-title').textContent = cat.nom;
+  document.getElementById('cat-subtitle').textContent = cat.subtitle || '';
+
+  const produits = state.produits.filter(p => p.categorie === currentCatCode);
+  const area = document.getElementById('product-area');
+
+  if (produits.length === 0) {
+    area.innerHTML = `
+      <div class="empty-state">
+        <p>Pas encore de produit dans <strong>${cat.nom}</strong>.</p>
+        <button class="btn-main" onclick="openModal(-1)">+ Créer le premier produit</button>
+      </div>`;
+    return;
+  }
+
+  const grid = document.createElement('div');
+  grid.className = 'product-grid';
+  produits.forEach(p => {
+    const idx = state.produits.indexOf(p);
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    const status = p.statut !== 'actif' ? `<span class="product-status ${p.statut}">${p.statut}</span>` : '';
+    const priceLine = p.pxGrossiste > 0 ? `${p.pxGrossiste.toFixed(2)}€ HT grossiste · MOQ ${p.packMOQ||1}` :
+                     p.statut === 'actif' && cat.code !== 'AV' ? '⚠ Prix à saisir' : '—';
+    card.innerHTML = `
+      <div class="product-thumb">
+        ${p.photo ? `<img src="${p.photo}" alt="${p.nom}">` : '✦'}
+        ${status}
+      </div>
+      <div class="product-body">
+        <span class="product-code">${p.code}</span>
+        <div class="product-name">${p.nom}</div>
+        <div class="product-subtitle">${p.sousTitre || ''}</div>
+        <div class="product-price">${priceLine}</div>
+      </div>
+    `;
+    card.onclick = () => openModal(idx);
+    grid.appendChild(card);
+  });
+  area.innerHTML = '';
+  area.appendChild(grid);
+}
+
+// =========================================
+// MODAL ÉDITION
+// =========================================
+
+function generateCode(catCode) {
+  const existing = state.produits.filter(p => p.categorie === catCode).map(p => p.code);
+  let n = 1;
+  while (existing.includes(`${catCode}-${String(n).padStart(3,'0')}`)) n++;
+  return `${catCode}-${String(n).padStart(3,'0')}`;
+}
+
+function openModal(idx) {
+  editing = idx;
+  const isNew = idx === -1;
+  const p = isNew ? {
+    code: generateCode(currentCatCode),
+    categorie: currentCatCode,
+    statut: 'actif',
+    nom: '', sousTitre: '', saison: 'permanente',
+    descCourte: '', descLongue: '', rationnel: '',
+    ingredients: '', allergenes: '', origine: '', recette: '',
+    tags: '', gout: '',
+    packType: 'UNITE', packLibelle: '', packUnites: 1, packMOQ: 1, packDLC: 5,
+    packPoids: null, packL: null, packW: null, packH: null, packEAN: '', packSKU: '',
+    cost: null, ppc: null, pxGrossiste: null, pxAgent: null, pxEpicier: null, pxPlateforme: null,
+    expedition: 'frigo', franco: 250, delai: 3, paiement: '30fdm', reprise: 'lancement',
+    notesLog: '', photo: null
+  } : state.produits[idx];
+
+  document.getElementById('modal-title').textContent = isNew ? `Nouveau produit · ${currentCatCode}` : `${p.code} · ${p.nom}`;
+  document.getElementById('btn-delete').style.display = isNew ? 'none' : 'inline-block';
+
+  // Remplir
+  fill('code', p.code);
+  fill('statut', p.statut);
+  fill('nom', p.nom);
+  fill('sous-titre', p.sousTitre);
+  fill('saison', p.saison);
+  fill('desc-courte', p.descCourte);
+  fill('desc-longue', p.descLongue);
+  fill('rationnel', p.rationnel);
+  fill('ingredients', p.ingredients);
+  fill('allergenes', p.allergenes);
+  fill('origine', p.origine);
+  fill('recette', p.recette);
+  fill('tags', p.tags);
+  fill('gout', p.gout);
+  fill('pack-type', p.packType);
+  fill('pack-libelle', p.packLibelle);
+  fill('pack-unites', p.packUnites);
+  fill('pack-moq', p.packMOQ);
+  fill('pack-dlc', p.packDLC);
+  fill('pack-poids', p.packPoids);
+  fill('pack-l', p.packL);
+  fill('pack-w', p.packW);
+  fill('pack-h', p.packH);
+  fill('pack-ean', p.packEAN);
+  fill('pack-sku', p.packSKU);
+  fill('cost', p.cost);
+  fill('ppc', p.ppc);
+  fill('px-grossiste', p.pxGrossiste);
+  fill('px-agent', p.pxAgent);
+  fill('px-epicier', p.pxEpicier);
+  fill('px-plateforme', p.pxPlateforme);
+  fill('expedition', p.expedition);
+  fill('franco', p.franco);
+  fill('delai', p.delai);
+  fill('paiement', p.paiement);
+  fill('reprise', p.reprise);
+  fill('notes-logistique', p.notesLog);
+
+  // Photo
+  const pz = document.getElementById('photo-zone');
+  const pzt = document.getElementById('photo-zone-text');
+  if (p.photo) {
+    pz.classList.add('has-image');
+    pz.innerHTML = `<input type="file" id="f-photo" accept="image/*" style="display:none"><img src="${p.photo}" alt=""><button class="remove-btn" type="button" onclick="removePhoto(event)">Retirer</button>`;
+  } else {
+    pz.classList.remove('has-image');
+    pz.innerHTML = `<input type="file" id="f-photo" accept="image/*" style="display:none"><div class="photo-zone-text" id="photo-zone-text">Glisser une photo ici ou cliquer pour sélectionner<br><span style="font-size:0.75rem;opacity:0.7;">JPG, PNG · max 2 Mo conseillé</span></div>`;
+  }
+  bindPhotoZone();
+
+  // Preview init
+  updatePreview();
+  updateMargins();
+
+  // Tabs reset
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === 'identite'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.dataset.panel === 'identite'));
+
+  // Ajouter la nav prev/next en bas du panel actif
+  renderPanelNav();
+
+  document.getElementById('modal').classList.add('open');
+}
+
+function fill(id, val) {
+  const el = document.getElementById('f-' + id);
+  if (!el) return;
+  el.value = val === null || val === undefined ? '' : val;
+}
+
+function getVal(id) {
+  const el = document.getElementById('f-' + id);
+  return el ? el.value : '';
+}
+function getNum(id) {
+  const v = getVal(id);
+  return v === '' ? null : parseFloat(v);
+}
+
+function collectForm() {
+  return {
+    code: getVal('code'),
+    categorie: currentCatCode,
+    statut: getVal('statut'),
+    nom: getVal('nom'),
+    sousTitre: getVal('sous-titre'),
+    saison: getVal('saison'),
+    descCourte: getVal('desc-courte'),
+    descLongue: getVal('desc-longue'),
+    rationnel: getVal('rationnel'),
+    ingredients: getVal('ingredients'),
+    allergenes: getVal('allergenes'),
+    origine: getVal('origine'),
+    recette: getVal('recette'),
+    tags: getVal('tags'),
+    gout: getVal('gout'),
+    packType: getVal('pack-type'),
+    packLibelle: getVal('pack-libelle'),
+    packUnites: getNum('pack-unites'),
+    packMOQ: getNum('pack-moq'),
+    packDLC: getNum('pack-dlc'),
+    packPoids: getNum('pack-poids'),
+    packL: getNum('pack-l'),
+    packW: getNum('pack-w'),
+    packH: getNum('pack-h'),
+    packEAN: getVal('pack-ean'),
+    packSKU: getVal('pack-sku'),
+    cost: getNum('cost'),
+    ppc: getNum('ppc'),
+    pxGrossiste: getNum('px-grossiste'),
+    pxAgent: getNum('px-agent'),
+    pxEpicier: getNum('px-epicier'),
+    pxPlateforme: getNum('px-plateforme'),
+    expedition: getVal('expedition'),
+    franco: getNum('franco'),
+    delai: getNum('delai'),
+    paiement: getVal('paiement'),
+    reprise: getVal('reprise'),
+    notesLog: getVal('notes-logistique'),
+    photo: currentPhoto
+  };
+}
+
+let currentPhoto = null;
+
+function bindPhotoZone() {
+  const zone = document.getElementById('photo-zone');
+  const input = zone.querySelector('#f-photo');
+  zone.onclick = (e) => {
+    if (e.target.classList.contains('remove-btn')) return;
+    input.click();
+  };
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      currentPhoto = ev.target.result;
+      zone.classList.add('has-image');
+      zone.innerHTML = `<input type="file" id="f-photo" accept="image/*" style="display:none"><img src="${currentPhoto}" alt=""><button class="remove-btn" type="button" onclick="removePhoto(event)">Retirer</button>`;
+      bindPhotoZone();
+    };
+    reader.readAsDataURL(file);
+  };
+}
+
+function removePhoto(e) {
+  e.stopPropagation();
+  currentPhoto = null;
+  const zone = document.getElementById('photo-zone');
+  zone.classList.remove('has-image');
+  zone.innerHTML = `<input type="file" id="f-photo" accept="image/*" style="display:none"><div class="photo-zone-text">Glisser une photo ici ou cliquer pour sélectionner<br><span style="font-size:0.75rem;opacity:0.7;">JPG, PNG · max 2 Mo conseillé</span></div>`;
+  bindPhotoZone();
+}
+
+function updatePreview() {
+  const nom = getVal('nom') || '—';
+  const sous = getVal('sous-titre') || '';
+  const desc = getVal('desc-courte') || '';
+  document.getElementById('preview-name').textContent = nom + (sous ? ` · ` : '');
+  document.getElementById('preview-name').innerHTML = nom + (sous ? ` <span style="font-size:0.85rem;opacity:0.6;">· ${sous}</span>` : '');
+  document.getElementById('preview-desc').textContent = desc;
+}
+
+function updateMargins() {
+  const cost = getNum('cost');
+  const preview = document.getElementById('margin-preview');
+  if (!cost) {
+    preview.innerHTML = 'Renseigner le coût de revient pour voir les marges.';
+    return;
+  }
+  const canals = [
+    {label:'Grossiste', key:'px-grossiste'},
+    {label:'Agent', key:'px-agent'},
+    {label:'Épicier direct', key:'px-epicier'},
+    {label:'Plateforme B2B', key:'px-plateforme'}
+  ];
+  const html = canals.map(c => {
+    const px = getNum(c.key);
+    if (!px) return `<div style="color:var(--marron);opacity:0.4;">• ${c.label} : — prix non renseigné</div>`;
+    const marge = px - cost;
+    const margePct = ((marge/px)*100).toFixed(0);
+    const color = marge < cost*0.3 ? '#BF646D' : (marge > cost ? '#968A42' : 'var(--marron)');
+    return `<div>• <strong>${c.label}</strong> : ${marge.toFixed(2)}€ de marge · <span style="color:${color};font-weight:500;">${margePct}%</span></div>`;
+  }).join('');
+  preview.innerHTML = html;
+}
+
+// Live preview
+['nom','sous-titre','desc-courte'].forEach(id => {
+  document.getElementById('f-' + id).addEventListener('input', updatePreview);
+});
+['cost','px-grossiste','px-agent','px-epicier','px-plateforme'].forEach(id => {
+  document.getElementById('f-' + id).addEventListener('input', updateMargins);
+});
+
+// Tabs
+const TAB_ORDER = ['identite', 'packaging', 'tarifs', 'marketing', 'logistique'];
+const TAB_LABELS = {
+  identite: 'Identité',
+  packaging: 'Packaging',
+  tarifs: 'Tarifs',
+  marketing: 'Photo',
+  logistique: 'Logistique'
+};
+
+function switchTab(tabName) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
+  document.querySelector(`.panel[data-panel="${tabName}"]`).classList.add('active');
+  // Scroll to top of modal body
+  document.querySelector('.modal-body').scrollTo({top: 0, behavior: 'smooth'});
+  renderPanelNav();
+}
+
+function renderPanelNav() {
+  const activePanel = document.querySelector('.panel.active');
+  if (!activePanel) return;
+  const current = activePanel.dataset.panel;
+  const idx = TAB_ORDER.indexOf(current);
+  const prev = idx > 0 ? TAB_ORDER[idx - 1] : null;
+  const next = idx < TAB_ORDER.length - 1 ? TAB_ORDER[idx + 1] : null;
+
+  // Remove existing nav
+  const existing = activePanel.querySelector('.panel-nav');
+  if (existing) existing.remove();
+
+  const nav = document.createElement('div');
+  nav.className = 'panel-nav';
+  nav.innerHTML = `
+    ${prev ? `<button class="btn-ghost btn" data-goto="${prev}">← ${TAB_LABELS[prev]}</button>` : '<span></span>'}
+    <span class="panel-nav-dots">
+      ${TAB_ORDER.map((t, i) => `<span class="dot ${t===current?'active':''}" data-goto="${t}"></span>`).join('')}
+    </span>
+    ${next ? `<button class="btn-main panel-nav-next" data-goto="${next}">${TAB_LABELS[next]} →</button>` : '<span></span>'}
+  `;
+  activePanel.appendChild(nav);
+
+  nav.querySelectorAll('[data-goto]').forEach(el => {
+    el.onclick = () => switchTab(el.dataset.goto);
+  });
+}
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.onclick = () => switchTab(tab.dataset.tab);
+});
+
+// AI BUTTONS (simulation)
+document.querySelectorAll('.ai-btn').forEach(btn => {
+  btn.onclick = () => {
+    const field = btn.dataset.ai;
+    const nom = getVal('nom');
+    if (!nom) {
+      showToast('Renseigne d\'abord le nom du produit');
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = '✦ Génération...';
+    setTimeout(() => {
+      const placeholder = {
+        'desc-courte': `[IA] Exemple pour "${nom}" : description à 30 mots, ton Maison Félicien, premium, sobre. À générer par l'API Claude en phase 2.`,
+        'desc-longue': `[IA] Exemple pour "${nom}" : description longue 100 mots, storytelling, technique, émotion. Génération via Claude en phase 2 avec clé API.`,
+        'rationnel': `[IA] Argumentaire distributeur :\n• Différenciation marché\n• Rotation prouvée\n• Marge attractive`,
+        'recette': `[IA] Storytelling recette à enrichir — rencontre producteur, détail technique, inspiration.`
+      };
+      fill(field, placeholder[field]);
+      btn.disabled = false;
+      btn.textContent = '✦ Enrichir avec l\'IA';
+      updatePreview();
+      showToast('Texte IA inséré — à éditer');
+    }, 700);
+  };
+});
+
+// Save
+document.getElementById('btn-save').onclick = () => {
+  const p = collectForm();
+  if (!p.nom || p.nom.trim() === '') {
+    showToast('Le nom est requis');
+    return;
+  }
+  if (editing === -1) {
+    state.produits.push(p);
+  } else {
+    state.produits[editing] = p;
+  }
+  closeModal();
+  render();
+  showToast('Enregistré');
+};
+
+document.getElementById('btn-delete').onclick = () => {
+  if (!confirm('Supprimer définitivement ce produit ?')) return;
+  state.produits.splice(editing, 1);
+  closeModal();
+  render();
+  showToast('Produit supprimé');
+};
+
+document.getElementById('btn-cancel').onclick = closeModal;
+document.getElementById('modal-close').onclick = closeModal;
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  currentPhoto = null;
+}
+
+document.getElementById('btn-new-product').onclick = () => {
+  currentPhoto = null;
+  openModal(-1);
+};
+
+// Capture photo state at open
+const origOpenModal = openModal;
+window.openModal = function(idx) {
+  const isNew = idx === -1;
+  currentPhoto = isNew ? null : (state.produits[idx].photo || null);
+  origOpenModal(idx);
+};
+
+// =========================================
+// EXPORT / IMPORT
+// =========================================
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+document.getElementById('btn-export-json').onclick = () => {
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `catalogue-mf-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('JSON exporté');
+};
+
+document.getElementById('btn-import-json').onclick = () => {
+  document.getElementById('file-import').click();
+};
+document.getElementById('file-import').onchange = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!data.categories || !data.produits) throw new Error('format');
+      state = data;
+      currentCatCode = state.categories[0].code;
+      render();
+      showToast(`Import réussi · ${state.produits.length} produits`);
+    } catch(err) {
+      showToast('Fichier JSON invalide');
+    }
+  };
+  reader.readAsText(file);
+};
+
+document.getElementById('btn-reset').onclick = () => {
+  if (!confirm('Supprimer tous les produits et repartir de zéro ?')) return;
+  state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+  currentCatCode = state.categories[0].code;
+  render();
+  showToast('Base réinitialisée');
+};
+
+document.getElementById('btn-seed').onclick = () => {
+  if (state.produits.length > 0 && !confirm('Cela ajoute des données démo par dessus. Continuer ?')) return;
+  SEED.forEach(s => {
+    if (!state.produits.find(p => p.code === s.code)) state.produits.push(s);
+  });
+  render();
+  showToast(`${SEED.length} produits démo chargés`);
+};
+
+// APERÇU CATALOGUE
+document.getElementById('btn-catalog-preview').onclick = () => {
+  document.getElementById('modal-export').classList.add('open');
+};
+document.querySelector('[data-close-export]').onclick = () => {
+  document.getElementById('modal-export').classList.remove('open');
+};
+
+document.querySelectorAll('[data-export]').forEach(card => {
+  card.onclick = () => {
+    const type = card.dataset.export;
+    if (type === 'catalog-html') generateCatalogHTML();
+    else if (type === 'fiche-grossiste') generateFicheGrossiste();
+    else if (type === 'json') document.getElementById('btn-export-json').click();
+    else if (type === 'csv-ankorstore') generateAnkorstoreCSV();
+  };
+});
+
+// Ouvrir catalogue HTML en nouvel onglet
+function generateCatalogHTML() {
+  const actifs = state.produits.filter(p => p.statut === 'actif');
+  const w = window.open('', '_blank');
+  w.document.write(buildCatalogHTML(actifs));
+  w.document.close();
+}
+
+function buildCatalogHTML(produits) {
+  const byCat = {};
+  produits.forEach(p => { (byCat[p.categorie] = byCat[p.categorie] || []).push(p); });
+
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Catalogue · Maison Félicien</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Questrial&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Questrial',sans-serif;background:#F0F0E6;color:#392D31;line-height:1.5}
+.cover{background:#8B3A43;color:#F0F0E6;padding:80px 40px;text-align:center;min-height:90vh;display:flex;flex-direction:column;justify-content:center}
+.cover .maison{font-size:0.8rem;letter-spacing:0.5em;text-transform:uppercase;color:#E5B7B3;margin-bottom:20px}
+.cover h1{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:clamp(3rem,10vw,6rem);margin-bottom:20px}
+.cover h2{font-family:'Cormorant Garamond',serif;font-size:1.3rem;letter-spacing:0.1em;color:#E5B7B3;font-weight:400}
+.cover .year{margin-top:60px;font-size:0.8rem;letter-spacing:0.3em;color:#E5B7B3;opacity:0.8}
+.section{padding:60px 40px;max-width:1000px;margin:0 auto}
+.sec-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:2.5rem;color:#8B3A43;margin-bottom:10px}
+.sec-sub{font-size:0.85rem;color:#968A42;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:40px}
+.products{display:grid;grid-template-columns:1fr 1fr;gap:30px}
+.prod{background:white;padding:24px;border-radius:6px;border:1px solid #E5B7B3;page-break-inside:avoid}
+.prod-thumb{aspect-ratio:4/3;background:#F0F0E6;border-radius:4px;margin-bottom:16px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.prod-thumb img{width:100%;height:100%;object-fit:cover}
+.prod-code{font-family:ui-monospace,monospace;font-size:0.7rem;color:#968A42;letter-spacing:0.1em;margin-bottom:6px}
+.prod-nom{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.3rem;color:#392D31;line-height:1.2;margin-bottom:4px}
+.prod-st{font-size:0.82rem;color:#968A42;margin-bottom:14px;font-style:italic}
+.prod-desc{font-size:0.85rem;line-height:1.6;margin-bottom:14px}
+.prod-meta{font-size:0.78rem;padding-top:12px;border-top:1px dashed #E5B7B3;color:#392D31;opacity:0.8}
+.prod-meta strong{color:#8B3A43;font-weight:500}
+.outro{background:#392D31;color:#F0F0E6;padding:60px 40px;text-align:center}
+.outro h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:2.5rem;margin-bottom:20px;color:#E5B7B3}
+.outro p{max-width:600px;margin:0 auto 16px;font-size:0.95rem;line-height:1.7}
+@media print{.cover{min-height:100vh;page-break-after:always}.section{page-break-after:always}.products{gap:20px}.prod{break-inside:avoid}}
+@media (max-width:640px){.products{grid-template-columns:1fr}}
+</style></head><body>
+
+<div class="cover">
+  <div class="maison">Maison</div>
+  <h1>Félicien</h1>
+  <h2>Catalogue Professionnel · ${new Date().getFullYear()}</h2>
+  <div class="year">Pâtisserie artisanale parisienne · Distribution épicerie fine</div>
+</div>
+
+${state.categories.filter(c => byCat[c.code]).map(c => `
+<div class="section">
+  <div class="sec-title">${c.nom}</div>
+  <div class="sec-sub">${c.subtitle || ''}</div>
+  <div class="products">
+    ${byCat[c.code].map(p => `
+      <div class="prod">
+        <div class="prod-thumb">${p.photo ? `<img src="${p.photo}">` : '<span style="font-family:Cormorant Garamond,serif;font-style:italic;font-size:3rem;color:#968A42;">✦</span>'}</div>
+        <div class="prod-code">${p.code}</div>
+        <div class="prod-nom">${p.nom}</div>
+        <div class="prod-st">${p.sousTitre || ''}</div>
+        <div class="prod-desc">${p.descCourte || ''}</div>
+        <div class="prod-meta">
+          ${p.origine ? `<div><strong>Origine</strong> · ${p.origine}</div>` : ''}
+          <div><strong>Format</strong> · ${p.packLibelle || p.packType} · MOQ ${p.packMOQ||1}${p.packDLC?' · DLC '+p.packDLC+'j':''}</div>
+          ${p.pxGrossiste ? `<div><strong>Tarif grossiste</strong> · ${p.pxGrossiste.toFixed(2)}€ HT${p.ppc?' · PPC '+p.ppc.toFixed(2)+'€ TTC':''}</div>`:''}
+        </div>
+      </div>
+    `).join('')}
+  </div>
+</div>`).join('')}
+
+<div class="outro">
+  <h2>Commandes & partenariats</h2>
+  <p>Maison Félicien · Pâtisserie artisanale parisienne</p>
+  <p><strong style="color:#E5B7B3;">pro@maison-felicien.com</strong> · 06 XX XX XX XX</p>
+  <p style="margin-top:30px;font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;opacity:0.7;">maison-felicien.com</p>
+</div>
+
+</body></html>`;
+}
+
+function generateFicheGrossiste() {
+  const actifs = state.produits.filter(p => p.statut === 'actif' && p.pxGrossiste > 0);
+  if (actifs.length === 0) {
+    showToast('Aucun produit actif avec prix grossiste');
+    return;
+  }
+  const w = window.open('', '_blank');
+  w.document.write(buildCatalogHTML(actifs));
+  w.document.close();
+}
+
+function generateAnkorstoreCSV() {
+  const actifs = state.produits.filter(p => p.statut === 'actif');
+  const headers = ['product_name','product_code','category','description','wholesale_price_ht','retail_price_ttc','moq','dlc_days','ingredients','allergens'];
+  const rows = actifs.map(p => [
+    p.nom, p.code, state.categories.find(c=>c.code===p.categorie)?.nom || '',
+    p.descCourte, p.pxPlateforme || '', p.ppc || '',
+    p.packMOQ || 1, p.packDLC || '',
+    p.ingredients, p.allergenes
+  ].map(v => `"${(String(v)||'').replace(/"/g,'""')}"`).join(','));
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob(["\ufeff" + csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `ankorstore-import-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('CSV Ankorstore exporté');
+}
+
+// Close modals on backdrop click
+document.querySelectorAll('.modal-backdrop').forEach(b => {
+  b.onclick = (e) => {
+    if (e.target === b) b.classList.remove('open');
+  };
+});
+
+// Init
+render();
+</script>
+
+</body>
+</html>

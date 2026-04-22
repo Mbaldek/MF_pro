@@ -69,3 +69,7 @@ SELECT * FROM leads ORDER BY created_at DESC;
 - Vercel : gratuit (Hobby plan, fonctions serverless incluses)
 - Supabase : gratuit (Free tier)
 - Anthropic Claude Haiku : ~$0.001 par conversation
+
+## Outils internes (non listés)
+
+- `/outils/catalogue-builder` — maquette de saisie catalogue (Phase 1, localStorage uniquement). URL non linkée depuis le site public. Pour la migration Next.js/Supabase prévue (Phase 2), voir `prompt_claude_code.md` à la racine du repo (non déployé).
