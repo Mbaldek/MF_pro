@@ -804,6 +804,7 @@
     <span class="brand-sub">· Catalogue Builder</span>
   </div>
   <div class="topbar-actions">
+    <button class="btn" id="btn-pricing">Tarification</button>
     <button class="btn" id="btn-export-json">Export JSON</button>
     <button class="btn" id="btn-import-json">Import JSON</button>
     <input type="file" id="file-import" accept=".json" style="display:none">
@@ -1032,7 +1033,17 @@
       <!-- TARIFS -->
       <div class="panel" data-panel="tarifs">
         <div class="hint-box">
-          <strong>4 canaux de prix</strong> pour ce produit. Tous les prix sont HT, par packaging (pas par unité interne). Le PPC est le prix public TTC conseillé au consommateur final.
+          <strong>Tarification par coefficients.</strong> Par défaut, les 4 prix canaux sont calculés depuis le PPR (prix public TTC) divisé par les coefficients de la catégorie. Le PPR est l'index de base. Cocher « Override » pour saisir les prix manuellement (ex: produits où la matière force un prix hors grille).
+        </div>
+
+        <div class="card-section" style="background:var(--poudre);border-left:3px solid var(--rose);">
+          <label style="display:flex;align-items:center;gap:12px;cursor:pointer;">
+            <input type="checkbox" id="f-override-prices" style="width:18px;height:18px;flex-shrink:0;accent-color:var(--rose);">
+            <div>
+              <strong style="font-size:0.95rem;">Override — saisir les prix manuellement</strong>
+              <div style="font-size:0.78rem;opacity:0.75;margin-top:3px;">Décoché (défaut) : prix calculés auto depuis PPR ÷ coef catégorie. Coché : saisie libre des 4 prix.</div>
+            </div>
+          </label>
         </div>
 
         <div class="card-section">
@@ -1043,7 +1054,7 @@
               <input type="number" step="0.01" class="input" id="f-cost" placeholder="0.00">
             </div>
             <div class="field">
-              <div class="field-label">PPC conseillé TTC <span class="field-hint">€ / pack</span></div>
+              <div class="field-label">PPR (prix public) TTC <span class="field-hint">€ / pack</span></div>
               <input type="number" step="0.01" class="input" id="f-ppc" placeholder="0.00">
             </div>
           </div>
@@ -1074,6 +1085,8 @@
               <span class="price-unit">€ HT · pack</span>
             </div>
           </div>
+
+          <div id="price-formulas" style="display:none;margin-top:12px;padding:10px 14px;background:rgba(150,138,66,0.08);border-left:2px solid var(--vert);border-radius:3px;font-size:0.78rem;color:var(--marron);line-height:1.8;"></div>
         </div>
 
         <div class="card-section">
@@ -1220,6 +1233,47 @@
   </div>
 </div>
 
+<!-- MODAL TARIFICATION PAR COEFFICIENTS -->
+<div class="modal-backdrop" id="modal-pricing">
+  <div class="modal" style="max-width:780px;">
+    <div class="modal-head">
+      <div class="modal-title">Tarification par coefficients</div>
+      <button class="modal-close" id="modal-pricing-close">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="hint-box">
+        <strong>Modèle PPR ÷ coef.</strong> Chaque prix canal HT est calculé par <code style="background:var(--blanc);padding:1px 5px;border-radius:3px;">PPR TTC ÷ coefficient</code>. Exemple : PPR 5,50 € ÷ 2,56 = 2,15 € HT grossiste. TVA pâtisserie vente à emporter = 5,5 % (absorbée dans le coef). Les produits marqués « Override » sont ignorés par ces coefs.
+      </div>
+
+      <div class="card-section">
+        <div class="card-section-title">Grille par catégorie</div>
+        <table id="pricing-grid" style="width:100%;border-collapse:collapse;font-size:0.88rem;margin-top:8px;">
+          <thead>
+            <tr>
+              <th style="text-align:left;padding:10px 8px;border-bottom:1px solid var(--poudre);font-family:var(--sans);font-weight:500;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--marron);">Catégorie</th>
+              <th style="padding:10px 8px;border-bottom:1px solid var(--poudre);font-family:var(--sans);font-weight:500;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--marron);">Grossiste</th>
+              <th style="padding:10px 8px;border-bottom:1px solid var(--poudre);font-family:var(--sans);font-weight:500;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--marron);">Agent</th>
+              <th style="padding:10px 8px;border-bottom:1px solid var(--poudre);font-family:var(--sans);font-weight:500;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--marron);">Épicier</th>
+              <th style="padding:10px 8px;border-bottom:1px solid var(--poudre);font-family:var(--sans);font-weight:500;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--marron);">Plateforme</th>
+            </tr>
+          </thead>
+          <tbody id="pricing-grid-body"></tbody>
+        </table>
+        <div style="margin-top:10px;font-size:0.76rem;opacity:0.65;color:var(--marron);">Coef <code style="background:var(--blanc);padding:0 4px;border-radius:3px;">1.00</code> = neutre (aucun calcul, prix figés à 0 ou à la valeur override). Utile pour les PLV.</div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <div class="modal-foot-left">
+        <button class="btn btn-ghost" id="btn-pricing-reset" style="color:var(--marron);">Réinitialiser aux défauts</button>
+      </div>
+      <div class="modal-foot-right">
+        <button class="btn btn-ghost" id="btn-pricing-cancel" style="color:var(--marron);">Annuler</button>
+        <button class="btn btn-primary" id="btn-pricing-apply" style="color:var(--marron);background:var(--poudre);border-color:var(--poudre);">Appliquer aux non-overridés</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast">Sauvegardé</div>
 
 <script>
@@ -1230,6 +1284,15 @@
 
 const STORAGE_KEY = 'mf_catalogue_v1';
 
+// Coefficients de tarification par catégorie : prix canal HT = PPR TTC / coef
+const DEFAULT_COEFS = {
+  CC: { grossiste: 2.56, agent: 2.29, epicier: 2.12, plateforme: 2.34 },
+  CK: { grossiste: 2.57, agent: 2.29, epicier: 2.11, plateforme: 2.34 },
+  CB: { grossiste: 2.58, agent: 2.29, epicier: 2.11, plateforme: 2.35 },
+  GR: { grossiste: 2.58, agent: 2.31, epicier: 2.11, plateforme: 2.35 },
+  AV: { grossiste: 1.00, agent: 1.00, epicier: 1.00, plateforme: 1.00 }
+};
+
 // Modèle de données
 const DEFAULT_STATE = {
   categories: [
@@ -1239,15 +1302,65 @@ const DEFAULT_STATE = {
     { code: 'GR', nom: "Granola", subtitle: "Artisanal, petites productions", ordre: 4 },
     { code: 'AV', nom: "Marketing & PLV", subtitle: "Aide à la vente pour distributeurs", ordre: 5 }
   ],
+  pricingSettings: {
+    tva: 5.5,
+    coefs: DEFAULT_COEFS
+  },
   produits: []
 };
 
+// ---- Compute helpers (PPR ÷ coef) ----
+function round2(n) { return Math.round(n * 100) / 100; }
+
+function computePrices(produit, coefs) {
+  const c = coefs[produit.categorie];
+  if (!c) return;
+  const ppc = produit.ppc;
+  if (!ppc || ppc === 0) return;
+  if (c.grossiste !== 1) produit.pxGrossiste = round2(ppc / c.grossiste);
+  if (c.agent !== 1) produit.pxAgent = round2(ppc / c.agent);
+  if (c.epicier !== 1) produit.pxEpicier = round2(ppc / c.epicier);
+  if (c.plateforme !== 1) produit.pxPlateforme = round2(ppc / c.plateforme);
+}
+
+function recomputeAllNonOverridden(s) {
+  let count = 0;
+  s.produits.forEach(p => {
+    if (!p.overridePrices) {
+      computePrices(p, s.pricingSettings.coefs);
+      count++;
+    }
+  });
+  return count;
+}
+
+function migrateState(s) {
+  if (!s.pricingSettings) {
+    s.pricingSettings = JSON.parse(JSON.stringify(DEFAULT_STATE.pricingSettings));
+  }
+  if (!s.pricingSettings.coefs) {
+    s.pricingSettings.coefs = JSON.parse(JSON.stringify(DEFAULT_COEFS));
+  }
+  s.produits.forEach(p => {
+    if (typeof p.overridePrices === 'undefined') {
+      const hasAnyPrice = [p.pxGrossiste, p.pxAgent, p.pxEpicier, p.pxPlateforme]
+        .some(v => v !== null && v !== undefined && v !== 0);
+      p.overridePrices = hasAnyPrice;
+    }
+  });
+  recomputeAllNonOverridden(s);
+  return s;
+}
+
 function loadState() {
+  let s;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch(e) {}
-  return JSON.parse(JSON.stringify(DEFAULT_STATE));
+    s = raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(DEFAULT_STATE));
+  } catch(e) {
+    s = JSON.parse(JSON.stringify(DEFAULT_STATE));
+  }
+  return migrateState(s);
 }
 
 function saveState(s) {
@@ -1257,6 +1370,7 @@ function saveState(s) {
 let state = loadState();
 let currentCatCode = state.categories[0].code;
 let editing = null; // { produit_index: -1 for new, or index }
+let editingCategorie = null; // catégorie du produit en cours d'édition (pour recompute)
 
 // =========================================
 // SEED DATA (données démo)
@@ -1493,10 +1607,12 @@ function openModal(idx) {
     packType: 'UNITE', packLibelle: '', packUnites: 1, packMOQ: 1, packDLC: 5,
     packPoids: null, packL: null, packW: null, packH: null, packEAN: '', packSKU: '',
     cost: null, ppc: null, pxGrossiste: null, pxAgent: null, pxEpicier: null, pxPlateforme: null,
+    overridePrices: false,
     expedition: 'frigo', franco: 250, delai: 3, paiement: '30fdm', reprise: 'lancement',
     notesLog: '', photo: null
   } : state.produits[idx];
 
+  editingCategorie = p.categorie;
   document.getElementById('modal-title').textContent = isNew ? `Nouveau produit · ${currentCatCode}` : `${p.code} · ${p.nom}`;
   document.getElementById('btn-delete').style.display = isNew ? 'none' : 'inline-block';
 
@@ -1532,6 +1648,8 @@ function openModal(idx) {
   fill('px-agent', p.pxAgent);
   fill('px-epicier', p.pxEpicier);
   fill('px-plateforme', p.pxPlateforme);
+  document.getElementById('f-override-prices').checked = !!p.overridePrices;
+  applyOverrideMode();
   fill('expedition', p.expedition);
   fill('franco', p.franco);
   fill('delai', p.delai);
@@ -1614,6 +1732,7 @@ function collectForm() {
     pxAgent: getNum('px-agent'),
     pxEpicier: getNum('px-epicier'),
     pxPlateforme: getNum('px-plateforme'),
+    overridePrices: document.getElementById('f-override-prices').checked,
     expedition: getVal('expedition'),
     franco: getNum('franco'),
     delai: getNum('delai'),
@@ -1689,12 +1808,89 @@ function updateMargins() {
   preview.innerHTML = html;
 }
 
+// ---- Override mode + live recompute ----
+function applyOverrideMode() {
+  const isOverride = document.getElementById('f-override-prices').checked;
+  ['px-grossiste','px-agent','px-epicier','px-plateforme'].forEach(id => {
+    const el = document.getElementById('f-' + id);
+    if (!el) return;
+    el.readOnly = !isOverride;
+    el.style.background = isOverride ? '' : 'rgba(240,240,230,0.6)';
+    el.style.cursor = isOverride ? '' : 'not-allowed';
+  });
+  updateFormulaHints();
+}
+
+function updateFormulaHints() {
+  const hintEl = document.getElementById('price-formulas');
+  if (!hintEl) return;
+  const isOverride = document.getElementById('f-override-prices').checked;
+  if (isOverride) { hintEl.style.display = 'none'; return; }
+  hintEl.style.display = 'block';
+  const ppc = parseFloat(document.getElementById('f-ppc').value);
+  if (!ppc) {
+    hintEl.innerHTML = '<em style="opacity:0.6;">Renseigner le PPR TTC pour voir les prix canaux calculés.</em>';
+    return;
+  }
+  const c = state.pricingSettings.coefs[editingCategorie || currentCatCode];
+  if (!c) { hintEl.style.display = 'none'; return; }
+  const rows = [
+    ['Grossiste', c.grossiste],
+    ['Agent', c.agent],
+    ['Épicier', c.epicier],
+    ['Plateforme', c.plateforme]
+  ];
+  hintEl.innerHTML = '<strong style="font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--vert);display:block;margin-bottom:6px;">Calcul depuis le PPR</strong>' +
+    rows.map(([label, coef]) => {
+      if (coef === 1) return `<span style="opacity:0.55;">${label} : coef neutre (1.00) — override requis</span>`;
+      const px = round2(ppc / coef);
+      return `${ppc.toFixed(2)} € ÷ ${coef.toFixed(2)} = <strong>${px.toFixed(2)} € HT</strong> <span style="opacity:0.6;">(${label})</span>`;
+    }).join('<br>');
+}
+
+function recomputeCurrentPrices() {
+  const ppc = parseFloat(document.getElementById('f-ppc').value);
+  if (!ppc) return;
+  const c = state.pricingSettings.coefs[editingCategorie || currentCatCode];
+  if (!c) return;
+  const fields = [
+    ['f-px-grossiste', c.grossiste],
+    ['f-px-agent', c.agent],
+    ['f-px-epicier', c.epicier],
+    ['f-px-plateforme', c.plateforme]
+  ];
+  fields.forEach(([id, coef]) => {
+    if (coef === 1) return;
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.value = round2(ppc / coef).toFixed(2);
+  });
+}
+
 // Live preview
 ['nom','sous-titre','desc-courte'].forEach(id => {
   document.getElementById('f-' + id).addEventListener('input', updatePreview);
 });
-['cost','px-grossiste','px-agent','px-epicier','px-plateforme'].forEach(id => {
+['cost','px-grossiste','px-agent','px-epicier','px-plateforme','ppc'].forEach(id => {
   document.getElementById('f-' + id).addEventListener('input', updateMargins);
+});
+
+// Override checkbox : toggle readonly, recompute if re-enabling auto mode
+document.getElementById('f-override-prices').addEventListener('change', () => {
+  applyOverrideMode();
+  if (!document.getElementById('f-override-prices').checked) {
+    recomputeCurrentPrices();
+    updateMargins();
+  }
+});
+
+// PPC input : if not overridden, live-recompute the 4 channel prices + margins
+document.getElementById('f-ppc').addEventListener('input', () => {
+  if (!document.getElementById('f-override-prices').checked) {
+    recomputeCurrentPrices();
+    updateMargins();
+  }
+  updateFormulaHints();
 });
 
 // Tabs
@@ -1855,7 +2051,8 @@ document.getElementById('file-import').onchange = (e) => {
     try {
       const data = JSON.parse(ev.target.result);
       if (!data.categories || !data.produits) throw new Error('format');
-      state = data;
+      state = migrateState(data);
+      saveState(state);
       currentCatCode = state.categories[0].code;
       render();
       showToast(`Import réussi · ${state.produits.length} produits`);
@@ -1877,10 +2074,85 @@ document.getElementById('btn-reset').onclick = () => {
 document.getElementById('btn-seed').onclick = () => {
   if (state.produits.length > 0 && !confirm('Cela ajoute des données démo par dessus. Continuer ?')) return;
   SEED.forEach(s => {
-    if (!state.produits.find(p => p.code === s.code)) state.produits.push(s);
+    if (!state.produits.find(p => p.code === s.code)) {
+      const copy = Object.assign({}, s, { overridePrices: false });
+      state.produits.push(copy);
+    }
   });
+  recomputeAllNonOverridden(state);
+  saveState(state);
   render();
   showToast(`${SEED.length} produits démo chargés`);
+};
+
+// =========================================
+// MODAL TARIFICATION (coefficients par catégorie)
+// =========================================
+
+const CANAUX = ['grossiste','agent','epicier','plateforme'];
+let pricingDraft = null; // copie locale pendant édition
+
+function renderPricingGrid() {
+  const body = document.getElementById('pricing-grid-body');
+  if (!body) return;
+  body.innerHTML = '';
+  state.categories.forEach(cat => {
+    const coefs = pricingDraft[cat.code] || { grossiste:1, agent:1, epicier:1, plateforme:1 };
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="padding:8px;border-bottom:1px solid var(--blanc);">
+        <strong style="font-family:var(--serif);font-style:italic;font-size:1rem;color:var(--rose);">${cat.nom}</strong>
+        <div style="font-size:0.72rem;opacity:0.65;">${cat.code}</div>
+      </td>
+      ${CANAUX.map(cx => `
+        <td style="padding:8px;border-bottom:1px solid var(--blanc);text-align:center;">
+          <input type="number" step="0.01" min="1" class="input pricing-coef" data-cat="${cat.code}" data-canal="${cx}" value="${coefs[cx].toFixed(2)}" style="width:72px;text-align:center;padding:6px 4px;font-family:var(--sans);">
+        </td>
+      `).join('')}
+    `;
+    body.appendChild(tr);
+  });
+  // Bind inputs
+  body.querySelectorAll('input.pricing-coef').forEach(inp => {
+    inp.addEventListener('input', (e) => {
+      const cat = e.target.dataset.cat;
+      const canal = e.target.dataset.canal;
+      const v = parseFloat(e.target.value);
+      if (!isNaN(v) && v > 0) {
+        pricingDraft[cat][canal] = v;
+      }
+    });
+  });
+}
+
+function openPricingModal() {
+  pricingDraft = JSON.parse(JSON.stringify(state.pricingSettings.coefs));
+  renderPricingGrid();
+  document.getElementById('modal-pricing').classList.add('open');
+}
+function closePricingModal() {
+  document.getElementById('modal-pricing').classList.remove('open');
+  pricingDraft = null;
+}
+
+document.getElementById('btn-pricing').onclick = openPricingModal;
+document.getElementById('modal-pricing-close').onclick = closePricingModal;
+document.getElementById('btn-pricing-cancel').onclick = closePricingModal;
+
+document.getElementById('btn-pricing-reset').onclick = () => {
+  if (!confirm('Réinitialiser les coefficients aux valeurs par défaut ? Les modifications en cours seront perdues.')) return;
+  pricingDraft = JSON.parse(JSON.stringify(DEFAULT_COEFS));
+  renderPricingGrid();
+  showToast('Coefs remis aux défauts (pas encore appliqués)');
+};
+
+document.getElementById('btn-pricing-apply').onclick = () => {
+  state.pricingSettings.coefs = JSON.parse(JSON.stringify(pricingDraft));
+  const count = recomputeAllNonOverridden(state);
+  saveState(state);
+  render();
+  closePricingModal();
+  showToast(`Coefs appliqués · ${count} produits recalculés`);
 };
 
 // APERÇU CATALOGUE
