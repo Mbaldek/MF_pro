@@ -72,4 +72,4 @@ SELECT * FROM leads ORDER BY created_at DESC;
 
 ## Outils internes (non listés)
 
-- `/outils/catalogue-builder` — maquette de saisie catalogue (Phase 1, localStorage uniquement). URL non linkée depuis le site public. Pour la migration Next.js/Supabase prévue (Phase 2), voir `prompt_claude_code.md` à la racine du repo (non déployé).
+- `/outils/catalogue-builder` — maquette de saisie catalogue (Phase 1, localStorage uniquement). URL non linkée depuis le site public. Pour la migration Next.js/Supabase prévue (Phase 2), voir `.specs/prompt_claude_code.md` dans le repo (dotfolder non déployé par Vercel).
