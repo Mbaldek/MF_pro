@@ -1302,7 +1302,7 @@
 const SUPABASE_URL = 'https://ckvwkwufdlydobjfwvwy.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_HICvkAoFNpeWenSsXT-FFQ_4O0IyS2l';
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-  auth: { persistSession: true, autoRefreshToken: true, storageKey: 'mf_catalogue_session' }
+  auth: { persistSession: true, autoRefreshToken: true }
 });
 
 const DEFAULT_COEFS = {
