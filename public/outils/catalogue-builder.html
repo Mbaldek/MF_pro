@@ -197,43 +197,68 @@
 
   /* MAIN */
   .main {
-    padding: 24px 20px 80px;
+    padding: 0 40px 80px;
     overflow-y: auto;
+    background: #FAFAF7;
   }
-  .main-head {
+  /* Header catégorie avec chiffre watermark */
+  .cat-head {
+    position: relative;
+    padding: 40px 0 20px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(57,45,49,0.08);
+  }
+  .cat-head-number {
+    position: absolute;
+    top: -8px; left: -14px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 8.5rem;
+    font-weight: 400;
+    color: var(--marron);
+    opacity: 0.05;
+    line-height: 0.9;
+    z-index: 0;
+    user-select: none;
+    pointer-events: none;
+  }
+  .cat-head-inner {
+    position: relative;
+    z-index: 1;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    gap: 16px;
-    margin-bottom: 24px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid var(--poudre);
+    gap: 20px;
     flex-wrap: wrap;
   }
-  .main-head h1 {
+  .cat-title {
     font-family: var(--serif);
     font-style: italic;
     font-weight: 500;
-    font-size: 2rem;
+    font-size: 2.2rem;
     color: var(--rose);
+    line-height: 1;
   }
-  .main-head-sub {
-    font-size: 0.78rem;
+  .cat-stats {
+    font-size: 0.72rem;
     color: var(--marron);
-    opacity: 0.7;
-    margin-top: 4px;
+    opacity: 0.72;
+    letter-spacing: 0.06em;
+    margin-top: 6px;
   }
+  .cat-stats .dot { color: var(--vert); margin: 0 8px; }
+  .cat-actions { display: flex; gap: 10px; }
 
   .btn-main {
     font-family: var(--sans);
     font-size: 0.72rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    padding: 10px 18px;
+    padding: 11px 20px;
     border: 1px solid var(--rose);
     background: var(--rose);
     color: var(--blanc);
-    border-radius: 4px;
+    border-radius: 3px;
     cursor: pointer;
     transition: all 0.15s;
     display: inline-flex;
@@ -243,90 +268,182 @@
   }
   .btn-main:hover { background: var(--marron); border-color: var(--marron); }
 
-  /* PRODUCT GRID */
+  /* Filet décoratif avant la liste */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 8px 0 18px;
+    opacity: 0.6;
+  }
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--poudre), transparent);
+  }
+  .divider-star {
+    color: var(--rose);
+    font-size: 0.85rem;
+    letter-spacing: 0.4em;
+  }
+
+  /* LIST (cards horizontales) */
   .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 14px;
+    grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+    gap: 12px;
   }
   .product-card {
     background: white;
-    border: 1px solid var(--poudre);
-    border-radius: 6px;
+    border: 1px solid rgba(57,45,49,0.08);
+    border-radius: 5px;
     overflow: hidden;
     cursor: pointer;
-    transition: all 0.15s;
-    display: flex;
-    flex-direction: column;
+    transition: all 0.2s cubic-bezier(.2,.8,.2,1);
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    align-items: stretch;
+    box-shadow: 0 1px 2px rgba(57,45,49,0.03);
+    position: relative;
   }
   .product-card:hover {
-    border-color: var(--rose);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(139,58,67,0.1), 0 2px 4px rgba(57,45,49,0.05);
+    border-color: rgba(139,58,67,0.18);
   }
   .product-thumb {
-    aspect-ratio: 4/3;
-    background: var(--blanc);
+    background: linear-gradient(135deg, #F5E0DE 0%, var(--poudre) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--vert);
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 2rem;
     overflow: hidden;
     position: relative;
   }
-  .product-thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .product-thumb svg {
+    width: 36px;
+    height: 36px;
+    opacity: 0.35;
+    stroke: var(--rose);
+    stroke-width: 1.6;
+    fill: none;
   }
-  .product-body {
-    padding: 14px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .product-code {
-    font-family: ui-monospace, monospace;
-    font-size: 0.68rem;
-    color: var(--vert);
+  .product-thumb.has-image { background: var(--blanc); padding: 0; }
+  .product-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .code-pill {
+    position: absolute;
+    bottom: 4px; left: 4px; right: 4px;
+    background: rgba(57,45,49,0.92);
+    color: var(--blanc);
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 0.6rem;
     letter-spacing: 0.1em;
+    padding: 2px 5px;
+    border-radius: 2px;
+    text-align: center;
+    backdrop-filter: blur(4px);
   }
-  .product-name {
+  .status-dot {
+    position: absolute;
+    top: 6px; right: 6px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.9);
+  }
+  .status-dot.pause { background: var(--vieux-rose); }
+  .status-dot.archive { background: rgba(57,45,49,0.4); }
+  .product-body {
+    padding: 10px 16px 10px 14px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 14px;
+    align-items: center;
+  }
+  .body-main { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .p-name {
     font-family: var(--serif);
     font-weight: 500;
-    font-size: 1.08rem;
+    font-size: 1.05rem;
     color: var(--marron);
     line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-  .product-subtitle {
-    font-size: 0.76rem;
-    color: var(--marron);
-    opacity: 0.6;
-  }
-  .product-price {
-    margin-top: auto;
-    padding-top: 10px;
-    border-top: 1px dashed var(--poudre);
-    font-size: 0.76rem;
+  .p-origin {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.78rem;
     color: var(--rose);
-    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-  .product-status {
-    position: absolute;
-    top: 8px; right: 8px;
-    font-size: 0.58rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 3px 8px;
-    border-radius: 100px;
-    background: rgba(255,255,255,0.9);
+  .p-origin::before {
+    content: '◆';
+    color: var(--vert);
+    font-size: 0.65rem;
+    flex-shrink: 0;
+  }
+  .p-pack {
+    display: flex;
+    gap: 8px;
+    margin-top: 3px;
+    font-size: 0.7rem;
     color: var(--marron);
+    opacity: 0.7;
+    font-variant-numeric: tabular-nums;
   }
-  .product-status.pause { background: rgba(191,100,109,0.9); color: white; }
-  .product-status.archive { opacity: 0.5; }
+  .p-pack strong { color: var(--marron); opacity: 1; font-weight: 500; }
+  .p-pack .sep { color: var(--poudre); }
+  .body-price { text-align: right; white-space: nowrap; flex-shrink: 0; }
+  .p-ppc {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--marron);
+    line-height: 1;
+  }
+  .p-ppc-cur {
+    font-family: var(--sans);
+    font-size: 0.58rem;
+    color: var(--vert);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-left: 2px;
+  }
+  .p-channel {
+    margin-top: 4px;
+    font-size: 0.68rem;
+    color: var(--marron);
+    opacity: 0.7;
+    font-variant-numeric: tabular-nums;
+  }
+  .p-channel .tag {
+    display: inline-block;
+    padding: 1px 5px;
+    background: rgba(139,58,67,0.08);
+    color: var(--rose);
+    border-radius: 2px;
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    margin-right: 4px;
+    font-family: var(--sans);
+    text-transform: uppercase;
+  }
+  .p-missing {
+    font-size: 0.68rem;
+    color: #B38B00;
+    background: rgba(234,179,8,0.08);
+    padding: 4px 8px;
+    border-left: 2px solid #EAB308;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
 
   .empty-state {
     text-align: center;
@@ -846,12 +963,23 @@
 
   <!-- MAIN -->
   <main class="main">
-    <div class="main-head">
-      <div>
-        <h1 id="cat-title">Cub'Cakes</h1>
-        <div class="main-head-sub" id="cat-subtitle">Format cube · fournée hebdomadaire numérotée</div>
+    <div class="cat-head">
+      <div class="cat-head-number" id="cat-head-number">01</div>
+      <div class="cat-head-inner">
+        <div>
+          <h1 class="cat-title" id="cat-title">Cub'Cakes</h1>
+          <div class="cat-stats" id="cat-subtitle">Format cube · fournée hebdomadaire numérotée</div>
+        </div>
+        <div class="cat-actions">
+          <button class="btn-main" id="btn-new-product">+ Nouveau produit</button>
+        </div>
       </div>
-      <button class="btn-main" id="btn-new-product">+ Nouveau produit</button>
+    </div>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-star">✦ ✦ ✦</div>
+      <div class="divider-line"></div>
     </div>
 
     <div id="product-area"></div>
@@ -1313,6 +1441,63 @@ const DEFAULT_COEFS = {
   AV: { grossiste: 1.00, agent: 1.00, epicier: 1.00, plateforme: 1.00 }
 };
 
+// Emblème botanique par défaut (Art Nouveau, élégant, stroke currentColor)
+const BOTANICAL_SVG = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M50 88 Q48 60 48 30 Q48 16 50 12 Q52 16 52 30 Q52 60 50 88"/>
+  <path d="M48 38 Q35 35 25 28"/>
+  <path d="M52 38 Q65 35 75 28"/>
+  <path d="M48 55 Q32 55 22 52"/>
+  <path d="M52 55 Q68 55 78 52"/>
+  <path d="M48 72 Q36 73 28 72"/>
+  <path d="M52 72 Q64 73 72 72"/>
+</svg>`;
+
+function categoryFromDB(r) {
+  return {
+    code: r.code,
+    nom: r.nom,
+    subtitle: r.subtitle,
+    ordre: r.ordre,
+    packagingMode: r.packaging_mode || 'per_product',
+    packType: r.pack_type,
+    packLibelle: r.pack_libelle,
+    packUnites: r.pack_unites,
+    packMOQ: r.pack_moq,
+    packDLC: r.pack_dlc,
+    packPoids: r.pack_poids_g,
+    packL: r.pack_long_cm !== null ? Number(r.pack_long_cm) : null,
+    packW: r.pack_larg_cm !== null ? Number(r.pack_larg_cm) : null,
+    packH: r.pack_haut_cm !== null ? Number(r.pack_haut_cm) : null,
+    expedition: r.expedition,
+    paiement: r.paiement,
+    reprise: r.reprise_invendus,
+    franco: r.franco_ht !== null ? Number(r.franco_ht) : null,
+    delai: r.delai_reassort
+  };
+}
+
+// Renvoie les valeurs packaging+logistique effectives pour un produit.
+// En mode 'shared' et sans override, on lit depuis la catégorie ; sinon depuis le produit.
+function getEffectivePack(produit, category) {
+  const fromCat = category && category.packagingMode === 'shared' && !produit.overridePackaging;
+  const src = fromCat ? category : produit;
+  return {
+    source: fromCat ? 'category' : 'product',
+    packType: src.packType,
+    packLibelle: src.packLibelle,
+    packUnites: src.packUnites,
+    packMOQ: src.packMOQ,
+    packDLC: src.packDLC,
+    packPoids: src.packPoids,
+    packL: src.packL, packW: src.packW, packH: src.packH,
+    expedition: src.expedition,
+    paiement: src.paiement,
+    reprise: src.reprise,
+    franco: src.franco,
+    delai: src.delai
+  };
+}
+
 // ---- DB ↔ UI mapping (snake_case ↔ camelCase) ----
 function produitFromDB(r) {
   return {
@@ -1351,6 +1536,7 @@ function produitFromDB(r) {
     pxEpicier: r.px_epicier_ht !== null ? Number(r.px_epicier_ht) : null,
     pxPlateforme: r.px_plateforme_ht !== null ? Number(r.px_plateforme_ht) : null,
     overridePrices: !!r.override_prices,
+    overridePackaging: !!r.override_packaging,
     expedition: r.expedition || 'frigo',
     franco: r.franco_ht !== null ? Number(r.franco_ht) : null,
     delai: r.delai_reassort,
@@ -1396,6 +1582,7 @@ function produitToDB(p) {
     px_epicier_ht: p.pxEpicier,
     px_plateforme_ht: p.pxPlateforme,
     override_prices: !!p.overridePrices,
+    override_packaging: !!p.overridePackaging,
     expedition: p.expedition || 'frigo',
     franco_ht: p.franco,
     delai_reassort: p.delai,
@@ -1451,7 +1638,7 @@ async function fetchState() {
   }
   setSyncStatus('ok');
   return {
-    categories: cats.data,
+    categories: cats.data.map(categoryFromDB),
     produits: prods.data.map(produitFromDB),
     pricingSettings: {
       tva: Number(pricing.data.tva),
@@ -1682,13 +1869,36 @@ function renderSidebar() {
   `;
 }
 
+function fmtEuro(n) {
+  return typeof n === 'number' && !isNaN(n) ? n.toFixed(2).replace('.', ',') : '—';
+}
+
 function renderMain() {
   const cat = state.categories.find(c => c.code === currentCatCode);
   if (!cat) return;
+
+  const catIdx = state.categories.findIndex(c => c.code === currentCatCode) + 1;
+  document.getElementById('cat-head-number').textContent = String(catIdx).padStart(2, '0');
   document.getElementById('cat-title').textContent = cat.nom;
-  document.getElementById('cat-subtitle').textContent = cat.subtitle || '';
 
   const produits = state.produits.filter(p => p.categorie === currentCatCode);
+  const actifs = produits.filter(p => p.statut === 'actif').length;
+
+  // Sous-titre enrichi : subtitle + compteurs + pack summary si shared
+  let statsParts = [cat.subtitle || ''];
+  statsParts.push(`<span class="dot">·</span>${produits.length} produit${produits.length>1?'s':''}`);
+  statsParts.push(`<span class="dot">·</span>${actifs} actif${actifs>1?'s':''}`);
+  if (cat.packagingMode === 'shared' && cat.packPoids) {
+    const logi = [
+      `${cat.packPoids} g`,
+      `MOQ ${cat.packMOQ}`,
+      cat.packDLC ? `DLC ${cat.packDLC} j` : null,
+      cat.expedition
+    ].filter(Boolean).join(' · ');
+    statsParts.push(`<span class="dot">·</span>${logi}`);
+  }
+  document.getElementById('cat-subtitle').innerHTML = statsParts.join(' ');
+
   const area = document.getElementById('product-area');
 
   if (produits.length === 0) {
@@ -1702,28 +1912,71 @@ function renderMain() {
 
   const grid = document.createElement('div');
   grid.className = 'product-grid';
+
   produits.forEach(p => {
     const idx = state.produits.indexOf(p);
+    const pack = getEffectivePack(p, cat);
     const card = document.createElement('div');
     card.className = 'product-card';
-    const status = p.statut !== 'actif' ? `<span class="product-status ${p.statut}">${p.statut}</span>` : '';
-    const priceLine = p.pxGrossiste > 0 ? `${p.pxGrossiste.toFixed(2)}€ HT grossiste · MOQ ${p.packMOQ||1}` :
-                     p.statut === 'actif' && cat.code !== 'AV' ? '⚠ Prix à saisir' : '—';
+
+    const statusDot = p.statut !== 'actif' ? `<span class="status-dot ${p.statut}" title="${p.statut}"></span>` : `<span class="status-dot" title="actif"></span>`;
+
+    // Origine / sous-titre : priorité à sousTitre (plus court), fallback origine
+    const originLine = p.sousTitre || p.origine || '';
+
+    // Pack info : poids · MOQ · DLC
+    const packParts = [];
+    if (pack.packPoids) packParts.push(`<span><strong>${pack.packPoids} g</strong></span>`);
+    if (pack.packMOQ) packParts.push(`<span>MOQ <strong>${pack.packMOQ}</strong></span>`);
+    if (pack.packDLC) packParts.push(`<span>DLC <strong>${pack.packDLC} j</strong></span>`);
+    const packInfo = packParts.length
+      ? `<div class="p-pack">${packParts.join('<span class="sep">·</span>')}</div>`
+      : '';
+
+    // Bloc prix : PPR + grossiste OU placeholder
+    let priceBlock;
+    if (p.ppc && p.ppc > 0) {
+      const ttc = fmtEuro(p.ppc);
+      const gross = p.pxGrossiste && p.pxGrossiste > 0
+        ? `<span class="tag">Gross.</span>${fmtEuro(p.pxGrossiste)} € HT`
+        : '';
+      priceBlock = `
+        <div class="p-ppc">${ttc}<span class="p-ppc-cur">€ TTC</span></div>
+        ${gross ? `<div class="p-channel">${gross}</div>` : ''}
+      `;
+    } else if (cat.code === 'AV') {
+      // PLV souvent offerte — pas d'alerte
+      priceBlock = `<div class="p-channel" style="opacity:0.5;">—</div>`;
+    } else {
+      priceBlock = `<div class="p-missing">⚠ PPR à définir</div>`;
+    }
+
+    const thumbContent = p.photo
+      ? `<img src="${p.photo}" alt="${p.nom}">`
+      : BOTANICAL_SVG;
+    const thumbClass = p.photo ? 'product-thumb has-image' : 'product-thumb';
+
     card.innerHTML = `
-      <div class="product-thumb">
-        ${p.photo ? `<img src="${p.photo}" alt="${p.nom}">` : '✦'}
-        ${status}
+      <div class="${thumbClass}">
+        ${thumbContent}
+        ${statusDot}
+        <span class="code-pill">${p.code}</span>
       </div>
       <div class="product-body">
-        <span class="product-code">${p.code}</span>
-        <div class="product-name">${p.nom}</div>
-        <div class="product-subtitle">${p.sousTitre || ''}</div>
-        <div class="product-price">${priceLine}</div>
+        <div class="body-main">
+          <div class="p-name">${p.nom}</div>
+          ${originLine ? `<div class="p-origin">${originLine}</div>` : ''}
+          ${packInfo}
+        </div>
+        <div class="body-price">
+          ${priceBlock}
+        </div>
       </div>
     `;
     card.onclick = () => openModal(idx);
     grid.appendChild(card);
   });
+
   area.innerHTML = '';
   area.appendChild(grid);
 }
@@ -1742,6 +1995,9 @@ function generateCode(catCode) {
 function openModal(idx) {
   editing = idx;
   const isNew = idx === -1;
+  // Pour un nouveau produit, préremplir packaging+logistique depuis la catégorie si shared
+  const catForNew = isNew ? state.categories.find(c => c.code === currentCatCode) : null;
+  const catShared = catForNew && catForNew.packagingMode === 'shared';
   const p = isNew ? {
     code: generateCode(currentCatCode),
     categorie: currentCatCode,
@@ -1750,17 +2006,36 @@ function openModal(idx) {
     descCourte: '', descLongue: '', rationnel: '',
     ingredients: '', allergenes: '', origine: '', recette: '',
     tags: '', gout: '',
-    packType: 'UNITE', packLibelle: '', packUnites: 1, packMOQ: 1, packDLC: 5,
-    packPoids: null, packL: null, packW: null, packH: null, packEAN: '', packSKU: '',
+    packType: (catShared ? catForNew.packType : null) || 'UNITE',
+    packLibelle: (catShared ? catForNew.packLibelle : '') || '',
+    packUnites: (catShared ? catForNew.packUnites : null) || 1,
+    packMOQ: (catShared ? catForNew.packMOQ : null) || 1,
+    packDLC: catShared ? catForNew.packDLC : 5,
+    packPoids: catShared ? catForNew.packPoids : null,
+    packL: catShared ? catForNew.packL : null,
+    packW: catShared ? catForNew.packW : null,
+    packH: catShared ? catForNew.packH : null,
+    packEAN: '', packSKU: '',
     cost: null, ppc: null, pxGrossiste: null, pxAgent: null, pxEpicier: null, pxPlateforme: null,
     overridePrices: false,
-    expedition: 'frigo', franco: 250, delai: 3, paiement: '30fdm', reprise: 'lancement',
+    overridePackaging: false,
+    expedition: (catShared ? catForNew.expedition : null) || 'frigo',
+    franco: catShared ? catForNew.franco : 250,
+    delai: catShared ? catForNew.delai : 3,
+    paiement: (catShared ? catForNew.paiement : null) || '30fdm',
+    reprise: (catShared ? catForNew.reprise : null) || 'lancement',
     notesLog: '', photo: null
   } : state.produits[idx];
 
   editingCategorie = p.categorie;
   document.getElementById('modal-title').textContent = isNew ? `Nouveau produit · ${currentCatCode}` : `${p.code} · ${p.nom}`;
   document.getElementById('btn-delete').style.display = isNew ? 'none' : 'inline-block';
+
+  // Masquer onglets Packaging + Logistique si la catégorie est en mode 'shared' (valeurs héritées)
+  const cat = state.categories.find(c => c.code === p.categorie);
+  const sharedPack = cat && cat.packagingMode === 'shared' && !p.overridePackaging;
+  document.querySelector('.tab[data-tab="packaging"]').style.display = sharedPack ? 'none' : '';
+  document.querySelector('.tab[data-tab="logistique"]').style.display = sharedPack ? 'none' : '';
 
   // Remplir
   fill('code', p.code);
