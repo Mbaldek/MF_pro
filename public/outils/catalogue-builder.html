@@ -934,6 +934,7 @@
     <span class="sync-dot sync-busy" id="sync-dot" title="État de synchronisation Supabase"></span>
   </div>
   <div class="topbar-actions">
+    <button class="btn" id="btn-cat-settings">Catégorie</button>
     <button class="btn" id="btn-pricing">Tarification</button>
     <button class="btn" id="btn-export-json">Export JSON</button>
     <button class="btn" id="btn-import-json">Import JSON</button>
@@ -1090,6 +1091,16 @@
             <textarea class="textarea" id="f-recette" placeholder="Le choix de ce cacao, la rencontre avec le producteur, la technique de mise en œuvre…"></textarea>
             <button class="ai-btn" style="margin-top:6px;" data-ai="recette">✦ Enrichir avec l'IA</button>
           </div>
+        </div>
+
+        <div class="card-section" id="packaging-inheritance" style="background:var(--poudre);border-left:3px solid var(--vert);display:none;">
+          <div class="card-section-title" style="display:flex;justify-content:space-between;align-items:baseline;">
+            <span>Packaging &amp; logistique</span>
+            <span id="packaging-inheritance-mode" style="font-size:0.64rem;letter-spacing:0.12em;color:var(--vert);"></span>
+          </div>
+          <div id="packaging-summary" style="font-size:0.82rem;line-height:1.7;color:var(--marron);margin:6px 0 12px;"></div>
+          <button type="button" class="btn btn-ghost" id="btn-override-packaging" style="background:white;color:var(--marron);border-color:var(--poudre);font-size:0.68rem;">Personnaliser pour ce produit</button>
+          <button type="button" class="btn btn-ghost" id="btn-revert-packaging" style="background:white;color:var(--vieux-rose);border-color:var(--vieux-rose);font-size:0.68rem;display:none;">Revenir aux valeurs catégorie</button>
         </div>
       </div>
 
@@ -1373,6 +1384,162 @@
           <div class="export-card-title">CSV Ankorstore</div>
           <div class="export-card-desc">Import direct dans votre brand portal Ankorstore</div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PARAMÈTRES CATÉGORIE -->
+<div class="modal-backdrop" id="modal-cat-settings">
+  <div class="modal" style="max-width:720px;">
+    <div class="modal-head">
+      <div class="modal-title">Paramètres catégorie</div>
+      <button class="modal-close" id="modal-cat-settings-close">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="hint-box">
+        <strong>Packaging &amp; logistique au niveau catégorie.</strong> Quand le mode est <code style="background:var(--blanc);padding:1px 5px;border-radius:3px;">shared</code>, tous les produits de la catégorie héritent de ces valeurs (format, poids, MOQ, DLC, expédition, paiement, reprise, franco). En mode <code style="background:var(--blanc);padding:1px 5px;border-radius:3px;">per_product</code>, chaque produit définit ses propres valeurs.
+      </div>
+
+      <div class="card-section">
+        <div class="card-section-title">Catégorie</div>
+        <div class="field">
+          <select class="input" id="cat-settings-picker"></select>
+        </div>
+      </div>
+
+      <div class="card-section">
+        <div class="card-section-title">Mode</div>
+        <div class="row cols-2">
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px 12px;border:1px solid var(--poudre);border-radius:4px;" id="mode-shared-label">
+            <input type="radio" name="cat-mode" value="shared" id="cat-mode-shared" style="accent-color:var(--rose);">
+            <div>
+              <strong style="font-size:0.88rem;">Shared</strong>
+              <div style="font-size:0.74rem;opacity:0.7;">Valeurs uniques pour tous les produits de la catégorie.</div>
+            </div>
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px 12px;border:1px solid var(--poudre);border-radius:4px;" id="mode-perproduct-label">
+            <input type="radio" name="cat-mode" value="per_product" id="cat-mode-perproduct" style="accent-color:var(--rose);">
+            <div>
+              <strong style="font-size:0.88rem;">Per product</strong>
+              <div style="font-size:0.74rem;opacity:0.7;">Chaque produit définit ses propres valeurs.</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div id="cat-settings-form">
+        <div class="card-section">
+          <div class="card-section-title">Format &amp; conditionnement</div>
+          <div class="row cols-2">
+            <div class="field">
+              <div class="field-label">Type de pack</div>
+              <select class="input" id="cs-packType">
+                <option value="">—</option>
+                <option value="UNITE">UNITE</option>
+                <option value="BOITE">BOITE</option>
+                <option value="POT">POT</option>
+                <option value="KIT">KIT</option>
+                <option value="COFFRET">COFFRET</option>
+              </select>
+            </div>
+            <div class="field">
+              <div class="field-label">Libellé <span class="field-hint">humain</span></div>
+              <input type="text" class="input" id="cs-packLibelle" placeholder="À l'unité, Pot 250 g…">
+            </div>
+          </div>
+          <div class="row cols-2">
+            <div class="field">
+              <div class="field-label">Unités internes</div>
+              <input type="number" class="input" id="cs-packUnites" value="1">
+            </div>
+            <div class="field">
+              <div class="field-label">MOQ <span class="field-hint">packs</span></div>
+              <input type="number" class="input" id="cs-packMOQ">
+            </div>
+          </div>
+        </div>
+
+        <div class="card-section">
+          <div class="card-section-title">Poids &amp; dimensions</div>
+          <div class="row cols-2">
+            <div class="field">
+              <div class="field-label">Poids <span class="field-hint">g</span></div>
+              <input type="number" class="input" id="cs-packPoids">
+            </div>
+            <div class="field">
+              <div class="field-label">DLC <span class="field-hint">jours</span></div>
+              <input type="number" class="input" id="cs-packDLC">
+            </div>
+          </div>
+          <div class="row cols-3">
+            <div class="field">
+              <div class="field-label">Long <span class="field-hint">cm</span></div>
+              <input type="number" step="0.1" class="input" id="cs-packL">
+            </div>
+            <div class="field">
+              <div class="field-label">Larg <span class="field-hint">cm</span></div>
+              <input type="number" step="0.1" class="input" id="cs-packW">
+            </div>
+            <div class="field">
+              <div class="field-label">Haut <span class="field-hint">cm</span></div>
+              <input type="number" step="0.1" class="input" id="cs-packH">
+            </div>
+          </div>
+        </div>
+
+        <div class="card-section">
+          <div class="card-section-title">Logistique &amp; commercial</div>
+          <div class="row cols-2">
+            <div class="field">
+              <div class="field-label">Expédition</div>
+              <select class="input" id="cs-expedition">
+                <option value="">—</option>
+                <option value="frigo">frigo</option>
+                <option value="ambiant">ambiant</option>
+                <option value="sec">sec</option>
+                <option value="surgelé">surgelé</option>
+              </select>
+            </div>
+            <div class="field">
+              <div class="field-label">Franco <span class="field-hint">€ HT</span></div>
+              <input type="number" step="0.01" class="input" id="cs-franco">
+            </div>
+          </div>
+          <div class="row cols-3">
+            <div class="field">
+              <div class="field-label">Délai réassort <span class="field-hint">jours</span></div>
+              <input type="number" class="input" id="cs-delai">
+            </div>
+            <div class="field">
+              <div class="field-label">Paiement</div>
+              <select class="input" id="cs-paiement">
+                <option value="">—</option>
+                <option value="comptant">comptant</option>
+                <option value="30fdm">30 jours fin de mois</option>
+                <option value="offert">offert</option>
+              </select>
+            </div>
+            <div class="field">
+              <div class="field-label">Reprise invendus</div>
+              <select class="input" id="cs-reprise">
+                <option value="">—</option>
+                <option value="aucune">aucune</option>
+                <option value="lancement">phase lancement</option>
+                <option value="permanente">permanente</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <div class="modal-foot-left">
+        <span style="font-size:0.72rem;color:var(--marron);opacity:0.6;">Affecte tous les produits <strong>non-overridés</strong> de la catégorie.</span>
+      </div>
+      <div class="modal-foot-right">
+        <button class="btn btn-ghost" id="btn-cat-settings-cancel" style="color:var(--marron);">Annuler</button>
+        <button class="btn btn-primary" id="btn-cat-settings-save" style="color:var(--marron);background:var(--poudre);border-color:var(--poudre);">Enregistrer</button>
       </div>
     </div>
   </div>
@@ -2036,6 +2203,7 @@ function openModal(idx) {
   const sharedPack = cat && cat.packagingMode === 'shared' && !p.overridePackaging;
   document.querySelector('.tab[data-tab="packaging"]').style.display = sharedPack ? 'none' : '';
   document.querySelector('.tab[data-tab="logistique"]').style.display = sharedPack ? 'none' : '';
+  updatePackagingInheritanceUI(p, cat);
 
   // Remplir
   fill('code', p.code);
@@ -2287,6 +2455,81 @@ function recomputeCurrentPrices() {
     el.value = round2(ppc / coef).toFixed(2);
   });
 }
+
+// ---- Packaging inheritance UI (Identité panel) ----
+function updatePackagingInheritanceUI(produit, category) {
+  const section = document.getElementById('packaging-inheritance');
+  const modeBadge = document.getElementById('packaging-inheritance-mode');
+  const summary = document.getElementById('packaging-summary');
+  const btnOverride = document.getElementById('btn-override-packaging');
+  const btnRevert = document.getElementById('btn-revert-packaging');
+  if (!section) return;
+
+  if (!category || category.packagingMode !== 'shared') {
+    section.style.display = 'none';
+    return;
+  }
+  section.style.display = '';
+
+  if (!produit.overridePackaging) {
+    modeBadge.textContent = 'Hérité · catégorie ' + category.code;
+    const bits = [
+      category.packLibelle || category.packType,
+      category.packPoids ? category.packPoids + ' g' : null,
+      category.packMOQ ? 'MOQ ' + category.packMOQ : null,
+      category.packDLC ? 'DLC ' + category.packDLC + ' j' : null,
+      category.expedition,
+      category.franco ? 'franco ' + Math.round(category.franco) + ' €' : null,
+      category.paiement, category.reprise
+    ].filter(Boolean);
+    summary.innerHTML = bits.join(' <span style="color:var(--poudre);">·</span> ');
+    btnOverride.style.display = '';
+    btnRevert.style.display = 'none';
+  } else {
+    modeBadge.textContent = 'Override actif';
+    summary.innerHTML = '<em>Ce produit utilise ses propres valeurs packaging et logistique (onglets éditables ci-dessus).</em>';
+    btnOverride.style.display = 'none';
+    btnRevert.style.display = '';
+  }
+}
+
+document.getElementById('btn-override-packaging').onclick = async () => {
+  if (editing === -1) {
+    showToast("Enregistrez d'abord le produit, puis rouvrez-le pour personnaliser.");
+    return;
+  }
+  const p = state.produits[editing];
+  p.overridePackaging = true;
+  try {
+    const saved = await upsertProduitRemote(p);
+    state.produits[editing] = saved;
+    showToast('Packaging personnalisable · rouverture…');
+    closeModal();
+    setTimeout(() => openModal(editing), 200);
+    render();
+  } catch (err) { remoteError(err); }
+};
+
+document.getElementById('btn-revert-packaging').onclick = async () => {
+  if (!confirm("Revenir aux valeurs de la catégorie ? Les valeurs manuelles actuelles du produit seront écrasées.")) return;
+  if (editing === -1) return;
+  const p = state.produits[editing];
+  const cat = state.categories.find(c => c.code === p.categorie);
+  if (!cat) return;
+  p.overridePackaging = false;
+  p.packType = cat.packType; p.packLibelle = cat.packLibelle;
+  p.packUnites = cat.packUnites; p.packMOQ = cat.packMOQ; p.packDLC = cat.packDLC;
+  p.packPoids = cat.packPoids; p.packL = cat.packL; p.packW = cat.packW; p.packH = cat.packH;
+  p.expedition = cat.expedition; p.franco = cat.franco; p.delai = cat.delai;
+  p.paiement = cat.paiement; p.reprise = cat.reprise;
+  try {
+    const saved = await upsertProduitRemote(p);
+    state.produits[editing] = saved;
+    showToast('Retour aux valeurs catégorie');
+    closeModal();
+    render();
+  } catch (err) { remoteError(err); }
+};
 
 // Live preview
 ['nom','sous-titre','desc-courte'].forEach(id => {
@@ -2609,6 +2852,115 @@ document.getElementById('btn-pricing-reset').onclick = () => {
   pricingDraft = JSON.parse(JSON.stringify(DEFAULT_COEFS));
   renderPricingGrid();
   showToast('Coefs remis aux défauts (pas encore appliqués)');
+};
+
+// =========================================
+// MODAL PARAMÈTRES CATÉGORIE
+// =========================================
+
+const CAT_SETTINGS_FIELDS = [
+  ['cs-packType', 'packType', 'val'],
+  ['cs-packLibelle', 'packLibelle', 'val'],
+  ['cs-packUnites', 'packUnites', 'num'],
+  ['cs-packMOQ', 'packMOQ', 'num'],
+  ['cs-packPoids', 'packPoids', 'num'],
+  ['cs-packDLC', 'packDLC', 'num'],
+  ['cs-packL', 'packL', 'num'],
+  ['cs-packW', 'packW', 'num'],
+  ['cs-packH', 'packH', 'num'],
+  ['cs-expedition', 'expedition', 'val'],
+  ['cs-franco', 'franco', 'num'],
+  ['cs-delai', 'delai', 'num'],
+  ['cs-paiement', 'paiement', 'val'],
+  ['cs-reprise', 'reprise', 'val']
+];
+
+function renderCatSettingsPicker() {
+  const sel = document.getElementById('cat-settings-picker');
+  sel.innerHTML = state.categories.map(c =>
+    `<option value="${c.code}">${c.code} · ${c.nom}</option>`
+  ).join('');
+}
+
+function loadCatSettingsForm(catCode) {
+  const cat = state.categories.find(c => c.code === catCode);
+  if (!cat) return;
+  document.getElementById('cat-settings-picker').value = catCode;
+  document.getElementById('cat-mode-shared').checked = cat.packagingMode === 'shared';
+  document.getElementById('cat-mode-perproduct').checked = cat.packagingMode === 'per_product';
+  CAT_SETTINGS_FIELDS.forEach(([id, key]) => {
+    const el = document.getElementById(id);
+    const v = cat[key];
+    el.value = (v === null || v === undefined) ? '' : v;
+  });
+  applyCatSettingsMode();
+}
+
+function applyCatSettingsMode() {
+  const isShared = document.getElementById('cat-mode-shared').checked;
+  const form = document.getElementById('cat-settings-form');
+  form.style.opacity = isShared ? '1' : '0.4';
+  form.querySelectorAll('input, select').forEach(el => {
+    if (el.name === 'cat-mode') return;
+    el.disabled = !isShared;
+  });
+}
+
+async function updateCategoryRemote(catCode, patch) {
+  setSyncStatus('busy');
+  const { data, error } = await db.from('catalogue_categories')
+    .update(patch).eq('code', catCode).select().single();
+  if (error) { setSyncStatus('err'); throw error; }
+  setSyncStatus('ok');
+  return categoryFromDB(data);
+}
+
+function openCatSettingsModal() {
+  renderCatSettingsPicker();
+  loadCatSettingsForm(currentCatCode);
+  document.getElementById('modal-cat-settings').classList.add('open');
+}
+function closeCatSettingsModal() {
+  document.getElementById('modal-cat-settings').classList.remove('open');
+}
+
+document.getElementById('btn-cat-settings').onclick = openCatSettingsModal;
+document.getElementById('modal-cat-settings-close').onclick = closeCatSettingsModal;
+document.getElementById('btn-cat-settings-cancel').onclick = closeCatSettingsModal;
+document.getElementById('cat-settings-picker').onchange = (e) => loadCatSettingsForm(e.target.value);
+document.getElementById('cat-mode-shared').addEventListener('change', applyCatSettingsMode);
+document.getElementById('cat-mode-perproduct').addEventListener('change', applyCatSettingsMode);
+
+document.getElementById('btn-cat-settings-save').onclick = async () => {
+  const catCode = document.getElementById('cat-settings-picker').value;
+  const mode = document.querySelector('input[name="cat-mode"]:checked').value;
+  const patch = {
+    packaging_mode: mode,
+    pack_type: document.getElementById('cs-packType').value || null,
+    pack_libelle: document.getElementById('cs-packLibelle').value || null,
+    pack_unites: parseInt(document.getElementById('cs-packUnites').value) || null,
+    pack_moq: parseInt(document.getElementById('cs-packMOQ').value) || null,
+    pack_dlc: parseInt(document.getElementById('cs-packDLC').value) || null,
+    pack_poids_g: parseInt(document.getElementById('cs-packPoids').value) || null,
+    pack_long_cm: parseFloat(document.getElementById('cs-packL').value) || null,
+    pack_larg_cm: parseFloat(document.getElementById('cs-packW').value) || null,
+    pack_haut_cm: parseFloat(document.getElementById('cs-packH').value) || null,
+    expedition: document.getElementById('cs-expedition').value || null,
+    franco_ht: parseFloat(document.getElementById('cs-franco').value) || null,
+    delai_reassort: parseInt(document.getElementById('cs-delai').value) || null,
+    paiement: document.getElementById('cs-paiement').value || null,
+    reprise_invendus: document.getElementById('cs-reprise').value || null
+  };
+  try {
+    const updated = await updateCategoryRemote(catCode, patch);
+    const i = state.categories.findIndex(c => c.code === catCode);
+    if (i >= 0) state.categories[i] = updated;
+    closeCatSettingsModal();
+    render();
+    showToast(`Catégorie ${catCode} mise à jour`);
+  } catch (err) {
+    remoteError(err);
+  }
 };
 
 document.getElementById('btn-pricing-apply').onclick = async () => {
