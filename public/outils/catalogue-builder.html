@@ -69,6 +69,18 @@
     margin-left: 10px;
     text-transform: uppercase;
   }
+  .sync-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-left: 10px;
+    vertical-align: middle;
+    transition: background 0.2s;
+  }
+  .sync-ok { background: #4ade80; box-shadow: 0 0 6px rgba(74,222,128,0.55); }
+  .sync-busy { background: var(--poudre); opacity: 0.6; }
+  .sync-err { background: #ef4444; box-shadow: 0 0 6px rgba(239,68,68,0.55); }
   .topbar-actions {
     display: flex;
     gap: 8px;
@@ -802,6 +814,7 @@
     <span class="brand-maison">Maison</span>
     <span class="brand-name">Félicien</span>
     <span class="brand-sub">· Catalogue Builder</span>
+    <span class="sync-dot sync-busy" id="sync-dot" title="État de synchronisation Supabase"></span>
   </div>
   <div class="topbar-actions">
     <button class="btn" id="btn-pricing">Tarification</button>
@@ -824,7 +837,11 @@
 
     <div class="side-label">Actions</div>
     <button class="btn btn-ghost" style="width:100%;color:var(--marron);border-color:var(--poudre);background:white;margin-bottom:6px;" id="btn-reset">Réinitialiser</button>
-    <button class="btn btn-ghost" style="width:100%;color:var(--marron);border-color:var(--poudre);background:white;" id="btn-seed">Charger données démo</button>
+    <button class="btn btn-ghost" style="width:100%;color:var(--marron);border-color:var(--poudre);background:white;margin-bottom:6px;" id="btn-seed">Charger données démo</button>
+
+    <div class="side-label" style="margin-top:18px;">Session</div>
+    <div style="font-size:0.72rem;color:var(--marron);opacity:0.7;margin-bottom:8px;word-break:break-all;" id="admin-email">—</div>
+    <button class="btn btn-ghost" style="width:100%;color:var(--vieux-rose);border-color:var(--poudre);background:white;" id="btn-logout">Se déconnecter</button>
   </aside>
 
   <!-- MAIN -->
@@ -1276,15 +1293,18 @@
 
 <div class="toast" id="toast">Sauvegardé</div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
 // =================================================
-// CATALOGUE BUILDER - Phase 1 maquette
-// Persistance localStorage, validation avant migration Supabase
+// CATALOGUE BUILDER v2 — backend Supabase + auth admin
 // =================================================
 
-const STORAGE_KEY = 'mf_catalogue_v1';
+const SUPABASE_URL = 'https://ckvwkwufdlydobjfwvwy.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_HICvkAoFNpeWenSsXT-FFQ_4O0IyS2l';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: { persistSession: true, autoRefreshToken: true, storageKey: 'mf_catalogue_session' }
+});
 
-// Coefficients de tarification par catégorie : prix canal HT = PPR TTC / coef
 const DEFAULT_COEFS = {
   CC: { grossiste: 2.56, agent: 2.29, epicier: 2.12, plateforme: 2.34 },
   CK: { grossiste: 2.57, agent: 2.29, epicier: 2.11, plateforme: 2.34 },
@@ -1293,21 +1313,97 @@ const DEFAULT_COEFS = {
   AV: { grossiste: 1.00, agent: 1.00, epicier: 1.00, plateforme: 1.00 }
 };
 
-// Modèle de données
-const DEFAULT_STATE = {
-  categories: [
-    { code: 'CC', nom: "Cub'Cakes", subtitle: "Format cube · fournée hebdomadaire numérotée", ordre: 1 },
-    { code: 'CK', nom: "Cakes", subtitle: "Grands formats, tradition pâtissière", ordre: 2 },
-    { code: 'CB', nom: "Cookies & Brownie", subtitle: "Gourmandises individuelles", ordre: 3 },
-    { code: 'GR', nom: "Granola", subtitle: "Artisanal, petites productions", ordre: 4 },
-    { code: 'AV', nom: "Marketing & PLV", subtitle: "Aide à la vente pour distributeurs", ordre: 5 }
-  ],
-  pricingSettings: {
-    tva: 5.5,
-    coefs: DEFAULT_COEFS
-  },
-  produits: []
-};
+// ---- DB ↔ UI mapping (snake_case ↔ camelCase) ----
+function produitFromDB(r) {
+  return {
+    id: r.id,
+    code: r.code,
+    categorie: r.categorie_code,
+    statut: r.statut,
+    nom: r.nom,
+    sousTitre: r.sous_titre || '',
+    saison: r.saison || 'permanente',
+    descCourte: r.desc_courte || '',
+    descLongue: r.desc_longue || '',
+    rationnel: r.rationnel || '',
+    ingredients: r.ingredients || '',
+    allergenes: r.allergenes || '',
+    origine: r.origine || '',
+    recette: r.recette || '',
+    tags: r.tags || '',
+    gout: r.profil_gout || '',
+    photo: r.photo_url,
+    packType: r.pack_type,
+    packLibelle: r.pack_libelle || '',
+    packUnites: r.pack_unites,
+    packMOQ: r.pack_moq,
+    packDLC: r.pack_dlc,
+    packPoids: r.pack_poids_g,
+    packL: r.pack_long_cm !== null ? Number(r.pack_long_cm) : null,
+    packW: r.pack_larg_cm !== null ? Number(r.pack_larg_cm) : null,
+    packH: r.pack_haut_cm !== null ? Number(r.pack_haut_cm) : null,
+    packEAN: r.pack_ean || '',
+    packSKU: r.pack_sku || '',
+    cost: r.cost_ht !== null ? Number(r.cost_ht) : null,
+    ppc: r.ppc_ttc !== null ? Number(r.ppc_ttc) : null,
+    pxGrossiste: r.px_grossiste_ht !== null ? Number(r.px_grossiste_ht) : null,
+    pxAgent: r.px_agent_ht !== null ? Number(r.px_agent_ht) : null,
+    pxEpicier: r.px_epicier_ht !== null ? Number(r.px_epicier_ht) : null,
+    pxPlateforme: r.px_plateforme_ht !== null ? Number(r.px_plateforme_ht) : null,
+    overridePrices: !!r.override_prices,
+    expedition: r.expedition || 'frigo',
+    franco: r.franco_ht !== null ? Number(r.franco_ht) : null,
+    delai: r.delai_reassort,
+    paiement: r.paiement || '30fdm',
+    reprise: r.reprise_invendus || 'lancement',
+    notesLog: r.notes_logistique || ''
+  };
+}
+
+function produitToDB(p) {
+  return {
+    code: p.code,
+    categorie_code: p.categorie,
+    statut: p.statut || 'actif',
+    nom: p.nom,
+    sous_titre: p.sousTitre || null,
+    saison: p.saison || 'permanente',
+    desc_courte: p.descCourte || null,
+    desc_longue: p.descLongue || null,
+    rationnel: p.rationnel || null,
+    ingredients: p.ingredients || null,
+    allergenes: p.allergenes || null,
+    origine: p.origine || null,
+    recette: p.recette || null,
+    tags: p.tags || null,
+    profil_gout: p.gout || null,
+    photo_url: p.photo || null,
+    pack_type: p.packType || null,
+    pack_libelle: p.packLibelle || null,
+    pack_unites: p.packUnites,
+    pack_moq: p.packMOQ,
+    pack_dlc: p.packDLC,
+    pack_poids_g: p.packPoids,
+    pack_long_cm: p.packL,
+    pack_larg_cm: p.packW,
+    pack_haut_cm: p.packH,
+    pack_ean: p.packEAN || null,
+    pack_sku: p.packSKU || p.code,
+    cost_ht: p.cost,
+    ppc_ttc: p.ppc,
+    px_grossiste_ht: p.pxGrossiste,
+    px_agent_ht: p.pxAgent,
+    px_epicier_ht: p.pxEpicier,
+    px_plateforme_ht: p.pxPlateforme,
+    override_prices: !!p.overridePrices,
+    expedition: p.expedition || 'frigo',
+    franco_ht: p.franco,
+    delai_reassort: p.delai,
+    paiement: p.paiement || '30fdm',
+    reprise_invendus: p.reprise || 'lancement',
+    notes_logistique: p.notesLog || null
+  };
+}
 
 // ---- Compute helpers (PPR ÷ coef) ----
 function round2(n) { return Math.round(n * 100) / 100; }
@@ -1334,43 +1430,94 @@ function recomputeAllNonOverridden(s) {
   return count;
 }
 
-function migrateState(s) {
-  if (!s.pricingSettings) {
-    s.pricingSettings = JSON.parse(JSON.stringify(DEFAULT_STATE.pricingSettings));
+// ---- Sync indicator ----
+function setSyncStatus(status) {
+  const dot = document.getElementById('sync-dot');
+  if (!dot) return;
+  dot.className = 'sync-dot sync-' + status;
+}
+
+// ---- Remote ops ----
+async function fetchState() {
+  setSyncStatus('busy');
+  const [cats, prods, pricing] = await Promise.all([
+    db.from('catalogue_categories').select('*').order('ordre'),
+    db.from('catalogue_produits').select('*').order('code'),
+    db.from('catalogue_pricing').select('*').eq('id', 'default').single()
+  ]);
+  if (cats.error || prods.error || pricing.error) {
+    setSyncStatus('err');
+    throw (cats.error || prods.error || pricing.error);
   }
-  if (!s.pricingSettings.coefs) {
-    s.pricingSettings.coefs = JSON.parse(JSON.stringify(DEFAULT_COEFS));
-  }
-  s.produits.forEach(p => {
-    if (typeof p.overridePrices === 'undefined') {
-      const hasAnyPrice = [p.pxGrossiste, p.pxAgent, p.pxEpicier, p.pxPlateforme]
-        .some(v => v !== null && v !== undefined && v !== 0);
-      p.overridePrices = hasAnyPrice;
+  setSyncStatus('ok');
+  return {
+    categories: cats.data,
+    produits: prods.data.map(produitFromDB),
+    pricingSettings: {
+      tva: Number(pricing.data.tva),
+      coefs: pricing.data.coefs
     }
-  });
-  recomputeAllNonOverridden(s);
-  return s;
+  };
 }
 
-function loadState() {
-  let s;
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    s = raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(DEFAULT_STATE));
-  } catch(e) {
-    s = JSON.parse(JSON.stringify(DEFAULT_STATE));
-  }
-  return migrateState(s);
+async function upsertProduitRemote(produit) {
+  setSyncStatus('busy');
+  const { data, error } = await db.from('catalogue_produits')
+    .upsert(produitToDB(produit), { onConflict: 'code' })
+    .select().single();
+  if (error) { setSyncStatus('err'); throw error; }
+  setSyncStatus('ok');
+  return produitFromDB(data);
 }
 
-function saveState(s) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+async function deleteProduitRemote(id) {
+  setSyncStatus('busy');
+  const { error } = await db.from('catalogue_produits').delete().eq('id', id);
+  if (error) { setSyncStatus('err'); throw error; }
+  setSyncStatus('ok');
 }
 
-let state = loadState();
-let currentCatCode = state.categories[0].code;
-let editing = null; // { produit_index: -1 for new, or index }
-let editingCategorie = null; // catégorie du produit en cours d'édition (pour recompute)
+async function deleteAllProduitsRemote() {
+  setSyncStatus('busy');
+  const { error } = await db.from('catalogue_produits').delete()
+    .neq('id', '00000000-0000-0000-0000-000000000000');
+  if (error) { setSyncStatus('err'); throw error; }
+  setSyncStatus('ok');
+}
+
+async function updatePricingRemote(coefs) {
+  setSyncStatus('busy');
+  const { error } = await db.from('catalogue_pricing')
+    .update({ coefs }).eq('id', 'default');
+  if (error) { setSyncStatus('err'); throw error; }
+  setSyncStatus('ok');
+}
+
+async function batchUpsertProduitsRemote(list) {
+  setSyncStatus('busy');
+  const rows = list.map(produitToDB);
+  const { error } = await db.from('catalogue_produits')
+    .upsert(rows, { onConflict: 'code' });
+  if (error) { setSyncStatus('err'); throw error; }
+  setSyncStatus('ok');
+}
+
+async function signOut() {
+  await db.auth.signOut();
+  window.location.href = '/outils/login.html';
+}
+
+function remoteError(err) {
+  console.error('Supabase error', err);
+  showToast('Erreur synchro : ' + (err?.message || 'inconnue'));
+}
+
+// ---- State (populé par init()) ----
+let state = { categories: [], produits: [], pricingSettings: { tva: 5.5, coefs: DEFAULT_COEFS } };
+let currentCatCode = null;
+let editing = null;
+let editingCategorie = null;
+let session = null;
 
 // =========================================
 // SEED DATA (données démo)
@@ -1503,7 +1650,6 @@ const SEED = [
 function render() {
   renderSidebar();
   renderMain();
-  saveState(state);
 }
 
 function renderSidebar() {
@@ -1973,28 +2119,38 @@ document.querySelectorAll('.ai-btn').forEach(btn => {
 });
 
 // Save
-document.getElementById('btn-save').onclick = () => {
+document.getElementById('btn-save').onclick = async () => {
   const p = collectForm();
   if (!p.nom || p.nom.trim() === '') {
     showToast('Le nom est requis');
     return;
   }
-  if (editing === -1) {
-    state.produits.push(p);
-  } else {
-    state.produits[editing] = p;
+  // Préserver l'id si édition
+  if (editing !== -1) p.id = state.produits[editing]?.id;
+  try {
+    const saved = await upsertProduitRemote(p);
+    if (editing === -1) state.produits.push(saved);
+    else state.produits[editing] = saved;
+    closeModal();
+    render();
+    showToast('Enregistré');
+  } catch (err) {
+    remoteError(err);
   }
-  closeModal();
-  render();
-  showToast('Enregistré');
 };
 
-document.getElementById('btn-delete').onclick = () => {
+document.getElementById('btn-delete').onclick = async () => {
   if (!confirm('Supprimer définitivement ce produit ?')) return;
-  state.produits.splice(editing, 1);
-  closeModal();
-  render();
-  showToast('Produit supprimé');
+  const toDelete = state.produits[editing];
+  try {
+    await deleteProduitRemote(toDelete.id);
+    state.produits.splice(editing, 1);
+    closeModal();
+    render();
+    showToast('Produit supprimé');
+  } catch (err) {
+    remoteError(err);
+  }
 };
 
 document.getElementById('btn-cancel').onclick = closeModal;
@@ -2047,42 +2203,76 @@ document.getElementById('file-import').onchange = (e) => {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = (ev) => {
+  reader.onload = async (ev) => {
     try {
       const data = JSON.parse(ev.target.result);
-      if (!data.categories || !data.produits) throw new Error('format');
-      state = migrateState(data);
-      saveState(state);
+      if (!data.produits || !Array.isArray(data.produits)) throw new Error('format');
+      // Si pricingSettings présent, appliquer en amont pour cohérence
+      if (data.pricingSettings?.coefs) {
+        state.pricingSettings = { tva: data.pricingSettings.tva || 5.5, coefs: data.pricingSettings.coefs };
+        await updatePricingRemote(state.pricingSettings.coefs);
+      }
+      // Normaliser chaque produit (overridePrices par défaut, recompute)
+      const normalized = data.produits.map(p => ({
+        ...p,
+        overridePrices: p.overridePrices === undefined
+          ? [p.pxGrossiste,p.pxAgent,p.pxEpicier,p.pxPlateforme].some(v => v !== null && v !== undefined && v !== 0)
+          : !!p.overridePrices
+      }));
+      normalized.forEach(p => { if (!p.overridePrices) computePrices(p, state.pricingSettings.coefs); });
+      await batchUpsertProduitsRemote(normalized);
+      // Refetch pour récupérer les ids générés
+      const fresh = await fetchState();
+      state = fresh;
       currentCatCode = state.categories[0].code;
       render();
       showToast(`Import réussi · ${state.produits.length} produits`);
     } catch(err) {
-      showToast('Fichier JSON invalide');
+      console.error(err);
+      showToast('Fichier JSON invalide ou erreur synchro');
     }
   };
   reader.readAsText(file);
 };
 
-document.getElementById('btn-reset').onclick = () => {
-  if (!confirm('Supprimer tous les produits et repartir de zéro ?')) return;
-  state = JSON.parse(JSON.stringify(DEFAULT_STATE));
-  currentCatCode = state.categories[0].code;
-  render();
-  showToast('Base réinitialisée');
+document.getElementById('btn-reset').onclick = async () => {
+  if (!confirm('Supprimer TOUS les produits et remettre les coefs aux défauts ? Action irréversible.')) return;
+  try {
+    await deleteAllProduitsRemote();
+    await updatePricingRemote(DEFAULT_COEFS);
+    state.produits = [];
+    state.pricingSettings.coefs = JSON.parse(JSON.stringify(DEFAULT_COEFS));
+    currentCatCode = state.categories[0].code;
+    render();
+    showToast('Base réinitialisée');
+  } catch (err) {
+    remoteError(err);
+  }
 };
 
-document.getElementById('btn-seed').onclick = () => {
-  if (state.produits.length > 0 && !confirm('Cela ajoute des données démo par dessus. Continuer ?')) return;
-  SEED.forEach(s => {
-    if (!state.produits.find(p => p.code === s.code)) {
-      const copy = Object.assign({}, s, { overridePrices: false });
-      state.produits.push(copy);
+document.getElementById('btn-seed').onclick = async () => {
+  if (state.produits.length > 0 && !confirm('Cela ajoute des données démo par dessus (skip si déjà existant). Continuer ?')) return;
+  try {
+    const toAdd = [];
+    SEED.forEach(s => {
+      if (!state.produits.find(p => p.code === s.code)) {
+        const copy = Object.assign({}, s, { overridePrices: false });
+        computePrices(copy, state.pricingSettings.coefs);
+        toAdd.push(copy);
+      }
+    });
+    if (toAdd.length === 0) {
+      showToast('Aucun nouveau produit démo à ajouter');
+      return;
     }
-  });
-  recomputeAllNonOverridden(state);
-  saveState(state);
-  render();
-  showToast(`${SEED.length} produits démo chargés`);
+    await batchUpsertProduitsRemote(toAdd);
+    const fresh = await fetchState();
+    state = fresh;
+    render();
+    showToast(`${toAdd.length} produits démo chargés`);
+  } catch (err) {
+    remoteError(err);
+  }
 };
 
 // =========================================
@@ -2146,13 +2336,20 @@ document.getElementById('btn-pricing-reset').onclick = () => {
   showToast('Coefs remis aux défauts (pas encore appliqués)');
 };
 
-document.getElementById('btn-pricing-apply').onclick = () => {
-  state.pricingSettings.coefs = JSON.parse(JSON.stringify(pricingDraft));
-  const count = recomputeAllNonOverridden(state);
-  saveState(state);
-  render();
-  closePricingModal();
-  showToast(`Coefs appliqués · ${count} produits recalculés`);
+document.getElementById('btn-pricing-apply').onclick = async () => {
+  try {
+    state.pricingSettings.coefs = JSON.parse(JSON.stringify(pricingDraft));
+    await updatePricingRemote(state.pricingSettings.coefs);
+    // Recompute in-memory, puis batch upsert les non-overridés
+    const affected = state.produits.filter(p => !p.overridePrices);
+    affected.forEach(p => computePrices(p, state.pricingSettings.coefs));
+    if (affected.length) await batchUpsertProduitsRemote(affected);
+    render();
+    closePricingModal();
+    showToast(`Coefs appliqués · ${affected.length} produits recalculés`);
+  } catch (err) {
+    remoteError(err);
+  }
 };
 
 // APERÇU CATALOGUE
@@ -2292,8 +2489,50 @@ document.querySelectorAll('.modal-backdrop').forEach(b => {
   };
 });
 
-// Init
-render();
+// Logout handler
+document.getElementById('btn-logout').onclick = async () => {
+  if (!confirm('Se déconnecter ?')) return;
+  await signOut();
+};
+
+// ===================================================
+// INIT — auth gate + load state from Supabase
+// ===================================================
+async function init() {
+  try {
+    const { data: { session: s } } = await db.auth.getSession();
+    if (!s || s.user?.app_metadata?.role !== 'admin') {
+      window.location.href = '/outils/login.html';
+      return;
+    }
+    session = s;
+    // Affichage email admin
+    const emailEl = document.getElementById('admin-email');
+    if (emailEl) emailEl.textContent = s.user.email;
+
+    // Chargement initial
+    state = await fetchState();
+    currentCatCode = state.categories[0]?.code || 'CC';
+    render();
+  } catch (err) {
+    console.error('Init error', err);
+    setSyncStatus('err');
+    showToast('Erreur de chargement — vérifier la connexion');
+  }
+}
+
+// Auto-refresh token listener — redirect to login if session lost
+db.auth.onAuthStateChange((event, sess) => {
+  if (event === 'SIGNED_OUT' || (!sess && event !== 'INITIAL_SESSION')) {
+    window.location.href = '/outils/login.html';
+  }
+});
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
 </script>
 
 </body>

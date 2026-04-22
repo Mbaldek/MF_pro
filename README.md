@@ -72,4 +72,19 @@ SELECT * FROM leads ORDER BY created_at DESC;
 
 ## Outils internes (non listés)
 
-- `/outils/catalogue-builder` — maquette de saisie catalogue (Phase 1, localStorage uniquement). URL non linkée depuis le site public. Pour la migration Next.js/Supabase prévue (Phase 2), voir `.specs/prompt_claude_code.md` dans le repo (dotfolder non déployé par Vercel).
+### Catalogue Builder — `/outils/catalogue-builder`
+
+Outil admin de saisie / gestion du catalogue produits. **Backend Supabase** (projet `MF_pro`, ref `ckvwkwufdlydobjfwvwy`), auth admin, RLS strictes, multi-device.
+
+- Login : `/outils/login.html` (email + mot de passe)
+- Tables : `catalogue_categories`, `catalogue_produits`, `catalogue_pricing` (schéma `public`, préfixées pour isoler des autres features du projet Supabase)
+- Auth : user Supabase Auth avec `app_metadata.role = 'admin'`. Les RLS policies refusent tout accès hors admin.
+- Anon key : publique, hardcodée dans l'HTML (safe par design, RLS est le filet)
+- Persistance : tout est en DB, aucun localStorage. Les modifications sont synchro immédiate via Supabase SDK.
+
+Créer un admin supplémentaire (via dashboard Supabase → Authentication → Users → Add user) :
+- Email + mot de passe
+- Cocher "Auto-confirm user"
+- Après création, éditer le user → onglet "Raw user meta data" → app_metadata : `{ "role": "admin" }`
+
+Pour la migration future vers Next.js + admin TS + Storage + AI enrichissement, voir `.specs/prompt_claude_code.md` (non déployé par Vercel).
