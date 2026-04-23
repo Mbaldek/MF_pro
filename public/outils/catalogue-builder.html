@@ -352,6 +352,156 @@
   }
   .status-dot.pause { background: var(--vieux-rose); }
   .status-dot.archive { background: rgba(57,45,49,0.4); }
+  .status-dot.draft { background: #b5a46c; }
+  .status-dot.review { background: #7aa3cf; }
+
+  /* Badge statut pill (carte + header modal) */
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px;
+    border-radius: 100px;
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+    background: rgba(57,45,49,0.06);
+    color: var(--marron);
+    border: 1px solid transparent;
+  }
+  .status-pill::before {
+    content: '';
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.8;
+  }
+  .status-pill.draft { background: rgba(181,164,108,0.18); color: #8a7a3c; border-color: rgba(181,164,108,0.35); }
+  .status-pill.review { background: rgba(122,163,207,0.18); color: #3d6c94; border-color: rgba(122,163,207,0.35); }
+  .status-pill.actif { background: rgba(74,222,128,0.18); color: #2d8b4d; border-color: rgba(74,222,128,0.35); }
+  .status-pill.pause { background: rgba(191,100,109,0.18); color: var(--vieux-rose); border-color: rgba(191,100,109,0.35); }
+  .status-pill.archive { background: rgba(57,45,49,0.12); color: var(--marron); border-color: rgba(57,45,49,0.25); }
+
+  /* Gates de publication — hint block */
+  .gates-block {
+    margin-top: 10px;
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 0.84rem;
+    line-height: 1.55;
+  }
+  .gates-block.ok {
+    background: rgba(150,138,66,0.1);
+    border-left: 3px solid var(--vert);
+    color: var(--vert);
+  }
+  .gates-block.fail {
+    background: rgba(191,100,109,0.1);
+    border-left: 3px solid var(--vieux-rose);
+    color: var(--vieux-rose);
+  }
+  .gates-block ul { margin: 6px 0 0 18px; font-size: 0.82rem; }
+  .gates-block li { margin: 2px 0; }
+
+  .btn-publish {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 9px 16px;
+    border: 1px solid var(--vert);
+    background: var(--vert);
+    color: var(--blanc);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-publish:hover { background: #7a6f34; border-color: #7a6f34; }
+  .btn-publish:disabled { opacity: 0.45; cursor: not-allowed; background: var(--poudre); border-color: var(--poudre); color: var(--marron); }
+
+  /* History modal (versions + diff) */
+  .history-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+  .history-row {
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    gap: 10px;
+    padding: 10px 12px;
+    background: white;
+    border: 1px solid var(--poudre);
+    border-radius: 5px;
+    align-items: center;
+    font-size: 0.82rem;
+  }
+  .history-row .v-num {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--rose);
+    text-align: center;
+  }
+  .history-row .v-meta { color: var(--marron); }
+  .history-row .v-meta strong { color: var(--marron); display: block; font-weight: 500; }
+  .history-row .v-meta em { color: var(--vert); font-style: normal; font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; }
+  .history-row .btn {
+    padding: 6px 10px;
+    font-size: 0.66rem;
+    letter-spacing: 0.1em;
+    background: transparent;
+    color: var(--marron);
+    border: 1px solid var(--poudre);
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .history-row .btn:hover { background: var(--blanc); border-color: var(--rose); color: var(--rose); }
+  .diff-block {
+    background: var(--blanc);
+    padding: 12px;
+    border-radius: 4px;
+    font-family: ui-monospace, monospace;
+    font-size: 0.76rem;
+    line-height: 1.5;
+    max-height: 400px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+  }
+  .diff-block .diff-add { color: var(--vert); background: rgba(150,138,66,0.08); padding: 1px 4px; border-radius: 2px; }
+  .diff-block .diff-del { color: var(--vieux-rose); background: rgba(191,100,109,0.08); padding: 1px 4px; border-radius: 2px; text-decoration: line-through; }
+
+  /* FIC allergènes grid */
+  .fic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .fic-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 10px;
+    border: 1px solid var(--poudre);
+    border-radius: 4px;
+    background: white;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .fic-item:hover { border-color: var(--rose); }
+  .fic-item input { accent-color: var(--rose); }
+  .fic-item.on { background: rgba(139,58,67,0.06); border-color: var(--rose); }
+  .fic-item.trace { background: rgba(229,183,179,0.25); border-color: var(--poudre); border-style: dashed; }
+  .fic-none {
+    margin-top: 6px;
+    padding: 10px 12px;
+    background: rgba(150,138,66,0.08);
+    border-left: 2px solid var(--vert);
+    border-radius: 3px;
+    font-size: 0.82rem;
+    color: var(--vert);
+    cursor: pointer;
+  }
   .product-body {
     padding: 10px 16px 10px 14px;
     display: grid;
@@ -1585,9 +1735,11 @@
               <input type="text" class="input" id="f-code" readonly style="background:var(--blanc);font-family:ui-monospace,monospace;">
             </div>
             <div class="field">
-              <div class="field-label">Statut</div>
+              <div class="field-label">Statut · workflow</div>
               <select class="select" id="f-statut">
-                <option value="actif">Actif</option>
+                <option value="draft">Brouillon</option>
+                <option value="review">En revue</option>
+                <option value="actif">Publié · actif</option>
                 <option value="pause">En pause</option>
                 <option value="archive">Archivé</option>
               </select>
@@ -1649,8 +1801,19 @@
             <textarea class="textarea" id="f-ingredients" placeholder="Farine de blé T65, beurre AOP Poitou-Charentes, sucre de canne bio, chocolat noir 72% Équateur, œufs frais de poules élevées en plein air, levure chimique, sel de Guérande." required></textarea>
           </div>
           <div class="field field--required">
-            <div class="field-label">Allergènes majeurs</div>
+            <div class="field-label">Allergènes majeurs <span class="field-hint">texte libre pour l'étiquetage</span></div>
             <input type="text" class="input" id="f-allergenes" placeholder="Gluten · œufs · lait · fruits à coque" required>
+          </div>
+          <div class="field field--required">
+            <div class="field-label">
+              Conformité FIC <span class="field-hint">règlement INCO 1169/2011 · 14 allergènes officiels</span>
+            </div>
+            <div id="fic-grid" class="fic-grid"></div>
+            <label class="fic-none" id="fic-none">
+              <input type="checkbox" id="f-fic-none" style="accent-color:var(--vert);margin-right:6px;vertical-align:middle;">
+              Aucun de ces 14 allergènes dans la recette
+            </label>
+            <button type="button" class="ai-btn" id="btn-fic-suggest" style="margin-top:8px;">✦ Déduire depuis les ingrédients</button>
           </div>
           <div class="field">
             <div class="field-label">Origine tracée · signature</div>
@@ -1913,17 +2076,37 @@
         <div class="preview-label">Aperçu carte boutique · temps réel</div>
         <div id="live-preview-card"></div>
       </div>
+
+      <div id="gates-container"></div>
     </div>
 
     <div class="modal-foot">
       <div class="modal-foot-left">
         <button class="btn btn-danger" id="btn-delete" style="display:none;">Supprimer</button>
+        <button class="btn btn-ghost" id="btn-history" style="display:none;color:var(--marron);">Historique</button>
         <span class="draft-badge" id="draft-badge" style="display:none;">Brouillon restauré</span>
       </div>
       <div class="modal-foot-right">
         <button class="btn btn-ghost" id="btn-cancel">Annuler</button>
         <button class="btn btn-primary" id="btn-save" style="color:var(--marron);background:var(--poudre);border-color:var(--poudre);">Enregistrer</button>
+        <button class="btn-publish" id="btn-publish" style="display:none;">Publier</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL HISTORIQUE VERSIONS -->
+<div class="modal-backdrop" id="modal-history">
+  <div class="modal" style="max-width:720px;">
+    <div class="modal-head">
+      <div class="modal-title" id="history-title">Historique du produit</div>
+      <button class="modal-close" id="modal-history-close">×</button>
+    </div>
+    <div class="modal-body" id="history-body">
+      <div class="hint-box">
+        Chaque publication ou changement majeur crée un snapshot immuable. Tu peux revenir à une version antérieure à tout moment (revert = nouvelle version créée depuis le snapshot).
+      </div>
+      <div class="history-list" id="history-list">Chargement…</div>
     </div>
   </div>
 </div>
@@ -2282,7 +2465,11 @@ function produitFromDB(r) {
     delai: r.delai_reassort,
     paiement: r.paiement || '30fdm',
     reprise: r.reprise_invendus || 'lancement',
-    notesLog: r.notes_logistique || ''
+    notesLog: r.notes_logistique || '',
+    publishAt: r.publish_at,
+    allergenesFic: r.allergenes_fic || {},
+    versionCurrent: r.version_current || 1,
+    updatedBy: r.updated_by || null
   };
 }
 
@@ -2328,7 +2515,10 @@ function produitToDB(p) {
     delai_reassort: p.delai,
     paiement: p.paiement || '30fdm',
     reprise_invendus: p.reprise || 'lancement',
-    notes_logistique: p.notesLog || null
+    notes_logistique: p.notesLog || null,
+    publish_at: p.publishAt || null,
+    allergenes_fic: p.allergenesFic || {},
+    updated_by: session?.user?.email || null
   };
 }
 
@@ -2486,7 +2676,7 @@ let session = null;
 const view = {
   q: '',
   sort: 'code-asc',
-  filters: { status: null, noPhoto: false, noPrice: false, lowMargin: false, needsInfo: false }
+  filters: { status: null, noPhoto: false, noPrice: false, lowMargin: false, needsInfo: false, noFic: false }
 };
 const selected = new Set(); // codes sélectionnés pour bulk
 const undoStack = []; // { type, data, at }
@@ -2640,22 +2830,35 @@ function computeCompletion(p) {
   // Pondération pensée catalogue distributeur. Total = 100.
   if (!p) return 0;
   const weights = {
-    nom: 8,
-    sousTitre: 4,
-    descCourte: 10,
-    descLongue: 8,
-    ingredients: 12,
-    allergenes: 10,
-    origine: 6,
-    gout: 4,
-    tags: 4,
-    photo: 14,
-    ppc: 10,
+    nom: 7,
+    sousTitre: 3,
+    descCourte: 9,
+    descLongue: 7,
+    ingredients: 10,
+    allergenes: 6,
+    origine: 5,
+    gout: 3,
+    tags: 3,
+    photo: 13,
+    ppc: 9,
     cost: 5,
-    packPoids: 5
+    packPoids: 5,
+    _fic: 10,
+    _publishable: 5
   };
   let score = 0;
   Object.entries(weights).forEach(([k, w]) => {
+    if (k === '_fic') {
+      const fic = p.allergenesFic || {};
+      const keys = Object.keys(fic).filter(x => fic[x] && fic[x] !== false);
+      if (keys.length > 0 || fic._none === true) score += w;
+      return;
+    }
+    if (k === '_publishable') {
+      const hasChannel = (p.pxGrossiste > 0) || (p.pxAgent > 0) || (p.pxEpicier > 0) || (p.pxPlateforme > 0);
+      if (hasChannel) score += w;
+      return;
+    }
     const v = p[k];
     const filled = (typeof v === 'string') ? v.trim().length > 0 : (v !== null && v !== undefined && v !== 0);
     if (filled) score += w;
@@ -2751,6 +2954,11 @@ function productMatchesFilters(p) {
     if (m === null || m >= 30) return false;
   }
   if (f.needsInfo && computeCompletion(p) >= 60) return false;
+  if (f.noFic) {
+    const fic = p.allergenesFic || {};
+    const k = Object.keys(fic).filter(x => fic[x] && fic[x] !== false);
+    if (k.length > 0 || fic._none === true) return false;
+  }
   return true;
 }
 function sortProduits(arr) {
@@ -2884,6 +3092,295 @@ function draftIsDifferent(draft, current) {
 }
 
 // =========================================
+// V2.1 · Workflow publication, gates, versioning, allergènes FIC
+// =========================================
+
+const STATUT_LABELS = {
+  draft: 'Brouillon', review: 'En revue', actif: 'Publié',
+  pause: 'En pause', archive: 'Archivé'
+};
+
+// 14 allergènes officiels INCO 1169/2011 (règlement FIC)
+const FIC_ALLERGENS = [
+  { key: 'gluten', label: 'Gluten', hint: 'blé, seigle, orge, avoine, épeautre' },
+  { key: 'crustaces', label: 'Crustacés' },
+  { key: 'oeufs', label: 'Œufs' },
+  { key: 'poissons', label: 'Poissons' },
+  { key: 'arachides', label: 'Arachides' },
+  { key: 'soja', label: 'Soja' },
+  { key: 'lait', label: 'Lait', hint: 'y compris lactose' },
+  { key: 'fruits_a_coque', label: 'Fruits à coque', hint: 'amandes, noisettes, noix, pistaches…' },
+  { key: 'celeri', label: 'Céleri' },
+  { key: 'moutarde', label: 'Moutarde' },
+  { key: 'sesame', label: 'Sésame' },
+  { key: 'sulfites', label: 'Anhydride sulfureux / sulfites' },
+  { key: 'lupin', label: 'Lupin' },
+  { key: 'mollusques', label: 'Mollusques' }
+];
+
+// Détection naïve des allergènes à partir du texte ingredients (fallback si pas d'IA)
+function detectFicFromIngredients(text) {
+  if (!text) return {};
+  const t = (text || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const rules = {
+    gluten: /\b(ble|froment|farine(?!\s*de\s*riz|\s*de\s*mais|\s*de\s*sarrasin)|seigle|orge|avoine|epeautre|kamut|semoule|boulgour|malt)\b/,
+    crustaces: /\b(crevette|homard|crabe|langoustine|langouste|ecrevisse)\b/,
+    oeufs: /\b(oeuf|oeufs|blanc d'oeuf|jaune d'oeuf|ovalbumine)\b/,
+    poissons: /\b(poisson|saumon|thon|cabillaud|anchois|sardine)\b/,
+    arachides: /\b(arachide|cacahuete|peanut)\b/,
+    soja: /\b(soja|soy|edamame|tofu|tamari)\b/,
+    lait: /\b(lait|beurre|creme|fromage|yaourt|lactose|caseine|petit lait|lactoserum|ricotta|mascarpone|mozzarella)\b/,
+    fruits_a_coque: /\b(amande|noisette|noix|pistache|pecan|cajou|macadamia|noix de bresil|noix de pecan|noix du bresil)\b/,
+    celeri: /\bceleri\b/,
+    moutarde: /\bmoutarde\b/,
+    sesame: /\b(sesame|tahin|tahini|gomasio)\b/,
+    sulfites: /\b(sulfite|anhydride sulfureux|e220|e221|e222|e223|e224|e226|e227|e228)\b/,
+    lupin: /\blupin\b/,
+    mollusques: /\b(mollusque|huitre|moule|escargot|poulpe|calamar|seiche)\b/
+  };
+  const out = {};
+  Object.entries(rules).forEach(([k, re]) => { if (re.test(t)) out[k] = 'contient'; });
+  return out;
+}
+
+// Gates de publication (prérequis pour passer en 'actif')
+function validatePublication(p) {
+  const issues = [];
+  if (!p.nom || p.nom.trim().length < 2) issues.push('Nom du produit manquant');
+  if (!p.descCourte || p.descCourte.trim().length < 20) issues.push('Description courte trop courte (20 caractères minimum)');
+  if (!p.ingredients || p.ingredients.trim().length < 5) issues.push('Ingrédients non renseignés');
+  // Allergènes : au moins le champ FIC explicité (avec 1+ allergène OU marqué "aucun")
+  const fic = p.allergenesFic || {};
+  const ficKeys = Object.keys(fic).filter(k => fic[k] && fic[k] !== false);
+  if (ficKeys.length === 0 && fic._none !== true) {
+    issues.push('Allergènes FIC à valider (14 allergènes officiels ou « aucun »)');
+  }
+  if (!p.ppc || p.ppc <= 0) issues.push('PPR TTC manquant');
+  const hasChannel = (p.pxGrossiste > 0) || (p.pxAgent > 0) || (p.pxEpicier > 0) || (p.pxPlateforme > 0);
+  if (!hasChannel && p.categorie !== 'AV') issues.push('Aucun prix canal > 0');
+  if (!p.photo) issues.push('Photo du produit manquante');
+  return { ok: issues.length === 0, issues };
+}
+
+function renderStatusPill(statut) {
+  const s = statut || 'actif';
+  const label = STATUT_LABELS[s] || s;
+  return `<span class="status-pill ${s}">${label}</span>`;
+}
+
+// Snapshot version (catalogue_versions) + audit log
+async function createVersionSnapshot(produitId, action, snapshot, diffFromPrev) {
+  if (!produitId) return;
+  const actor = session?.user?.email || null;
+  try {
+    // Récupérer la dernière version pour incrémenter
+    const { data: last } = await db.from('catalogue_versions')
+      .select('version').eq('produit_id', produitId)
+      .order('version', { ascending: false }).limit(1).single();
+    const nextVersion = (last?.version || 0) + 1;
+    await db.from('catalogue_versions').insert({
+      produit_id: produitId,
+      version: nextVersion,
+      snapshot,
+      diff_from_prev: diffFromPrev || null,
+      action,
+      created_by: actor
+    });
+    // Mettre à jour version_current sur le produit
+    await db.from('catalogue_produits').update({ version_current: nextVersion }).eq('id', produitId);
+    // Audit log
+    await db.from('catalogue_audit_log').insert({
+      entity: 'catalogue_produits',
+      entity_id: produitId,
+      action,
+      after: snapshot,
+      actor
+    });
+  } catch (e) {
+    console.error('createVersionSnapshot error', e);
+  }
+}
+
+function computeDiff(a, b) {
+  // Diff par champ sur clés importantes (texte + prix)
+  const keys = ['nom','sousTitre','statut','descCourte','descLongue','rationnel','ingredients','allergenes','origine','recette','tags','gout','cost','ppc','pxGrossiste','pxAgent','pxEpicier','pxPlateforme','photo','packEAN','packSKU','allergenesFic'];
+  const diff = {};
+  keys.forEach(k => {
+    const va = a?.[k], vb = b?.[k];
+    if (JSON.stringify(va) !== JSON.stringify(vb)) diff[k] = { from: va, to: vb };
+  });
+  return diff;
+}
+
+// ---- FIC checklist : état local dans la modal + render ----
+let ficState = {};
+function renderFicGrid() {
+  const host = document.getElementById('fic-grid');
+  if (!host) return;
+  host.innerHTML = FIC_ALLERGENS.map(a => {
+    const val = ficState[a.key];
+    const isOn = val === 'contient';
+    const isTrace = val === 'trace';
+    const cls = isOn ? 'fic-item on' : (isTrace ? 'fic-item trace' : 'fic-item');
+    return `
+      <label class="${cls}" data-fic="${a.key}" title="${a.hint || a.label}">
+        <input type="checkbox" ${isOn ? 'checked' : ''} data-fic-key="${a.key}">
+        <span>${a.label}${isTrace ? ' <em style="font-size:0.7rem;color:var(--vert);">(trace)</em>' : ''}</span>
+      </label>
+    `;
+  }).join('');
+  host.querySelectorAll('[data-fic-key]').forEach(inp => {
+    inp.onchange = () => {
+      const k = inp.dataset.ficKey;
+      if (inp.checked) { ficState[k] = 'contient'; ficState._none = false; document.getElementById('f-fic-none').checked = false; }
+      else delete ficState[k];
+      renderFicGrid();
+      triggerAutosaveAndCompletion();
+      renderGates();
+    };
+  });
+  // Clic sur label avec shift = toggle "trace"
+  host.querySelectorAll('[data-fic]').forEach(lab => {
+    lab.addEventListener('click', (e) => {
+      if (!e.shiftKey) return;
+      e.preventDefault();
+      const k = lab.dataset.fic;
+      if (ficState[k] === 'trace') delete ficState[k];
+      else { ficState[k] = 'trace'; ficState._none = false; document.getElementById('f-fic-none').checked = false; }
+      renderFicGrid();
+      triggerAutosaveAndCompletion();
+      renderGates();
+    });
+  });
+}
+
+function renderGates() {
+  const host = document.getElementById('gates-container');
+  const btnPublish = document.getElementById('btn-publish');
+  if (!host) return;
+  const p = collectForm();
+  p.allergenesFic = ficState;
+  const { ok, issues } = validatePublication(p);
+  if (ok) {
+    host.innerHTML = `
+      <div class="gates-block ok">
+        <strong>Prêt pour publication</strong> — tous les critères sont OK. Tu peux passer le produit en <em>Publié</em>.
+      </div>`;
+  } else {
+    host.innerHTML = `
+      <div class="gates-block fail">
+        <strong>${issues.length} critère${issues.length > 1 ? 's' : ''} à compléter avant publication</strong>
+        <ul>${issues.map(i => `<li>${i}</li>`).join('')}</ul>
+      </div>`;
+  }
+  // Afficher Publier seulement en draft/review ou pause
+  if (btnPublish) {
+    const statut = getVal('statut');
+    btnPublish.style.display = (statut === 'draft' || statut === 'review' || statut === 'pause') ? 'inline-block' : 'none';
+    btnPublish.disabled = !ok;
+    btnPublish.title = ok ? 'Publier ce produit (statut = actif)' : 'Gates non remplies';
+  }
+}
+
+// Historique : fetch + render
+async function fetchVersions(produitId) {
+  const { data, error } = await db.from('catalogue_versions')
+    .select('*')
+    .eq('produit_id', produitId)
+    .order('version', { ascending: false });
+  if (error) { remoteError(error); return []; }
+  return data;
+}
+
+function renderDiffText(prev, curr) {
+  if (!prev) return '<span class="diff-add">(création initiale)</span>';
+  const diff = computeDiff(prev, curr);
+  const entries = Object.entries(diff);
+  if (!entries.length) return '<em>(aucune différence détectée sur les champs suivis)</em>';
+  return entries.map(([k, { from, to }]) => {
+    const fs = (from === null || from === undefined || from === '') ? '∅' : JSON.stringify(from);
+    const ts = (to === null || to === undefined || to === '') ? '∅' : JSON.stringify(to);
+    return `<div><strong>${k}</strong> · <span class="diff-del">${fs.slice(0,80)}</span> → <span class="diff-add">${ts.slice(0,120)}</span></div>`;
+  }).join('');
+}
+
+async function openHistoryModal(produitId) {
+  const modal = document.getElementById('modal-history');
+  const list = document.getElementById('history-list');
+  list.innerHTML = 'Chargement…';
+  modal.classList.add('open');
+  const versions = await fetchVersions(produitId);
+  if (!versions.length) { list.innerHTML = '<em>Pas d\'historique pour ce produit.</em>'; return; }
+  list.innerHTML = versions.map((v, idx) => {
+    const date = new Date(v.created_at);
+    const actor = v.created_by || '—';
+    const actionLabel = { create: 'Création', publish: 'Publication', unpublish: 'Dépublication', revert: 'Revert', archive: 'Archivage', restore: 'Restauration' }[v.action] || v.action;
+    return `
+      <div class="history-row" data-version="${v.version}">
+        <div class="v-num">v${v.version}</div>
+        <div class="v-meta">
+          <strong>${actionLabel}</strong>
+          <em>${date.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}</em>
+          · ${actor}
+        </div>
+        <div style="display:flex;gap:6px;">
+          <button class="btn" data-hist-action="diff" data-version="${v.version}">Diff</button>
+          ${idx !== 0 ? `<button class="btn" data-hist-action="revert" data-version="${v.version}">Revenir</button>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+  // Bind actions
+  list.querySelectorAll('[data-hist-action="diff"]').forEach(btn => {
+    btn.onclick = () => {
+      const v = Number(btn.dataset.version);
+      const curr = versions.find(x => x.version === v)?.snapshot;
+      const prevEntry = versions.find(x => x.version === v - 1);
+      const prev = prevEntry?.snapshot;
+      const wrap = btn.closest('.history-row');
+      let block = wrap.nextElementSibling;
+      if (block && block.classList.contains('diff-block-wrap')) {
+        block.remove();
+        return;
+      }
+      block = document.createElement('div');
+      block.className = 'diff-block-wrap';
+      block.innerHTML = `<div class="diff-block">${renderDiffText(prev, curr)}</div>`;
+      wrap.after(block);
+    };
+  });
+  list.querySelectorAll('[data-hist-action="revert"]').forEach(btn => {
+    btn.onclick = async () => {
+      const v = Number(btn.dataset.version);
+      const target = versions.find(x => x.version === v);
+      if (!target) return;
+      const ok = await mfConfirm(`Revenir à la version <strong>v${v}</strong> ? Les champs du produit seront remplacés par le snapshot ; une nouvelle version sera créée (revert non destructif).`, { title: 'Revert version', danger: true, okLabel: 'Revert' });
+      if (!ok) return;
+      await revertProduitToVersion(produitId, target);
+      modal.classList.remove('open');
+      closeModal();
+      const fresh = await fetchState(); state = fresh; render();
+      showToast(`Reverté à v${v}`);
+    };
+  });
+}
+
+async function revertProduitToVersion(produitId, versionRow) {
+  const snap = versionRow.snapshot;
+  // Reconstruire un payload DB depuis le snapshot (même schéma snake_case)
+  const payload = {};
+  Object.keys(snap).forEach(k => {
+    if (k === 'id' || k === 'created_at' || k === 'updated_at' || k === 'version_current') return;
+    payload[k] = snap[k];
+  });
+  const { error } = await db.from('catalogue_produits').update(payload).eq('id', produitId);
+  if (error) { remoteError(error); return; }
+  // Nouvelle version "revert"
+  const { data: fresh } = await db.from('catalogue_produits').select('*').eq('id', produitId).single();
+  await createVersionSnapshot(produitId, 'revert', fresh, { reverted_to_version: versionRow.version });
+}
+
+// =========================================
 // RENDER
 // =========================================
 
@@ -2947,19 +3444,29 @@ function renderFilterChips() {
   if (!host) return;
   const f = view.filters;
   const total = state.produits.length;
+  const cDraft = state.produits.filter(p => p.statut === 'draft').length;
+  const cReview = state.produits.filter(p => p.statut === 'review').length;
   const cActif = state.produits.filter(p => p.statut === 'actif').length;
   const cPause = state.produits.filter(p => p.statut === 'pause').length;
   const cNoPhoto = state.produits.filter(p => !p.photo).length;
   const cNoPrice = state.produits.filter(p => !p.pxGrossiste || p.pxGrossiste === 0).length;
   const cLowMarg = state.produits.filter(p => { const m = computeMarginPct(p); return m !== null && m < 30; }).length;
   const cNeedsInfo = state.produits.filter(p => computeCompletion(p) < 60).length;
+  const cNoFic = state.produits.filter(p => {
+    const fic = p.allergenesFic || {};
+    const k = Object.keys(fic).filter(x => fic[x] && fic[x] !== false);
+    return k.length === 0 && fic._none !== true;
+  }).length;
   const chips = [
-    { key: 'status-actif', label: 'Actifs', count: cActif, on: f.status === 'actif' },
+    { key: 'status-draft', label: 'Brouillons', count: cDraft, on: f.status === 'draft' },
+    { key: 'status-review', label: 'En revue', count: cReview, on: f.status === 'review' },
+    { key: 'status-actif', label: 'Publiés', count: cActif, on: f.status === 'actif' },
     { key: 'status-pause', label: 'En pause', count: cPause, on: f.status === 'pause' },
     { key: 'noPhoto', label: 'Sans photo', count: cNoPhoto, on: f.noPhoto },
     { key: 'noPrice', label: 'Sans prix', count: cNoPrice, on: f.noPrice },
     { key: 'lowMargin', label: 'Marge < 30 %', count: cLowMarg, on: f.lowMargin },
-    { key: 'needsInfo', label: 'À compléter', count: cNeedsInfo, on: f.needsInfo }
+    { key: 'needsInfo', label: 'À compléter', count: cNeedsInfo, on: f.needsInfo },
+    { key: 'noFic', label: 'Allergènes FIC manquants', count: cNoFic, on: f.noFic }
   ];
   host.innerHTML = chips.map(c =>
     `<button class="chip${c.on ? ' on' : ''}" data-chip="${c.key}">${c.label}<span class="chip-count">${c.count}</span></button>`
@@ -3041,7 +3548,7 @@ function renderMain() {
     if (cf) cf.onclick = () => {
       view.q = '';
       const ts = document.getElementById('topbar-search'); if (ts) ts.value = '';
-      view.filters = { status: null, noPhoto: false, noPrice: false, lowMargin: false, needsInfo: false };
+      view.filters = { status: null, noPhoto: false, noPrice: false, lowMargin: false, needsInfo: false, noFic: false };
       render();
     };
     return;
@@ -3058,6 +3565,7 @@ function renderMain() {
     card.dataset.code = p.code;
 
     const statusDot = p.statut !== 'actif' ? `<span class="status-dot ${p.statut}" title="${p.statut}"></span>` : `<span class="status-dot" title="actif"></span>`;
+    const statusPillHtml = p.statut !== 'actif' ? renderStatusPill(p.statut) : '';
 
     const originLine = p.sousTitre || p.origine || '';
 
@@ -3123,7 +3631,7 @@ function renderMain() {
       </div>
       <div class="product-body">
         <div class="body-main">
-          <div class="p-name">${p.nom}</div>
+          <div class="p-name">${p.nom}${statusPillHtml ? ' ' + statusPillHtml : ''}</div>
           ${originLine ? `<div class="p-origin">${originLine}</div>` : ''}
           ${packInfo}
         </div>
@@ -3168,7 +3676,7 @@ function openModal(idx) {
   const p = isNew ? {
     code: generateCode(currentCatCode),
     categorie: currentCatCode,
-    statut: 'actif',
+    statut: 'draft',
     nom: '', sousTitre: '', saison: 'permanente',
     descCourte: '', descLongue: '', rationnel: '',
     ingredients: '', allergenes: '', origine: '', recette: '',
@@ -3191,7 +3699,8 @@ function openModal(idx) {
     delai: catShared ? catForNew.delai : 3,
     paiement: (catShared ? catForNew.paiement : null) || '30fdm',
     reprise: (catShared ? catForNew.reprise : null) || 'lancement',
-    notesLog: '', photo: null
+    notesLog: '', photo: null,
+    allergenesFic: {}, versionCurrent: 1, publishAt: null
   } : state.produits[idx];
 
   editingCategorie = p.categorie;
@@ -3265,6 +3774,14 @@ function openModal(idx) {
   currentDraftCode = p.code;
   updateCompletionIndicator(p);
   validateEanField();
+
+  // V2.1 · FIC checklist init + gates + history button
+  ficState = { ...(p.allergenesFic || {}) };
+  document.getElementById('f-fic-none').checked = ficState._none === true;
+  renderFicGrid();
+  renderGates();
+  const btnHistory = document.getElementById('btn-history');
+  if (btnHistory) btnHistory.style.display = (!isNew && p.id) ? 'inline-block' : 'none';
   const draft = loadDraft(p.code);
   const badge = document.getElementById('draft-badge');
   if (badge) badge.style.display = 'none';
@@ -3359,7 +3876,8 @@ function collectForm() {
     paiement: getVal('paiement'),
     reprise: getVal('reprise'),
     notesLog: getVal('notes-logistique'),
-    photo: currentPhoto
+    photo: currentPhoto,
+    allergenesFic: { ...ficState }
   };
 }
 
@@ -3764,11 +4282,12 @@ document.getElementById('btn-gen-ean').onclick = () => {
   try { triggerAutosaveAndCompletion(); } catch(e) {}
 };
 
-// Score complétion live + autosave + preview
+// Score complétion live + autosave + preview + gates
 function triggerAutosaveAndCompletion() {
   const snapshot = collectForm();
   updateCompletionIndicator(snapshot);
   updatePreview();
+  renderGates();
   if (!currentDraftCode) return;
   clearTimeout(autosaveTimer);
   autosaveTimer = setTimeout(() => {
@@ -3933,16 +4452,39 @@ document.getElementById('btn-save').onclick = async () => {
     const ok = await mfConfirm('L\'EAN saisi n\'est pas valide (checksum invalide). Enregistrer quand même ?', { title: 'EAN invalide', danger: true, okLabel: 'Enregistrer' });
     if (!ok) return;
   }
+  // Blocage : passage en actif si gates non OK
+  if (p.statut === 'actif') {
+    const { ok, issues } = validatePublication(p);
+    if (!ok) {
+      await mfAlert(`<strong>Impossible de passer en « Publié »</strong><br><br>${issues.map(i => '• ' + i).join('<br>')}<br><br>Astuce : enregistre d'abord en <em>Brouillon</em> ou <em>En revue</em>.`, { title: 'Critères manquants' });
+      return;
+    }
+  }
   // Préserver l'id si édition
-  if (editing !== -1) p.id = state.produits[editing]?.id;
+  const prevSnap = editing !== -1 ? { ...state.produits[editing] } : null;
+  if (editing !== -1) p.id = prevSnap?.id;
+  const statutChanged = prevSnap && prevSnap.statut !== p.statut;
   try {
     const saved = await upsertProduitRemote(p);
-    if (editing === -1) state.produits.push(saved);
+    const isNewProduct = editing === -1;
+    if (isNewProduct) state.produits.push(saved);
     else state.produits[editing] = saved;
     clearDraft(p.code);
+
+    // V2.1 · versioning
+    if (isNewProduct) {
+      await createVersionSnapshot(saved.id, 'create', produitToDB(saved), null);
+    } else if (statutChanged) {
+      let action = 'publish';
+      if (p.statut === 'archive') action = 'archive';
+      else if (prevSnap.statut === 'actif' && p.statut !== 'actif') action = 'unpublish';
+      else if (p.statut === 'actif') action = 'publish';
+      await createVersionSnapshot(saved.id, action, produitToDB(saved), computeDiff(prevSnap, saved));
+    }
+
     closeModal();
     render();
-    showToast('Enregistré');
+    showToast(statutChanged ? `${STATUT_LABELS[p.statut]} · enregistré` : 'Enregistré');
   } catch (err) {
     remoteError(err);
   }
@@ -4441,6 +4983,79 @@ function generateAnkorstoreCSV() {
   URL.revokeObjectURL(url);
   showToast('CSV Ankorstore exporté');
 }
+
+// V2.1 · Publish + History + FIC suggest/none bindings
+(function wireV21UI() {
+  const btnPub = document.getElementById('btn-publish');
+  if (btnPub) btnPub.onclick = async () => {
+    const p = collectForm();
+    p.allergenesFic = ficState;
+    const { ok, issues } = validatePublication(p);
+    if (!ok) {
+      await mfAlert(`<strong>Publication impossible</strong><br><br>${issues.map(i => '• ' + i).join('<br>')}`, { title: 'Critères manquants' });
+      return;
+    }
+    // Passer statut = actif, publier
+    document.getElementById('f-statut').value = 'actif';
+    const payload = collectForm();
+    payload.allergenesFic = ficState;
+    payload.statut = 'actif';
+    if (editing !== -1) payload.id = state.produits[editing]?.id;
+    try {
+      const saved = await upsertProduitRemote(payload);
+      const prevSnap = editing !== -1 ? state.produits[editing] : null;
+      if (editing === -1) state.produits.push(saved);
+      else state.produits[editing] = saved;
+      // Snapshot v-next + audit "publish"
+      const dbSnap = produitToDB(saved);
+      await createVersionSnapshot(saved.id, 'publish', dbSnap, prevSnap ? computeDiff(prevSnap, saved) : null);
+      clearDraft(saved.code);
+      closeModal();
+      render();
+      showToast(`Produit publié · v${(saved.versionCurrent || 1) + 1 > 1 ? saved.versionCurrent + 1 : 1}`);
+    } catch (err) { remoteError(err); }
+  };
+
+  const btnHist = document.getElementById('btn-history');
+  if (btnHist) btnHist.onclick = () => {
+    const id = state.produits[editing]?.id;
+    if (!id) return;
+    openHistoryModal(id);
+  };
+
+  const btnClose = document.getElementById('modal-history-close');
+  if (btnClose) btnClose.onclick = () => document.getElementById('modal-history').classList.remove('open');
+
+  const ficNone = document.getElementById('f-fic-none');
+  if (ficNone) ficNone.onchange = () => {
+    if (ficNone.checked) {
+      ficState = { _none: true };
+    } else {
+      delete ficState._none;
+    }
+    renderFicGrid();
+    triggerAutosaveAndCompletion();
+  };
+
+  const btnFicSuggest = document.getElementById('btn-fic-suggest');
+  if (btnFicSuggest) btnFicSuggest.onclick = () => {
+    const ing = getVal('ingredients');
+    if (!ing || ing.length < 5) { showToast('Renseigne d\'abord les ingrédients'); return; }
+    const detected = detectFicFromIngredients(ing);
+    const detectedKeys = Object.keys(detected);
+    if (detectedKeys.length === 0) {
+      showToast('Aucun allergène détecté — coche « aucun » si c\'est bien le cas');
+      return;
+    }
+    // Merge avec l'état existant (ne supprime pas ce qui a été coché manuellement)
+    detectedKeys.forEach(k => { if (!ficState[k]) ficState[k] = detected[k]; });
+    ficState._none = false;
+    document.getElementById('f-fic-none').checked = false;
+    renderFicGrid();
+    triggerAutosaveAndCompletion();
+    showToast(`${detectedKeys.length} allergène${detectedKeys.length>1?'s':''} détecté${detectedKeys.length>1?'s':''} — à valider`);
+  };
+})();
 
 // V3.2 · Topbar search + sort + sync popover + bulk bar bindings
 (function wireV32UI() {
