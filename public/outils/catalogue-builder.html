@@ -2609,30 +2609,42 @@ document.querySelectorAll('.tab').forEach(tab => {
   tab.onclick = () => switchTab(tab.dataset.tab);
 });
 
-// AI BUTTONS (simulation)
+// AI BUTTONS — appel réel à /api/enrich (Claude Sonnet)
 document.querySelectorAll('.ai-btn').forEach(btn => {
-  btn.onclick = () => {
+  btn.onclick = async () => {
     const field = btn.dataset.ai;
     const nom = getVal('nom');
     if (!nom) {
       showToast('Renseigne d\'abord le nom du produit');
       return;
     }
+    const originalText = btn.textContent;
     btn.disabled = true;
     btn.textContent = '✦ Génération...';
-    setTimeout(() => {
-      const placeholder = {
-        'desc-courte': `[IA] Exemple pour "${nom}" : description à 30 mots, ton Maison Félicien, premium, sobre. À générer par l'API Claude en phase 2.`,
-        'desc-longue': `[IA] Exemple pour "${nom}" : description longue 100 mots, storytelling, technique, émotion. Génération via Claude en phase 2 avec clé API.`,
-        'rationnel': `[IA] Argumentaire distributeur :\n• Différenciation marché\n• Rotation prouvée\n• Marge attractive`,
-        'recette': `[IA] Storytelling recette à enrichir — rencontre producteur, détail technique, inspiration.`
-      };
-      fill(field, placeholder[field]);
-      btn.disabled = false;
-      btn.textContent = '✦ Enrichir avec l\'IA';
+    try {
+      const { data: { session: s } } = await db.auth.getSession();
+      if (!s) throw new Error('Session expirée — reconnecte-toi');
+      const produit = collectForm();
+      const r = await fetch('/api/enrich', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${s.access_token}`
+        },
+        body: JSON.stringify({ field, produit })
+      });
+      const payload = await r.json();
+      if (!r.ok) throw new Error(payload.error || 'Erreur IA');
+      fill(field, payload.text);
       updatePreview();
-      showToast('Texte IA inséré — à éditer');
-    }, 700);
+      showToast('Texte IA inséré — à relire');
+    } catch (err) {
+      console.error('AI enrich error:', err);
+      showToast(err.message || 'Erreur IA');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }
   };
 });
 
