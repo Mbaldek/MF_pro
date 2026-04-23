@@ -74,7 +74,12 @@ export default async function handler(req, res) {
   const isAdmin = await verifyAdmin(token);
   if (!isAdmin) return res.status(401).json({ error: 'Session admin requise' });
 
-  const { field, produit } = req.body || {};
+  let body = req.body;
+  if (typeof body === 'string') {
+    try { body = JSON.parse(body); } catch { body = {}; }
+  }
+  if (!body || typeof body !== 'object') body = {};
+  const { field, produit } = body;
   if (!field || !FIELD_INSTRUCTIONS[field]) {
     return res.status(400).json({ error: 'Champ IA invalide' });
   }
@@ -114,7 +119,11 @@ export default async function handler(req, res) {
     return res.status(200).json({ text });
 
   } catch (err) {
-    console.error('Enrich handler error:', err);
-    return res.status(500).json({ error: 'Erreur serveur' });
+    console.error('Enrich handler error:', err?.message, err?.stack);
+    return res.status(500).json({
+      error: 'Erreur serveur',
+      detail: err?.message || String(err),
+      where: err?.stack?.split('\n')?.[1]?.trim()
+    });
   }
 }
