@@ -2008,6 +2008,21 @@
         </div>
 
         <div class="card-section">
+          <div class="card-section-title">Benchmark concurrent <span style="color:var(--vert);font-size:0.7rem;letter-spacing:0.1em;margin-left:8px;">OPTIONNEL</span></div>
+          <div class="row cols-2">
+            <div class="field">
+              <div class="field-label">Prix marché TTC observé <span class="field-hint">€</span></div>
+              <input type="number" step="0.01" class="input" id="f-ppc-marche" placeholder="0.00">
+            </div>
+            <div class="field">
+              <div class="field-label">Source / concurrent</div>
+              <input type="text" class="input" id="f-benchmark-source" placeholder="Ex : Hermé, Popelini, L'Éclair de Génie">
+            </div>
+          </div>
+          <div id="benchmark-compare" style="margin-top:8px;font-size:0.82rem;line-height:1.55;"></div>
+        </div>
+
+        <div class="card-section">
           <div class="card-section-title">Tarifs par canal</div>
 
           <div class="price-table">
@@ -2384,6 +2399,11 @@
         </table>
         <div style="margin-top:10px;font-size:0.76rem;opacity:0.65;color:var(--marron);">Coef <code style="background:var(--blanc);padding:0 4px;border-radius:3px;">1.00</code> = neutre (aucun calcul, prix figés à 0 ou à la valeur override). Utile pour les PLV.</div>
       </div>
+
+      <div class="card-section" id="pricing-simulator-card" style="background:var(--blanc);">
+        <div class="card-section-title">Simulation avant application</div>
+        <div id="pricing-simulator" style="font-size:0.84rem;line-height:1.7;color:var(--marron);">Modifie un coef pour voir l'impact projeté sur les produits non-overridés.</div>
+      </div>
     </div>
     <div class="modal-foot">
       <div class="modal-foot-left">
@@ -2525,7 +2545,9 @@ function produitFromDB(r) {
     allergenesFic: r.allergenes_fic || {},
     versionCurrent: r.version_current || 1,
     updatedBy: r.updated_by || null,
-    translations: r.translations || {}
+    translations: r.translations || {},
+    ppcMarche: r.ppc_marche_ttc !== null ? Number(r.ppc_marche_ttc) : null,
+    benchmarkSource: r.benchmark_source || ''
   };
 }
 
@@ -2575,6 +2597,8 @@ function produitToDB(p) {
     publish_at: p.publishAt || null,
     allergenes_fic: p.allergenesFic || {},
     translations: p.translations || {},
+    ppc_marche_ttc: p.ppcMarche,
+    benchmark_source: p.benchmarkSource || null,
     updated_by: session?.user?.email || null
   };
 }
@@ -3800,6 +3824,8 @@ function openModal(idx) {
   fill('pack-sku', p.packSKU);
   fill('cost', p.cost);
   fill('ppc', p.ppc);
+  fill('ppc-marche', p.ppcMarche);
+  fill('benchmark-source', p.benchmarkSource);
   fill('px-grossiste', p.pxGrossiste);
   fill('px-agent', p.pxAgent);
   fill('px-epicier', p.pxEpicier);
@@ -3843,6 +3869,9 @@ function openModal(idx) {
   // V2.4 · Traductions
   fillTranslations(p.translations || {});
   setLangTab(null);
+
+  // V2.5 · Benchmark
+  updateBenchmarkCompare();
   const draft = loadDraft(p.code);
   const badge = document.getElementById('draft-badge');
   if (badge) badge.style.display = 'none';
@@ -3939,7 +3968,9 @@ function collectForm() {
     notesLog: getVal('notes-logistique'),
     photo: currentPhoto,
     allergenesFic: { ...ficState },
-    translations: collectTranslations()
+    translations: collectTranslations(),
+    ppcMarche: getNum('ppc-marche'),
+    benchmarkSource: getVal('benchmark-source')
   };
 }
 
@@ -4341,6 +4372,24 @@ document.getElementById('btn-revert-packaging').onclick = async () => {
 ['cost','px-grossiste','px-agent','px-epicier','px-plateforme','ppc'].forEach(id => {
   document.getElementById('f-' + id).addEventListener('input', updateMargins);
 });
+['ppc','ppc-marche'].forEach(id => {
+  document.getElementById('f-' + id).addEventListener('input', updateBenchmarkCompare);
+});
+
+function updateBenchmarkCompare() {
+  const host = document.getElementById('benchmark-compare');
+  if (!host) return;
+  const ppr = getNum('ppc');
+  const march = getNum('ppc-marche');
+  if (!ppr || !march) { host.innerHTML = ''; return; }
+  const delta = ((ppr - march) / march) * 100;
+  let cls, label;
+  if (Math.abs(delta) <= 5) { cls = 'good'; label = 'aligné'; }
+  else if (delta < 0) { cls = 'mid'; label = `PPR ${delta.toFixed(0)} % sous marché — marge possible à la hausse`; }
+  else { cls = 'bad'; label = `PPR ${delta.toFixed(0)} % au-dessus marché — vérifier positionnement`; }
+  const pillColor = cls === 'good' ? 'var(--vert)' : (cls === 'mid' ? 'var(--marron)' : 'var(--vieux-rose)');
+  host.innerHTML = `<div style="padding:8px 12px;background:rgba(150,138,66,0.08);border-left:2px solid ${pillColor};border-radius:3px;color:${pillColor};"><strong>Écart ${delta > 0 ? '+' : ''}${delta.toFixed(1)} %</strong> — ${label}</div>`;
+}
 
 // V3.2 · autosave + completion + EAN validation hook (écoute toute input modale)
 function validateEanField() {
@@ -4790,8 +4839,64 @@ function renderPricingGrid() {
       if (!isNaN(v) && v > 0) {
         pricingDraft[cat][canal] = v;
       }
+      renderPricingSimulator();
     });
   });
+  renderPricingSimulator();
+}
+
+function renderPricingSimulator() {
+  const host = document.getElementById('pricing-simulator');
+  if (!host || !pricingDraft) return;
+  const current = state.pricingSettings.coefs;
+  const affected = state.produits.filter(p => !p.overridePrices && p.ppc && p.ppc > 0);
+  if (!affected.length) { host.innerHTML = '<em>Aucun produit non-overridé à simuler.</em>'; return; }
+
+  // Comparer ancien vs nouveau : pour chaque canal, marge moyenne avant/après
+  const canaux = ['grossiste','agent','epicier','plateforme'];
+  const labels = { grossiste:'Grossiste', agent:'Agent', epicier:'Épicier', plateforme:'Plateforme' };
+  let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;margin-top:8px;">';
+  const warnings = [];
+  canaux.forEach(cx => {
+    let oldMargSum = 0, newMargSum = 0, oldCount = 0, newCount = 0, newBelow30 = 0;
+    affected.forEach(p => {
+      const cat = p.categorie;
+      const oldCoef = current[cat]?.[cx];
+      const newCoef = pricingDraft[cat]?.[cx];
+      if (!oldCoef || oldCoef === 1 || !newCoef || newCoef === 1) return;
+      const oldPx = p.ppc / oldCoef;
+      const newPx = p.ppc / newCoef;
+      if (p.cost) {
+        oldMargSum += ((oldPx - p.cost) / oldPx) * 100;
+        oldCount++;
+        newMargSum += ((newPx - p.cost) / newPx) * 100;
+        newCount++;
+        if (((newPx - p.cost) / newPx) * 100 < 30) newBelow30++;
+      }
+    });
+    const oldAvg = oldCount ? oldMargSum / oldCount : null;
+    const newAvg = newCount ? newMargSum / newCount : null;
+    const delta = (oldAvg !== null && newAvg !== null) ? (newAvg - oldAvg) : null;
+    const arrow = delta === null ? '' : (delta > 0.1 ? '↑' : (delta < -0.1 ? '↓' : '→'));
+    const color = delta === null ? 'var(--marron)' : (delta > 0 ? 'var(--vert)' : (delta < 0 ? 'var(--vieux-rose)' : 'var(--marron)'));
+    html += `
+      <div style="background:white;padding:10px;border:1px solid var(--poudre);border-radius:4px;">
+        <div style="font-size:0.64rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--vert);">${labels[cx]}</div>
+        <div style="font-family:var(--serif);font-style:italic;font-size:1.3rem;color:${color};">${newAvg !== null ? newAvg.toFixed(1) + ' %' : '—'} <span style="font-family:var(--sans);font-style:normal;font-size:0.8rem;">${arrow}</span></div>
+        <div style="font-size:0.72rem;opacity:0.6;">${oldAvg !== null ? 'avant ' + oldAvg.toFixed(1) + ' %' : '—'}</div>
+      </div>
+    `;
+    if (newBelow30 > 0) warnings.push(`${newBelow30} produit${newBelow30>1?'s':''} passe${newBelow30>1?'nt':''} sous 30 % marge en canal <strong>${labels[cx]}</strong>`);
+  });
+  html += '</div>';
+
+  html += `<div style="margin-top:12px;font-size:0.82rem;color:var(--marron);opacity:0.85;">Simulation sur <strong>${affected.length}</strong> produit${affected.length>1?'s':''} non-overridé${affected.length>1?'s':''}.</div>`;
+
+  if (warnings.length) {
+    html += '<div style="margin-top:10px;padding:10px 12px;background:rgba(191,100,109,0.1);border-left:2px solid var(--vieux-rose);border-radius:3px;color:var(--vieux-rose);font-size:0.82rem;">' +
+      '⚠ ' + warnings.join(' · ') + '</div>';
+  }
+  host.innerHTML = html;
 }
 
 function openPricingModal() {
