@@ -209,8 +209,17 @@ const CANAL_LABELS = {
 
 function getToken() {
   const url = new URL(window.location.href);
-  // Supporté : /c/:token (via rewrite → ?t=), ou ?t=xxx direct
   return url.searchParams.get('t') || url.pathname.split('/c/')[1] || '';
+}
+function getLang() {
+  const url = new URL(window.location.href);
+  const l = (url.searchParams.get('lang') || 'fr').toLowerCase();
+  return ['fr','en','ja'].includes(l) ? l : 'fr';
+}
+function translatedField(p, field, lang) {
+  if (lang === 'fr') return p[field];
+  const t = (p.translations && p.translations[lang]) || {};
+  return t[field] || p[field]; // fallback FR
 }
 
 function fmtEuro(n) {
@@ -267,20 +276,29 @@ function renderCatalogue(data) {
   const link = data.link || {};
   const dist = data.distributeur;
   const canal = link.canal || 'public';
+  const lang = getLang();
 
-  // Topstrip
+  // Topstrip + language switcher
   document.getElementById('canal-label').textContent = CANAL_LABELS[canal] || '—';
+  document.documentElement.setAttribute('lang', lang);
 
   // Cover
   const title = link.title || 'Catalogue professionnel';
   const subtitle = link.subtitle || new Date().getFullYear();
   const cover = document.getElementById('cover-host');
+  const langSwitcher = ['fr','en','ja'].map(l => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('lang', l);
+    const active = l === lang;
+    return `<a href="${url.toString()}" style="color:${active ? 'var(--blanc)' : 'var(--poudre)'};${active ? 'text-decoration:underline;' : 'opacity:0.7;'}text-decoration:none;margin:0 8px;font-size:0.74rem;letter-spacing:0.12em;text-transform:uppercase;">${l === 'ja' ? '日本語' : l}</a>`;
+  }).join('');
   cover.innerHTML = `
     <section class="cover">
       <div class="maison">Maison</div>
       <h1>Félicien</h1>
       <h2>${title} · ${subtitle}</h2>
-      ${dist ? `<div class="dist"><strong>Pour : ${dist.nom}</strong>${dist.ville ? ' · ' + dist.ville : ''}</div>` : ''}
+      ${dist ? `<div class="dist"><strong>${lang === 'en' ? 'For' : lang === 'ja' ? 'お客様' : 'Pour'} : ${dist.nom}</strong>${dist.ville ? ' · ' + dist.ville : ''}</div>` : ''}
+      <div style="margin-top:20px;">${langSwitcher}</div>
     </section>
   `;
 
@@ -307,16 +325,19 @@ function renderCatalogue(data) {
       </div>
       <div class="cat-sub">${c.subtitle || ''}</div>
       <div class="products">
-        ${byCat[c.code].map(p => renderProduct(p, canal)).join('')}
+        ${byCat[c.code].map(p => renderProduct(p, canal, lang)).join('')}
       </div>
     </section>
   `).join('');
 }
 
-function renderProduct(p, canal) {
+function renderProduct(p, canal, lang) {
+  const nom = translatedField(p, 'nom', lang);
+  const sousTitre = translatedField(p, 'sous_titre', lang);
+  const descCourte = translatedField(p, 'desc_courte', lang);
   const { value, label } = priceForCanal(p, canal);
   const thumb = p.photo_url
-    ? `<img src="${p.photo_url}" alt="${p.nom || ''}">`
+    ? `<img src="${p.photo_url}" alt="${nom || ''}">`
     : BOTANICAL_SVG;
   const bits = [];
   if (p.pack_libelle) bits.push(`<span class="tag">${p.pack_libelle}</span>`);
@@ -328,9 +349,9 @@ function renderProduct(p, canal) {
       <div class="prod-thumb">${thumb}</div>
       <div>
         <div class="prod-code">${p.code}</div>
-        <div class="prod-nom">${p.nom || ''}</div>
-        ${p.sous_titre ? `<div class="prod-st">${p.sous_titre}</div>` : ''}
-        ${p.desc_courte ? `<div class="prod-desc">${p.desc_courte}</div>` : ''}
+        <div class="prod-nom">${nom || ''}</div>
+        ${sousTitre ? `<div class="prod-st">${sousTitre}</div>` : ''}
+        ${descCourte ? `<div class="prod-desc">${descCourte}</div>` : ''}
         <div class="prod-meta">
           ${bits.join('<span style="color:var(--poudre);">·</span>')}
         </div>

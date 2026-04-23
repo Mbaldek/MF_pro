@@ -502,6 +502,14 @@
     color: var(--vert);
     cursor: pointer;
   }
+
+  /* Language tabs */
+  #lang-tabs .btn.small.lang-on {
+    background: var(--rose);
+    color: var(--blanc);
+    border-color: var(--rose);
+  }
+  .lang-panel { padding-top: 10px; border-top: 1px dashed var(--poudre); margin-top: 10px; }
   .product-body {
     padding: 10px 16px 10px 14px;
     display: grid;
@@ -1828,6 +1836,51 @@
           </div>
         </div>
 
+        <div class="card-section">
+          <div class="card-section-title" style="display:flex;justify-content:space-between;align-items:baseline;">
+            <span>Traductions <span style="color:var(--vert);font-size:0.7rem;letter-spacing:0.1em;font-family:var(--sans);font-style:normal;margin-left:6px;">EN · JA</span></span>
+            <div style="display:flex;gap:4px;" id="lang-tabs">
+              <button type="button" class="btn small" data-lang="en" style="font-size:0.64rem;padding:4px 10px;">EN</button>
+              <button type="button" class="btn small" data-lang="ja" style="font-size:0.64rem;padding:4px 10px;">日本語</button>
+            </div>
+          </div>
+          <div id="lang-panel-en" class="lang-panel" style="display:none;">
+            <div class="field"><div class="field-label">Name <span class="field-hint">English</span></div>
+              <div style="display:flex;gap:6px;"><input type="text" class="input" id="f-nom-en" style="flex:1;"><button type="button" class="ai-btn" data-translate="en" data-src-field="nom" data-tgt-field="nom-en">✦ FR→EN</button></div>
+            </div>
+            <div class="field"><div class="field-label">Tagline <span class="field-hint">English</span></div>
+              <div style="display:flex;gap:6px;"><input type="text" class="input" id="f-sous-titre-en" style="flex:1;"><button type="button" class="ai-btn" data-translate="en" data-src-field="sous-titre" data-tgt-field="sous-titre-en">✦ FR→EN</button></div>
+            </div>
+            <div class="field"><div class="field-label">Short description <span class="field-hint">~30 words</span></div>
+              <textarea class="textarea" id="f-desc-courte-en"></textarea>
+              <button type="button" class="ai-btn" data-translate="en" data-src-field="desc-courte" data-tgt-field="desc-courte-en" style="margin-top:6px;">✦ FR→EN</button>
+            </div>
+            <div class="field"><div class="field-label">Long description <span class="field-hint">storytelling</span></div>
+              <textarea class="textarea textarea-lg" id="f-desc-longue-en"></textarea>
+              <button type="button" class="ai-btn" data-translate="en" data-src-field="desc-longue" data-tgt-field="desc-longue-en" style="margin-top:6px;">✦ FR→EN</button>
+            </div>
+          </div>
+          <div id="lang-panel-ja" class="lang-panel" style="display:none;">
+            <div class="field"><div class="field-label">商品名 <span class="field-hint">日本語</span></div>
+              <div style="display:flex;gap:6px;"><input type="text" class="input" id="f-nom-ja" style="flex:1;"><button type="button" class="ai-btn" data-translate="ja" data-src-field="nom" data-tgt-field="nom-ja">✦ FR→日本語</button></div>
+            </div>
+            <div class="field"><div class="field-label">サブタイトル <span class="field-hint">日本語</span></div>
+              <div style="display:flex;gap:6px;"><input type="text" class="input" id="f-sous-titre-ja" style="flex:1;"><button type="button" class="ai-btn" data-translate="ja" data-src-field="sous-titre" data-tgt-field="sous-titre-ja">✦ FR→日本語</button></div>
+            </div>
+            <div class="field"><div class="field-label">短い説明文 <span class="field-hint">約30語</span></div>
+              <textarea class="textarea" id="f-desc-courte-ja"></textarea>
+              <button type="button" class="ai-btn" data-translate="ja" data-src-field="desc-courte" data-tgt-field="desc-courte-ja" style="margin-top:6px;">✦ FR→日本語</button>
+            </div>
+            <div class="field"><div class="field-label">長い説明文 <span class="field-hint">ストーリー</span></div>
+              <textarea class="textarea textarea-lg" id="f-desc-longue-ja"></textarea>
+              <button type="button" class="ai-btn" data-translate="ja" data-src-field="desc-longue" data-tgt-field="desc-longue-ja" style="margin-top:6px;">✦ FR→日本語</button>
+            </div>
+          </div>
+          <div id="lang-collapsed" style="font-size:0.82rem;color:var(--marron);opacity:0.65;">
+            Sélectionne une langue pour saisir ou traduire depuis le français.
+          </div>
+        </div>
+
         <div class="card-section" id="packaging-inheritance" style="background:var(--poudre);border-left:3px solid var(--vert);display:none;">
           <div class="card-section-title" style="display:flex;justify-content:space-between;align-items:baseline;">
             <span>Packaging &amp; logistique</span>
@@ -2471,7 +2524,8 @@ function produitFromDB(r) {
     publishAt: r.publish_at,
     allergenesFic: r.allergenes_fic || {},
     versionCurrent: r.version_current || 1,
-    updatedBy: r.updated_by || null
+    updatedBy: r.updated_by || null,
+    translations: r.translations || {}
   };
 }
 
@@ -2520,6 +2574,7 @@ function produitToDB(p) {
     notes_logistique: p.notesLog || null,
     publish_at: p.publishAt || null,
     allergenes_fic: p.allergenesFic || {},
+    translations: p.translations || {},
     updated_by: session?.user?.email || null
   };
 }
@@ -3784,6 +3839,10 @@ function openModal(idx) {
   renderGates();
   const btnHistory = document.getElementById('btn-history');
   if (btnHistory) btnHistory.style.display = (!isNew && p.id) ? 'inline-block' : 'none';
+
+  // V2.4 · Traductions
+  fillTranslations(p.translations || {});
+  setLangTab(null);
   const draft = loadDraft(p.code);
   const badge = document.getElementById('draft-badge');
   if (badge) badge.style.display = 'none';
@@ -3879,8 +3938,34 @@ function collectForm() {
     reprise: getVal('reprise'),
     notesLog: getVal('notes-logistique'),
     photo: currentPhoto,
-    allergenesFic: { ...ficState }
+    allergenesFic: { ...ficState },
+    translations: collectTranslations()
   };
+}
+
+function collectTranslations() {
+  const out = {};
+  ['en', 'ja'].forEach(lang => {
+    const t = {
+      nom: getVal('nom-' + lang),
+      sous_titre: getVal('sous-titre-' + lang),
+      desc_courte: getVal('desc-courte-' + lang),
+      desc_longue: getVal('desc-longue-' + lang)
+    };
+    // Ne garde que les locales où au moins un champ est rempli
+    if (Object.values(t).some(v => v && v.trim())) out[lang] = t;
+  });
+  return out;
+}
+
+function fillTranslations(tr) {
+  ['en', 'ja'].forEach(lang => {
+    const t = (tr && tr[lang]) || {};
+    fill('nom-' + lang, t.nom || '');
+    fill('sous-titre-' + lang, t.sous_titre || '');
+    fill('desc-courte-' + lang, t.desc_courte || '');
+    fill('desc-longue-' + lang, t.desc_longue || '');
+  });
 }
 
 let currentPhoto = null;
@@ -4985,6 +5070,57 @@ function generateAnkorstoreCSV() {
   URL.revokeObjectURL(url);
   showToast('CSV Ankorstore exporté');
 }
+
+// V2.4 · Translations · tabs + translate buttons
+function setLangTab(lang) {
+  document.querySelectorAll('#lang-tabs [data-lang]').forEach(b => b.classList.toggle('lang-on', b.dataset.lang === lang));
+  const enPanel = document.getElementById('lang-panel-en');
+  const jaPanel = document.getElementById('lang-panel-ja');
+  const collapsed = document.getElementById('lang-collapsed');
+  if (enPanel) enPanel.style.display = lang === 'en' ? '' : 'none';
+  if (jaPanel) jaPanel.style.display = lang === 'ja' ? '' : 'none';
+  if (collapsed) collapsed.style.display = lang ? 'none' : '';
+}
+
+document.querySelectorAll('#lang-tabs [data-lang]').forEach(btn => {
+  btn.onclick = () => {
+    const current = btn.classList.contains('lang-on') ? null : btn.dataset.lang;
+    setLangTab(current);
+  };
+});
+
+// Translate buttons (FR → EN/JA)
+document.querySelectorAll('[data-translate]').forEach(btn => {
+  btn.onclick = async () => {
+    const target = btn.dataset.translate;
+    const srcId = btn.dataset.srcField;
+    const tgtId = btn.dataset.tgtField;
+    const src = getVal(srcId);
+    if (!src || !src.trim()) { showToast('Texte source FR vide', { danger: true }); return; }
+    const original = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = '✦ Traduction…';
+    try {
+      const { data: { session: s } } = await db.auth.getSession();
+      if (!s) throw new Error('Session expirée');
+      const r = await fetch('/api/enrich', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${s.access_token}` },
+        body: JSON.stringify({ field: 'translate', target, source: src })
+      });
+      const p = await r.json();
+      if (!r.ok) throw new Error(p.error || 'Erreur traduction');
+      fill(tgtId, p.text);
+      triggerAutosaveAndCompletion();
+      showToast(`Traduit en ${target.toUpperCase()}`);
+    } catch (err) {
+      showToast(err.message || 'Erreur', { danger: true });
+    } finally {
+      btn.disabled = false;
+      btn.textContent = original;
+    }
+  };
+});
 
 // V2.1 · Publish + History + FIC suggest/none bindings
 (function wireV21UI() {

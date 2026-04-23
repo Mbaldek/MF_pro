@@ -27,6 +27,19 @@ const FIELD_INSTRUCTIONS = {
     "Rédige un court storytelling recette (60 à 90 mots). Choisis UN seul angle, bien tenu : rencontre avec un producteur générique (sans nom inventé), détail technique signature, ou inspiration saisonnière. Prose fluide."
 };
 
+const TRANSLATE_INSTRUCTIONS = {
+  en: `Translate the following French text to English for a premium artisanal pastry catalogue (brand: Maison Félicien, Paris).
+- Keep the elegant, restrained tone. No marketing superlatives.
+- Preserve proper nouns, AOP/IGP/PDO labels, and origins exactly as they appear.
+- Use natural British/international English, no Americanisms ("flavour" not "flavor", "biscuit" not "cookie" unless the source says "cookie").
+- No preamble, no quotes around the output. Return only the translated text.`,
+  ja: `以下のフランス語のテキストを、パリの高級職人菓子店「Maison Félicien」のカタログ用として日本語に翻訳してください。
+- 控えめで洗練されたトーンを保つ。誇張された販売文句は使わない。
+- AOP・IGP・原産地名・固有名詞はそのまま残す。
+- 自然で丁寧な日本語。敬語ではなく、品格のある商品説明の文体。
+- 前置きや引用符なし。訳文のみを返す。`
+};
+
 function buildContext(p) {
   const lines = [];
   if (p.nom) lines.push(`Nom: ${p.nom}`);
@@ -89,16 +102,33 @@ export default async function handler(req, res) {
     try { body = JSON.parse(body); } catch { body = {}; }
   }
   if (!body || typeof body !== 'object') body = {};
-  const { field, produit } = body;
-  if (!field || !FIELD_INSTRUCTIONS[field]) {
-    return res.status(400).json({ error: 'Champ IA invalide' });
-  }
-  if (!produit || !produit.nom || !produit.nom.trim()) {
-    return res.status(400).json({ error: 'Le nom du produit est requis' });
+  const { field, produit, source, target } = body;
+
+  // Mode traduction : field = 'translate', target = 'en' | 'ja', source = texte FR
+  const isTranslate = field === 'translate';
+  if (isTranslate) {
+    if (!TRANSLATE_INSTRUCTIONS[target]) {
+      return res.status(400).json({ error: 'Langue cible invalide (attendu: en, ja)' });
+    }
+    if (!source || !source.trim()) {
+      return res.status(400).json({ error: 'Texte source vide' });
+    }
+  } else {
+    if (!field || !FIELD_INSTRUCTIONS[field]) {
+      return res.status(400).json({ error: 'Champ IA invalide' });
+    }
+    if (!produit || !produit.nom || !produit.nom.trim()) {
+      return res.status(400).json({ error: 'Le nom du produit est requis' });
+    }
   }
 
-  const context = buildContext(produit);
-  const userPrompt = `Contexte produit:\n${context}\n\nTâche:\n${FIELD_INSTRUCTIONS[field]}`;
+  let userPrompt;
+  if (isTranslate) {
+    userPrompt = `${TRANSLATE_INSTRUCTIONS[target]}\n\n---\n${source.trim()}\n---`;
+  } else {
+    const context = buildContext(produit);
+    userPrompt = `Contexte produit:\n${context}\n\nTâche:\n${FIELD_INSTRUCTIONS[field]}`;
+  }
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
