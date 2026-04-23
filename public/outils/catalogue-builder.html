@@ -532,14 +532,23 @@
     color: var(--marron);
     cursor: pointer;
     border-bottom: 3px solid transparent;
-    transition: all 0.15s;
     opacity: 0.55;
     text-align: center;
     line-height: 1.2;
+    transition:
+      opacity 180ms ease-out,
+      background 180ms ease-out,
+      color 180ms ease-out,
+      transform 220ms cubic-bezier(.2,.8,.2,1),
+      box-shadow 220ms cubic-bezier(.2,.8,.2,1);
   }
-  .tab:hover { opacity: 0.85; background: var(--blanc); }
+  .tab:hover {
+    opacity: 0.9;
+    background: var(--blanc);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px -10px rgba(139, 58, 67, 0.45);
+  }
   .tab.active {
-    border-bottom-color: var(--rose);
     color: var(--rose);
     opacity: 1;
     background: var(--blanc);
@@ -549,15 +558,45 @@
     font-family: var(--serif);
     font-style: italic;
     font-size: 0.9rem;
-    opacity: 0.6;
+    color: var(--marron);
+    opacity: 0.5;
     margin-bottom: 2px;
+    transform-origin: center bottom;
+    transition:
+      transform 220ms cubic-bezier(.2,.8,.2,1),
+      opacity 180ms ease-out,
+      color 180ms ease-out;
   }
-  .tab.active .tab-num { opacity: 1; color: var(--rose); }
+  .tab.active .tab-num {
+    opacity: 1;
+    color: var(--rose);
+    transform: scale(1.18);
+  }
+  /* Sliding active indicator (replaces per-tab bottom border) */
+  .tab-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: var(--rose);
+    pointer-events: none;
+    border-radius: 2px 2px 0 0;
+    transition:
+      left 260ms cubic-bezier(.2,.8,.2,1),
+      width 260ms cubic-bezier(.2,.8,.2,1);
+  }
   @media (min-width: 600px) {
     .tab {
       font-size: 0.72rem;
       padding: 14px 10px;
     }
+  }
+
+  /* PANEL enter animation on active switch */
+  @keyframes panelIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   .modal-body {
@@ -566,7 +605,10 @@
   }
 
   .panel { display: none; }
-  .panel.active { display: block; }
+  .panel.active {
+    display: block;
+    animation: panelIn 240ms cubic-bezier(.2,.8,.2,1);
+  }
 
   /* PANEL NAV - bottom of each panel */
   .panel-nav {
@@ -1528,6 +1570,7 @@
       <button class="tab" data-tab="tarifs"><span class="tab-num">3</span>Tarifs</button>
       <button class="tab" data-tab="marketing"><span class="tab-num">4</span>Photo</button>
       <button class="tab" data-tab="logistique"><span class="tab-num">5</span>Logistique</button>
+      <span class="tab-indicator" aria-hidden="true"></span>
     </div>
 
     <div class="modal-body">
@@ -3160,6 +3203,7 @@ function openModal(idx) {
   const sharedPack = cat && cat.packagingMode === 'shared' && !p.overridePackaging;
   document.querySelector('.tab[data-tab="packaging"]').style.display = sharedPack ? 'none' : '';
   document.querySelector('.tab[data-tab="logistique"]').style.display = sharedPack ? 'none' : '';
+  renumberTabs();
   updatePackagingInheritanceUI(p, cat);
 
   // Remplir
@@ -3250,6 +3294,13 @@ function openModal(idx) {
   }
 
   document.getElementById('modal').classList.add('open');
+  // Position indicator once modal is visible & laid out
+  requestAnimationFrame(() => {
+    const ind = document.querySelector('.tab-indicator');
+    if (ind) ind.style.transition = 'none';
+    moveIndicator();
+    requestAnimationFrame(() => { if (ind) ind.style.transition = ''; });
+  });
 }
 
 function fill(id, val) {
@@ -3767,18 +3818,40 @@ function switchTab(tabName) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
   document.querySelector(`.panel[data-panel="${tabName}"]`).classList.add('active');
+  moveIndicator();
   // Scroll to top of modal body
   document.querySelector('.modal-body').scrollTo({top: 0, behavior: 'smooth'});
   renderPanelNav();
+}
+
+function visibleTabs() {
+  return Array.from(document.querySelectorAll('.tab'))
+    .filter(t => t.style.display !== 'none');
+}
+
+function renumberTabs() {
+  visibleTabs().forEach((tab, i) => {
+    const num = tab.querySelector('.tab-num');
+    if (num) num.textContent = i + 1;
+  });
+}
+
+function moveIndicator() {
+  const indicator = document.querySelector('.tab-indicator');
+  const active = document.querySelector('.tab.active');
+  if (!indicator || !active || active.style.display === 'none') return;
+  indicator.style.left = active.offsetLeft + 'px';
+  indicator.style.width = active.offsetWidth + 'px';
 }
 
 function renderPanelNav() {
   const activePanel = document.querySelector('.panel.active');
   if (!activePanel) return;
   const current = activePanel.dataset.panel;
-  const idx = TAB_ORDER.indexOf(current);
-  const prev = idx > 0 ? TAB_ORDER[idx - 1] : null;
-  const next = idx < TAB_ORDER.length - 1 ? TAB_ORDER[idx + 1] : null;
+  const visible = visibleTabs().map(t => t.dataset.tab);
+  const idx = visible.indexOf(current);
+  const prev = idx > 0 ? visible[idx - 1] : null;
+  const next = idx >= 0 && idx < visible.length - 1 ? visible[idx + 1] : null;
 
   // Remove existing nav
   const existing = activePanel.querySelector('.panel-nav');
@@ -3789,7 +3862,7 @@ function renderPanelNav() {
   nav.innerHTML = `
     ${prev ? `<button class="btn-ghost btn" data-goto="${prev}">← ${TAB_LABELS[prev]}</button>` : '<span></span>'}
     <span class="panel-nav-dots">
-      ${TAB_ORDER.map((t, i) => `<span class="dot ${t===current?'active':''}" data-goto="${t}"></span>`).join('')}
+      ${visible.map(t => `<span class="dot ${t===current?'active':''}" data-goto="${t}"></span>`).join('')}
     </span>
     ${next ? `<button class="btn-main panel-nav-next" data-goto="${next}">${TAB_LABELS[next]} →</button>` : '<span></span>'}
   `;
