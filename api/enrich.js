@@ -119,11 +119,11 @@ export default async function handler(req, res) {
     return res.status(200).json({ text });
 
   } catch (err) {
-    console.error('Enrich handler error:', err?.message, err?.stack);
-    return res.status(500).json({
-      error: 'Erreur serveur',
-      detail: err?.message || String(err),
-      where: err?.stack?.split('\n')?.[1]?.trim()
-    });
+    const detail = err?.message || String(err);
+    const where = err?.stack?.split('\n')?.[1]?.trim();
+    console.error('EnrichErr-msg:', detail);
+    console.error('EnrichErr-where:', where);
+    console.error('EnrichErr-stack:', err?.stack);
+    return res.status(500).json({ error: 'Erreur serveur', detail, where });
   }
 }

@@ -2634,7 +2634,13 @@ document.querySelectorAll('.ai-btn').forEach(btn => {
         body: JSON.stringify({ field, produit })
       });
       const payload = await r.json();
-      if (!r.ok) throw new Error(payload.error || 'Erreur IA');
+      if (!r.ok) {
+        console.error('AI enrich server response:', payload);
+        const msg = payload.detail
+          ? `${payload.error || 'Erreur IA'} — ${payload.detail}${payload.where ? ' @ ' + payload.where : ''}`
+          : (payload.error || 'Erreur IA');
+        throw new Error(msg);
+      }
       fill(field, payload.text);
       updatePreview();
       showToast('Texte IA inséré — à relire');
