@@ -922,6 +922,481 @@
   @media print {
     .no-print { display: none !important; }
   }
+
+  /* =========================================
+     V3.2 — UI polish
+     ========================================= */
+
+  /* Topbar search */
+  .topbar-search {
+    position: relative;
+    flex: 1;
+    min-width: 180px;
+    max-width: 320px;
+  }
+  .topbar-search input {
+    width: 100%;
+    padding: 8px 12px 8px 30px;
+    border: 1px solid rgba(229,183,179,0.35);
+    background: rgba(240,240,230,0.08);
+    color: var(--blanc);
+    border-radius: 4px;
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    transition: all 0.15s;
+  }
+  .topbar-search input::placeholder { color: rgba(229,183,179,0.65); }
+  .topbar-search input:focus {
+    outline: none;
+    background: rgba(240,240,230,0.14);
+    border-color: var(--poudre);
+  }
+  .topbar-search::before {
+    content: '⌕';
+    position: absolute;
+    left: 10px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--poudre);
+    font-size: 0.95rem;
+    pointer-events: none;
+    opacity: 0.7;
+  }
+
+  /* Sync popover */
+  .sync-dot { cursor: pointer; position: relative; }
+  .sync-pop {
+    position: absolute;
+    top: 28px; right: 0;
+    background: white;
+    border: 1px solid var(--poudre);
+    border-radius: 6px;
+    padding: 10px 14px;
+    box-shadow: 0 12px 30px rgba(57,45,49,0.18);
+    font-family: var(--sans);
+    font-size: 0.74rem;
+    color: var(--marron);
+    white-space: nowrap;
+    z-index: 40;
+    min-width: 220px;
+    display: none;
+  }
+  .sync-pop.open { display: block; }
+  .sync-pop strong {
+    display: block;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--rose);
+    margin-bottom: 3px;
+    font-weight: 500;
+  }
+  .sync-pop .sync-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 3px 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .sync-pop .sync-row span:first-child { opacity: 0.6; letter-spacing: 0.06em; }
+
+  /* Filter chips */
+  .chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .chip {
+    padding: 5px 10px;
+    border: 1px solid var(--poudre);
+    background: white;
+    border-radius: 100px;
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: var(--marron);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .chip:hover { border-color: var(--rose); }
+  .chip.on {
+    background: var(--rose);
+    color: var(--blanc);
+    border-color: var(--rose);
+  }
+  .chip .chip-count {
+    background: rgba(57,45,49,0.08);
+    color: var(--marron);
+    font-size: 0.62rem;
+    padding: 1px 6px;
+    border-radius: 100px;
+    font-variant-numeric: tabular-nums;
+  }
+  .chip.on .chip-count {
+    background: rgba(240,240,230,0.25);
+    color: var(--blanc);
+  }
+
+  /* Sort + toolbar */
+  .toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .toolbar-label {
+    font-size: 0.64rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--vert);
+  }
+  .toolbar select {
+    padding: 6px 10px;
+    border: 1px solid var(--poudre);
+    border-radius: 4px;
+    background: white;
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    color: var(--marron);
+    cursor: pointer;
+  }
+  .toolbar select:focus { outline: none; border-color: var(--rose); }
+  .toolbar-spacer { flex: 1; }
+  .toolbar-count {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--rose);
+  }
+
+  /* Badge marge sur cartes */
+  .margin-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 7px;
+    border-radius: 100px;
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+    margin-top: 3px;
+    white-space: nowrap;
+  }
+  .margin-badge.good { background: rgba(150,138,66,0.14); color: var(--vert); }
+  .margin-badge.mid { background: rgba(229,183,179,0.35); color: var(--marron); }
+  .margin-badge.bad { background: rgba(191,100,109,0.16); color: var(--vieux-rose); }
+  .margin-spark {
+    display: flex;
+    gap: 2px;
+    align-items: flex-end;
+    height: 14px;
+    margin-top: 4px;
+  }
+  .margin-spark .bar {
+    width: 5px;
+    background: var(--poudre);
+    border-radius: 1px 1px 0 0;
+    min-height: 2px;
+    transition: background 0.15s;
+  }
+  .margin-spark .bar.good { background: var(--vert); }
+  .margin-spark .bar.mid { background: var(--rose); }
+  .margin-spark .bar.bad { background: var(--vieux-rose); }
+
+  /* Card select checkbox overlay (bulk) */
+  .product-card .card-select {
+    position: absolute;
+    top: 6px; left: 6px;
+    width: 18px; height: 18px;
+    accent-color: var(--rose);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 3;
+    background: rgba(255,255,255,0.85);
+    border-radius: 3px;
+  }
+  .product-card:hover .card-select,
+  .product-card.selected .card-select,
+  body.bulk-mode .product-card .card-select { opacity: 1; }
+  .product-card.selected {
+    outline: 2px solid var(--rose);
+    outline-offset: -2px;
+  }
+
+  /* Bulk bar */
+  .bulk-bar {
+    position: fixed;
+    bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(120px);
+    background: var(--marron);
+    color: var(--blanc);
+    border-radius: 100px;
+    padding: 10px 14px 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 18px 40px rgba(57,45,49,0.35);
+    z-index: 55;
+    transition: transform 0.25s cubic-bezier(.2,.8,.2,1);
+    font-family: var(--sans);
+    font-size: 0.76rem;
+  }
+  .bulk-bar.show { transform: translateX(-50%) translateY(0); }
+  .bulk-bar strong {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--poudre);
+    font-weight: 500;
+    margin-right: 4px;
+  }
+  .bulk-bar .bulk-btn {
+    padding: 6px 12px;
+    border: 1px solid rgba(229,183,179,0.35);
+    background: transparent;
+    color: var(--blanc);
+    border-radius: 100px;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--sans);
+  }
+  .bulk-bar .bulk-btn:hover { background: var(--poudre); color: var(--marron); border-color: var(--poudre); }
+  .bulk-bar .bulk-btn.danger:hover { background: var(--vieux-rose); border-color: var(--vieux-rose); color: var(--blanc); }
+  .bulk-bar .bulk-close {
+    background: transparent;
+    border: 0;
+    color: var(--poudre);
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 2px 6px;
+    line-height: 1;
+  }
+  .bulk-bar .bulk-close:hover { color: var(--blanc); }
+
+  /* Required fields marker */
+  .field--required .field-label::after {
+    content: '·';
+    color: var(--rose);
+    font-weight: 700;
+    font-size: 1.2em;
+    margin-left: 2px;
+    line-height: 0;
+    vertical-align: middle;
+  }
+
+  /* Completion score */
+  .completion {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 14px;
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    color: var(--marron);
+    letter-spacing: 0.04em;
+  }
+  .completion-track {
+    width: 90px;
+    height: 4px;
+    background: var(--blanc);
+    border-radius: 100px;
+    overflow: hidden;
+    border: 1px solid var(--poudre);
+  }
+  .completion-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--vieux-rose), var(--vert));
+    border-radius: 100px;
+    transition: width 0.3s;
+  }
+  .completion-fill.low { background: var(--vieux-rose); }
+  .completion-fill.mid { background: var(--rose); }
+  .completion-fill.high { background: var(--vert); }
+  .completion-pct { font-variant-numeric: tabular-nums; color: var(--rose); font-weight: 500; }
+
+  /* Draft badge in modal foot */
+  .draft-badge {
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    color: var(--vieux-rose);
+    padding: 4px 10px;
+    border: 1px dashed var(--vieux-rose);
+    border-radius: 100px;
+    background: rgba(191,100,109,0.06);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .draft-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--vieux-rose);
+    animation: draft-pulse 1.6s infinite;
+  }
+  @keyframes draft-pulse {
+    0%,100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  /* Custom dialog (confirm/alert) */
+  dialog.mf-dialog {
+    border: 0;
+    padding: 0;
+    border-radius: 8px;
+    background: var(--blanc);
+    box-shadow: 0 40px 80px rgba(57,45,49,0.35);
+    max-width: 420px;
+    width: 90vw;
+    font-family: var(--sans);
+    color: var(--marron);
+  }
+  dialog.mf-dialog::backdrop {
+    background: rgba(57,45,49,0.55);
+    backdrop-filter: blur(3px);
+  }
+  .mf-dialog-head {
+    padding: 20px 22px 10px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--rose);
+    font-weight: 500;
+  }
+  .mf-dialog-body {
+    padding: 0 22px 18px;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--marron);
+  }
+  .mf-dialog-foot {
+    padding: 14px 18px;
+    background: white;
+    border-top: 1px solid var(--poudre);
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+  .mf-dialog-foot .btn {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 9px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid var(--poudre);
+    background: white;
+    color: var(--marron);
+    transition: all 0.15s;
+  }
+  .mf-dialog-foot .btn:hover { background: var(--blanc); }
+  .mf-dialog-foot .btn.primary {
+    background: var(--rose);
+    color: var(--blanc);
+    border-color: var(--rose);
+  }
+  .mf-dialog-foot .btn.primary:hover { background: var(--marron); border-color: var(--marron); }
+  .mf-dialog-foot .btn.danger {
+    background: var(--vieux-rose);
+    color: var(--blanc);
+    border-color: var(--vieux-rose);
+  }
+  .mf-dialog-foot .btn.danger:hover { background: var(--rose); border-color: var(--rose); }
+
+  /* Toast undo button */
+  .toast { display: flex; align-items: center; gap: 12px; }
+  .toast-undo {
+    background: rgba(240,240,230,0.2);
+    border: 1px solid rgba(240,240,230,0.45);
+    color: var(--blanc);
+    font-family: var(--sans);
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .toast-undo:hover { background: var(--blanc); color: var(--marron); }
+  .toast.danger { background: var(--vieux-rose); }
+
+  /* EAN generate button (inline) */
+  .input-with-btn {
+    display: flex;
+    gap: 6px;
+    align-items: stretch;
+  }
+  .input-with-btn .input { flex: 1; }
+  .input-with-btn .gen-btn {
+    padding: 0 12px;
+    background: white;
+    border: 1px solid var(--poudre);
+    color: var(--rose);
+    font-family: var(--sans);
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .input-with-btn .gen-btn:hover { background: var(--rose); color: var(--blanc); border-color: var(--rose); }
+  .input-with-btn .gen-btn.invalid { color: var(--vieux-rose); border-color: var(--vieux-rose); }
+
+  /* Margin live table in Tarifs panel */
+  .margin-live {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 8px 16px;
+    font-size: 0.84rem;
+    align-items: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .margin-live-header {
+    font-size: 0.64rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--vert);
+    opacity: 0.8;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed var(--poudre);
+  }
+  .margin-live-cell {
+    padding: 6px 0;
+    border-bottom: 1px dashed rgba(229,183,179,0.4);
+  }
+  .margin-live-cell:nth-last-child(-n+4) { border-bottom: 0; }
+  .margin-live-cell strong {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--rose);
+    font-weight: 500;
+    display: block;
+  }
+  .margin-live-cell.pct-good { color: var(--vert); font-weight: 500; }
+  .margin-live-cell.pct-mid { color: var(--marron); }
+  .margin-live-cell.pct-bad { color: var(--vieux-rose); font-weight: 500; }
+
+  /* Sidebar density */
+  .side-stat-row.clickable { cursor: pointer; }
+  .side-stat-row.clickable:hover strong { color: var(--vieux-rose); }
+  .side-stat-row.active strong { color: var(--vieux-rose); text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -931,7 +1406,16 @@
     <span class="brand-maison">Maison</span>
     <span class="brand-name">Félicien</span>
     <span class="brand-sub">· Catalogue Builder</span>
-    <span class="sync-dot sync-busy" id="sync-dot" title="État de synchronisation Supabase"></span>
+    <span class="sync-dot sync-busy" id="sync-dot" title="État de synchronisation Supabase" aria-label="État Supabase"></span>
+    <div class="sync-pop" id="sync-pop" role="status" aria-live="polite">
+      <strong>Synchronisation</strong>
+      <div class="sync-row"><span>État</span><span id="sync-pop-state">…</span></div>
+      <div class="sync-row"><span>Dernière sync</span><span id="sync-pop-when">—</span></div>
+      <div class="sync-row"><span>Latence</span><span id="sync-pop-latency">—</span></div>
+    </div>
+  </div>
+  <div class="topbar-search">
+    <input type="search" id="topbar-search" placeholder="Rechercher produit, code, ingrédient…" autocomplete="off">
   </div>
   <div class="topbar-actions">
     <button class="btn" id="btn-cat-settings">Catégorie</button>
@@ -949,6 +1433,9 @@
   <aside class="sidebar">
     <div class="side-label">Catégories</div>
     <ul class="cat-list" id="cat-list"></ul>
+
+    <div class="side-label">Filtres rapides</div>
+    <div class="chip-row" id="filter-chips"></div>
 
     <div class="side-label">Synthèse</div>
     <div class="side-stats" id="side-stats"></div>
@@ -983,16 +1470,56 @@
       <div class="divider-line"></div>
     </div>
 
+    <div class="toolbar" id="toolbar">
+      <span class="toolbar-label">Trier</span>
+      <select id="sort-select">
+        <option value="code-asc">Code ↑</option>
+        <option value="code-desc">Code ↓</option>
+        <option value="nom-asc">Nom A→Z</option>
+        <option value="nom-desc">Nom Z→A</option>
+        <option value="ppc-asc">PPR croissant</option>
+        <option value="ppc-desc">PPR décroissant</option>
+        <option value="marge-asc">Marge croissante</option>
+        <option value="marge-desc">Marge décroissante</option>
+      </select>
+      <span class="toolbar-spacer"></span>
+      <span class="toolbar-count" id="toolbar-count">—</span>
+    </div>
+
     <div id="product-area"></div>
   </main>
 </div>
+
+<!-- BULK BAR -->
+<div class="bulk-bar" id="bulk-bar" role="region" aria-label="Actions en lot">
+  <strong id="bulk-count">0 sélectionné</strong>
+  <button class="bulk-btn" data-bulk="duplicate">Dupliquer</button>
+  <button class="bulk-btn" data-bulk="pause">Pause</button>
+  <button class="bulk-btn" data-bulk="activate">Activer</button>
+  <button class="bulk-btn" data-bulk="archive">Archiver</button>
+  <button class="bulk-btn danger" data-bulk="delete">Supprimer</button>
+  <button class="bulk-close" id="bulk-close" title="Désélectionner tout">×</button>
+</div>
+
+<!-- CUSTOM DIALOG (confirm/alert) -->
+<dialog class="mf-dialog" id="mf-dialog">
+  <div class="mf-dialog-head" id="mf-dialog-title">Confirmer</div>
+  <div class="mf-dialog-body" id="mf-dialog-body">—</div>
+  <div class="mf-dialog-foot" id="mf-dialog-foot"></div>
+</dialog>
 
 <!-- MODAL ÉDITION PRODUIT -->
 <div class="modal-backdrop" id="modal">
   <div class="modal">
     <div class="modal-head">
-      <div class="modal-title" id="modal-title">Nouveau produit</div>
-      <button class="modal-close" id="modal-close">×</button>
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0;">
+        <div class="modal-title" id="modal-title">Nouveau produit</div>
+        <div class="completion" id="completion-indicator" title="Complétion de la fiche" aria-label="Score de complétion">
+          <div class="completion-track"><div class="completion-fill" id="completion-fill" style="width:0%"></div></div>
+          <span class="completion-pct" id="completion-pct">0%</span>
+        </div>
+      </div>
+      <button class="modal-close" id="modal-close" aria-label="Fermer">×</button>
     </div>
 
     <div class="tabs">
@@ -1023,9 +1550,9 @@
               </select>
             </div>
           </div>
-          <div class="field">
+          <div class="field field--required">
             <div class="field-label">Nom du produit</div>
-            <input type="text" class="input" id="f-nom" placeholder="Ex : Cub'Cake Chocolat Noir 72%">
+            <input type="text" class="input" id="f-nom" placeholder="Ex : Cub'Cake Chocolat Noir 72%" required>
           </div>
           <div class="field">
             <div class="field-label">Sous-titre · baseline</div>
@@ -1074,13 +1601,13 @@
 
         <div class="card-section">
           <div class="card-section-title">Composition</div>
-          <div class="field">
+          <div class="field field--required">
             <div class="field-label">Ingrédients</div>
-            <textarea class="textarea" id="f-ingredients" placeholder="Farine de blé T65, beurre AOP Poitou-Charentes, sucre de canne bio, chocolat noir 72% Équateur, œufs frais de poules élevées en plein air, levure chimique, sel de Guérande."></textarea>
+            <textarea class="textarea" id="f-ingredients" placeholder="Farine de blé T65, beurre AOP Poitou-Charentes, sucre de canne bio, chocolat noir 72% Équateur, œufs frais de poules élevées en plein air, levure chimique, sel de Guérande." required></textarea>
           </div>
-          <div class="field">
+          <div class="field field--required">
             <div class="field-label">Allergènes majeurs</div>
-            <input type="text" class="input" id="f-allergenes" placeholder="Gluten · œufs · lait · fruits à coque">
+            <input type="text" class="input" id="f-allergenes" placeholder="Gluten · œufs · lait · fruits à coque" required>
           </div>
           <div class="field">
             <div class="field-label">Origine tracée · signature</div>
@@ -1175,8 +1702,11 @@
           <div class="card-section-title">Codification</div>
           <div class="row cols-2">
             <div class="field">
-              <div class="field-label">EAN / GTIN 13 <span class="field-hint">optionnel</span></div>
-              <input type="text" class="input" id="f-pack-ean" placeholder="3770xxxxxxxx">
+              <div class="field-label">EAN / GTIN 13 <span class="field-hint" id="ean-status">optionnel</span></div>
+              <div class="input-with-btn">
+                <input type="text" class="input" id="f-pack-ean" placeholder="3770xxxxxxxx" maxlength="13" inputmode="numeric">
+                <button type="button" class="gen-btn" id="btn-gen-ean" title="Générer un EAN-13 valide">Générer</button>
+              </div>
             </div>
             <div class="field">
               <div class="field-label">Code interne / SKU</div>
@@ -1209,9 +1739,9 @@
               <div class="field-label">Coût de revient HT <span class="field-hint">€ / pack</span></div>
               <input type="number" step="0.01" class="input" id="f-cost" placeholder="0.00">
             </div>
-            <div class="field">
+            <div class="field field--required">
               <div class="field-label">PPR (prix public) TTC <span class="field-hint">€ / pack</span></div>
-              <input type="number" step="0.01" class="input" id="f-ppc" placeholder="0.00">
+              <input type="number" step="0.01" class="input" id="f-ppc" placeholder="0.00" required>
             </div>
           </div>
         </div>
@@ -1336,16 +1866,16 @@
         </div>
       </div>
 
-      <div class="preview-box">
-        <div class="preview-label">Aperçu</div>
-        <div class="preview-content" id="preview-name">—</div>
-        <div class="preview-desc" id="preview-desc"></div>
+      <div class="preview-box" id="live-preview-box">
+        <div class="preview-label">Aperçu carte boutique · temps réel</div>
+        <div id="live-preview-card"></div>
       </div>
     </div>
 
     <div class="modal-foot">
       <div class="modal-foot-left">
         <button class="btn btn-danger" id="btn-delete" style="display:none;">Supprimer</button>
+        <span class="draft-badge" id="draft-badge" style="display:none;">Brouillon restauré</span>
       </div>
       <div class="modal-foot-right">
         <button class="btn btn-ghost" id="btn-cancel">Annuler</button>
@@ -1785,11 +2315,47 @@ function recomputeAllNonOverridden(s) {
 }
 
 // ---- Sync indicator ----
+let _syncStartedAt = null;
 function setSyncStatus(status) {
   const dot = document.getElementById('sync-dot');
   if (!dot) return;
   dot.className = 'sync-dot sync-' + status;
+  if (status === 'busy') {
+    _syncStartedAt = performance.now();
+    lastSync.state = 'busy';
+  } else {
+    if (_syncStartedAt !== null) {
+      lastSync.latency = Math.round(performance.now() - _syncStartedAt);
+      _syncStartedAt = null;
+    }
+    lastSync.state = status;
+    if (status === 'ok') lastSync.at = new Date();
+  }
+  updateSyncPop();
 }
+function fmtRelative(d) {
+  if (!d) return '—';
+  const s = Math.round((Date.now() - d.getTime()) / 1000);
+  if (s < 5) return 'à l’instant';
+  if (s < 60) return `il y a ${s} s`;
+  const m = Math.round(s / 60);
+  if (m < 60) return `il y a ${m} min`;
+  const h = Math.round(m / 60);
+  return `il y a ${h} h`;
+}
+function updateSyncPop() {
+  const ps = document.getElementById('sync-pop-state');
+  const pw = document.getElementById('sync-pop-when');
+  const pl = document.getElementById('sync-pop-latency');
+  if (!ps) return;
+  const labels = { ok: 'Connecté', busy: 'Synchronisation…', err: 'Erreur', idle: '—' };
+  ps.textContent = labels[lastSync.state] || '—';
+  ps.style.color = lastSync.state === 'ok' ? 'var(--vert)' : (lastSync.state === 'err' ? 'var(--vieux-rose)' : 'var(--marron)');
+  pw.textContent = fmtRelative(lastSync.at);
+  pl.textContent = lastSync.latency != null ? `${lastSync.latency} ms` : '—';
+}
+// Refresh relative time every 15s
+setInterval(updateSyncPop, 15000);
 
 // ---- Remote ops ----
 async function fetchState() {
@@ -1872,6 +2438,18 @@ let currentCatCode = null;
 let editing = null;
 let editingCategorie = null;
 let session = null;
+
+// ---- V3.2 · vue (recherche/tri/filtres/bulk) ----
+const view = {
+  q: '',
+  sort: 'code-asc',
+  filters: { status: null, noPhoto: false, noPrice: false, lowMargin: false, needsInfo: false }
+};
+const selected = new Set(); // codes sélectionnés pour bulk
+const undoStack = []; // { type, data, at }
+let lastSync = { at: null, latency: null, state: 'idle' };
+let autosaveTimer = null;
+let currentDraftCode = null;
 
 // =========================================
 // SEED DATA (données démo)
@@ -1998,6 +2576,271 @@ const SEED = [
 ];
 
 // =========================================
+// V3.2 HELPERS — marge, complétion, EAN, dialog, search/sort/filter, bulk, autosave
+// =========================================
+
+function computeMarginPct(p) {
+  // Marge sur prix grossiste (canal le plus représentatif du revenu B2B)
+  if (!p || !p.cost || !p.pxGrossiste) return null;
+  if (p.pxGrossiste <= 0) return null;
+  return ((p.pxGrossiste - p.cost) / p.pxGrossiste) * 100;
+}
+
+function marginBadgeClass(pct) {
+  if (pct === null || pct === undefined) return null;
+  if (pct >= 40) return 'good';
+  if (pct >= 30) return 'mid';
+  return 'bad';
+}
+
+function computeCompletion(p) {
+  // Pondération pensée catalogue distributeur. Total = 100.
+  if (!p) return 0;
+  const weights = {
+    nom: 8,
+    sousTitre: 4,
+    descCourte: 10,
+    descLongue: 8,
+    ingredients: 12,
+    allergenes: 10,
+    origine: 6,
+    gout: 4,
+    tags: 4,
+    photo: 14,
+    ppc: 10,
+    cost: 5,
+    packPoids: 5
+  };
+  let score = 0;
+  Object.entries(weights).forEach(([k, w]) => {
+    const v = p[k];
+    const filled = (typeof v === 'string') ? v.trim().length > 0 : (v !== null && v !== undefined && v !== 0);
+    if (filled) score += w;
+  });
+  return Math.min(100, Math.round(score));
+}
+
+function updateCompletionIndicator(p) {
+  const fill = document.getElementById('completion-fill');
+  const pct = document.getElementById('completion-pct');
+  if (!fill || !pct) return;
+  const s = computeCompletion(p);
+  fill.style.width = s + '%';
+  fill.className = 'completion-fill ' + (s < 40 ? 'low' : s < 75 ? 'mid' : 'high');
+  pct.textContent = s + ' %';
+}
+
+// ---- EAN-13 (checksum mod-10) ----
+function eanChecksum(twelve) {
+  // twelve = 12 chiffres, retourne la 13e (contrôle)
+  const d = twelve.split('').map(Number);
+  let sum = 0;
+  for (let i = 0; i < 12; i++) sum += d[i] * (i % 2 === 0 ? 1 : 3);
+  return (10 - (sum % 10)) % 10;
+}
+function isValidEAN13(s) {
+  if (!/^\d{13}$/.test(s)) return false;
+  return eanChecksum(s.slice(0, 12)) === Number(s[12]);
+}
+function generateEAN13() {
+  // Préfixe 3770 = fabricant FR, 8 chiffres aléatoires, checksum
+  const prefix = '3770';
+  let body = '';
+  for (let i = 0; i < 8; i++) body += Math.floor(Math.random() * 10);
+  const twelve = prefix + body;
+  return twelve + eanChecksum(twelve);
+}
+
+// ---- Custom dialog (remplace confirm/alert natifs) ----
+function mfDialog({ title, body, actions }) {
+  return new Promise(resolve => {
+    const dlg = document.getElementById('mf-dialog');
+    const t = document.getElementById('mf-dialog-title');
+    const b = document.getElementById('mf-dialog-body');
+    const f = document.getElementById('mf-dialog-foot');
+    t.textContent = title || 'Confirmer';
+    b.innerHTML = body || '';
+    f.innerHTML = '';
+    (actions || [{ label: 'OK', value: true, primary: true }]).forEach(a => {
+      const btn = document.createElement('button');
+      btn.className = 'btn' + (a.primary ? ' primary' : '') + (a.danger ? ' danger' : '');
+      btn.textContent = a.label;
+      btn.onclick = () => { dlg.close(); resolve(a.value); };
+      f.appendChild(btn);
+    });
+    dlg.returnValue = '';
+    dlg.addEventListener('cancel', function onCancel(e) {
+      dlg.removeEventListener('cancel', onCancel);
+      resolve(false);
+    }, { once: true });
+    if (typeof dlg.showModal === 'function') dlg.showModal();
+    else dlg.setAttribute('open', '');
+  });
+}
+function mfConfirm(body, { title = 'Confirmer', danger = false, okLabel = 'Confirmer', cancelLabel = 'Annuler' } = {}) {
+  return mfDialog({
+    title, body,
+    actions: [
+      { label: cancelLabel, value: false },
+      { label: okLabel, value: true, primary: !danger, danger }
+    ]
+  });
+}
+function mfAlert(body, { title = 'Information' } = {}) {
+  return mfDialog({ title, body, actions: [{ label: 'OK', value: true, primary: true }] });
+}
+
+// ---- Search + sort + filters ----
+function norm(s) { return (s || '').toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+function productMatchesQuery(p, q) {
+  if (!q) return true;
+  const qn = norm(q);
+  const hay = norm([p.nom, p.code, p.sousTitre, p.origine, p.ingredients, p.tags, p.gout].filter(Boolean).join(' · '));
+  return hay.includes(qn);
+}
+function productMatchesFilters(p) {
+  const f = view.filters;
+  if (f.status && p.statut !== f.status) return false;
+  if (f.noPhoto && p.photo) return false;
+  if (f.noPrice && p.pxGrossiste && p.pxGrossiste > 0) return false;
+  if (f.lowMargin) {
+    const m = computeMarginPct(p);
+    if (m === null || m >= 30) return false;
+  }
+  if (f.needsInfo && computeCompletion(p) >= 60) return false;
+  return true;
+}
+function sortProduits(arr) {
+  const s = view.sort;
+  const by = (getter, dir) => (a, b) => {
+    const va = getter(a), vb = getter(b);
+    if (va === vb) return 0;
+    if (va === null || va === undefined) return 1;
+    if (vb === null || vb === undefined) return -1;
+    return (va > vb ? 1 : -1) * (dir === 'asc' ? 1 : -1);
+  };
+  const [key, dir] = s.split('-');
+  if (key === 'code') arr.sort(by(p => p.code, dir));
+  else if (key === 'nom') arr.sort(by(p => norm(p.nom), dir));
+  else if (key === 'ppc') arr.sort(by(p => p.ppc || 0, dir));
+  else if (key === 'marge') arr.sort(by(p => computeMarginPct(p) ?? -9999, dir));
+  return arr;
+}
+
+// ---- Bulk + undo ----
+function toggleSelect(code) {
+  if (selected.has(code)) selected.delete(code);
+  else selected.add(code);
+  updateBulkBar();
+  const card = document.querySelector(`.product-card[data-code="${code}"]`);
+  if (card) card.classList.toggle('selected', selected.has(code));
+  const cb = document.querySelector(`.card-select[data-code="${code}"]`);
+  if (cb) cb.checked = selected.has(code);
+}
+function clearSelection() {
+  selected.clear();
+  document.querySelectorAll('.product-card.selected').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('.card-select').forEach(c => c.checked = false);
+  updateBulkBar();
+}
+function updateBulkBar() {
+  const bar = document.getElementById('bulk-bar');
+  const c = document.getElementById('bulk-count');
+  if (!bar) return;
+  if (selected.size > 0) {
+    bar.classList.add('show');
+    c.textContent = `${selected.size} sélectionné${selected.size > 1 ? 's' : ''}`;
+  } else {
+    bar.classList.remove('show');
+  }
+}
+
+async function bulkAction(action) {
+  if (!selected.size) return;
+  const targets = state.produits.filter(p => selected.has(p.code));
+  if (action === 'duplicate') {
+    const clones = [];
+    for (const p of targets) {
+      const clone = { ...p };
+      delete clone.id;
+      clone.code = generateCode(clone.categorie);
+      clone.nom = clone.nom + ' (copie)';
+      clone.statut = 'pause';
+      clone.packSKU = clone.code;
+      clones.push(clone);
+    }
+    try {
+      await batchUpsertProduitsRemote(clones);
+      const fresh = await fetchState(); state = fresh;
+      clearSelection(); render();
+      showToast(`${clones.length} produit${clones.length>1?'s':''} dupliqué${clones.length>1?'s':''}`);
+    } catch (err) { remoteError(err); }
+    return;
+  }
+  if (action === 'pause' || action === 'activate' || action === 'archive') {
+    const stat = action === 'pause' ? 'pause' : (action === 'activate' ? 'actif' : 'archive');
+    const patched = targets.map(p => ({ ...p, statut: stat }));
+    try {
+      await batchUpsertProduitsRemote(patched);
+      patched.forEach(p => {
+        const i = state.produits.findIndex(x => x.code === p.code);
+        if (i >= 0) state.produits[i] = { ...state.produits[i], statut: stat };
+      });
+      clearSelection(); render();
+      showToast(`${targets.length} produit${targets.length>1?'s':''} · ${stat}`);
+    } catch (err) { remoteError(err); }
+    return;
+  }
+  if (action === 'delete') {
+    const ok = await mfConfirm(
+      `Supprimer définitivement ${targets.length} produit${targets.length>1?'s':''} ? Tu pourras annuler dans les 5 secondes.`,
+      { title: 'Suppression en lot', danger: true, okLabel: 'Supprimer' }
+    );
+    if (!ok) return;
+    const snapshot = targets.map(p => ({ ...p }));
+    try {
+      for (const p of targets) await deleteProduitRemote(p.id);
+      state.produits = state.produits.filter(p => !selected.has(p.code));
+      clearSelection(); render();
+      showToast(`${snapshot.length} supprimé${snapshot.length>1?'s':''}`, {
+        undo: async () => {
+          try {
+            await batchUpsertProduitsRemote(snapshot.map(p => { const c = { ...p }; delete c.id; return c; }));
+            const fresh = await fetchState(); state = fresh; render();
+            showToast('Annulé · produits restaurés');
+          } catch (err) { remoteError(err); }
+        }
+      });
+    } catch (err) { remoteError(err); }
+  }
+}
+
+// ---- Autosave draft (localStorage) ----
+const DRAFT_KEY = 'mf-draft-v1-';
+function saveDraft(code, data) {
+  if (!code) return;
+  try {
+    localStorage.setItem(DRAFT_KEY + code, JSON.stringify({ at: Date.now(), data }));
+  } catch (e) { /* quota, skip */ }
+}
+function loadDraft(code) {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY + code);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch (e) { return null; }
+}
+function clearDraft(code) {
+  try { localStorage.removeItem(DRAFT_KEY + code); } catch (e) {}
+}
+function draftIsDifferent(draft, current) {
+  if (!draft || !current) return false;
+  // Ne compare que les champs éditables
+  const keys = ['nom','sousTitre','descCourte','descLongue','rationnel','ingredients','allergenes','origine','recette','tags','gout','ppc','cost','pxGrossiste','pxAgent','pxEpicier','pxPlateforme','packEAN','packSKU','notesLog'];
+  return keys.some(k => (draft[k] || '') !== (current[k] || ''));
+}
+
+// =========================================
 // RENDER
 // =========================================
 
@@ -2021,19 +2864,75 @@ function renderSidebar() {
     list.appendChild(li);
   });
 
+  renderFilterChips();
+
   // Stats
   const total = state.produits.length;
   const actifs = state.produits.filter(p => p.statut === 'actif').length;
   const enPause = state.produits.filter(p => p.statut === 'pause').length;
   const sansPhoto = state.produits.filter(p => !p.photo).length;
   const sansPrixGross = state.produits.filter(p => !p.pxGrossiste || p.pxGrossiste === 0).length;
+  const lowMargin = state.produits.filter(p => {
+    const m = computeMarginPct(p);
+    return m !== null && m < 30;
+  }).length;
+  const f = view.filters;
   document.getElementById('side-stats').innerHTML = `
     <div class="side-stat-row"><span>Produits total</span><strong>${total}</strong></div>
-    <div class="side-stat-row"><span>Actifs</span><strong>${actifs}</strong></div>
-    <div class="side-stat-row"><span>En pause</span><strong>${enPause}</strong></div>
-    <div class="side-stat-row"><span>Sans photo</span><strong>${sansPhoto}</strong></div>
-    <div class="side-stat-row"><span>Sans prix gross.</span><strong>${sansPrixGross}</strong></div>
+    <div class="side-stat-row clickable${f.status==='actif'?' active':''}" data-stat-filter="status-actif"><span>Actifs</span><strong>${actifs}</strong></div>
+    <div class="side-stat-row clickable${f.status==='pause'?' active':''}" data-stat-filter="status-pause"><span>En pause</span><strong>${enPause}</strong></div>
+    <div class="side-stat-row clickable${f.noPhoto?' active':''}" data-stat-filter="noPhoto"><span>Sans photo</span><strong>${sansPhoto}</strong></div>
+    <div class="side-stat-row clickable${f.noPrice?' active':''}" data-stat-filter="noPrice"><span>Sans prix gross.</span><strong>${sansPrixGross}</strong></div>
+    <div class="side-stat-row clickable${f.lowMargin?' active':''}" data-stat-filter="lowMargin"><span>Marge &lt; 30 %</span><strong>${lowMargin}</strong></div>
   `;
+  document.querySelectorAll('[data-stat-filter]').forEach(row => {
+    row.onclick = () => {
+      const key = row.dataset.statFilter;
+      if (key.startsWith('status-')) {
+        const val = key.split('-')[1];
+        view.filters.status = view.filters.status === val ? null : val;
+      } else {
+        view.filters[key] = !view.filters[key];
+      }
+      render();
+    };
+  });
+}
+
+function renderFilterChips() {
+  const host = document.getElementById('filter-chips');
+  if (!host) return;
+  const f = view.filters;
+  const total = state.produits.length;
+  const cActif = state.produits.filter(p => p.statut === 'actif').length;
+  const cPause = state.produits.filter(p => p.statut === 'pause').length;
+  const cNoPhoto = state.produits.filter(p => !p.photo).length;
+  const cNoPrice = state.produits.filter(p => !p.pxGrossiste || p.pxGrossiste === 0).length;
+  const cLowMarg = state.produits.filter(p => { const m = computeMarginPct(p); return m !== null && m < 30; }).length;
+  const cNeedsInfo = state.produits.filter(p => computeCompletion(p) < 60).length;
+  const chips = [
+    { key: 'status-actif', label: 'Actifs', count: cActif, on: f.status === 'actif' },
+    { key: 'status-pause', label: 'En pause', count: cPause, on: f.status === 'pause' },
+    { key: 'noPhoto', label: 'Sans photo', count: cNoPhoto, on: f.noPhoto },
+    { key: 'noPrice', label: 'Sans prix', count: cNoPrice, on: f.noPrice },
+    { key: 'lowMargin', label: 'Marge < 30 %', count: cLowMarg, on: f.lowMargin },
+    { key: 'needsInfo', label: 'À compléter', count: cNeedsInfo, on: f.needsInfo }
+  ];
+  host.innerHTML = chips.map(c =>
+    `<button class="chip${c.on ? ' on' : ''}" data-chip="${c.key}">${c.label}<span class="chip-count">${c.count}</span></button>`
+  ).join('');
+  host.querySelectorAll('.chip').forEach(ch => {
+    ch.onclick = () => {
+      const key = ch.dataset.chip;
+      if (key.startsWith('status-')) {
+        const v = key.split('-')[1];
+        f.status = f.status === v ? null : v;
+      } else {
+        f[key] = !f[key];
+      }
+      render();
+    };
+  });
 }
 
 function fmtEuro(n) {
@@ -2067,6 +2966,18 @@ function renderMain() {
   document.getElementById('cat-subtitle').innerHTML = statsParts.join(' ');
 
   const area = document.getElementById('product-area');
+  const countEl = document.getElementById('toolbar-count');
+
+  // Application search / filters / tri
+  let visibles = produits.filter(p => productMatchesQuery(p, view.q) && productMatchesFilters(p));
+  sortProduits(visibles);
+
+  if (countEl) {
+    const tot = produits.length;
+    countEl.textContent = (visibles.length === tot)
+      ? `${tot} produit${tot>1?'s':''}`
+      : `${visibles.length} / ${tot} produit${tot>1?'s':''}`;
+  }
 
   if (produits.length === 0) {
     area.innerHTML = `
@@ -2077,18 +2988,34 @@ function renderMain() {
     return;
   }
 
+  if (visibles.length === 0) {
+    area.innerHTML = `
+      <div class="empty-state">
+        <p>Aucun produit ne correspond à la recherche ou aux filtres.</p>
+        <button class="btn btn-ghost" id="btn-clear-filters" style="color:var(--marron);background:white;border-color:var(--poudre);">Effacer les filtres</button>
+      </div>`;
+    const cf = document.getElementById('btn-clear-filters');
+    if (cf) cf.onclick = () => {
+      view.q = '';
+      const ts = document.getElementById('topbar-search'); if (ts) ts.value = '';
+      view.filters = { status: null, noPhoto: false, noPrice: false, lowMargin: false, needsInfo: false };
+      render();
+    };
+    return;
+  }
+
   const grid = document.createElement('div');
   grid.className = 'product-grid';
 
-  produits.forEach(p => {
+  visibles.forEach(p => {
     const idx = state.produits.indexOf(p);
     const pack = getEffectivePack(p, cat);
     const card = document.createElement('div');
-    card.className = 'product-card';
+    card.className = 'product-card' + (selected.has(p.code) ? ' selected' : '');
+    card.dataset.code = p.code;
 
     const statusDot = p.statut !== 'actif' ? `<span class="status-dot ${p.statut}" title="${p.statut}"></span>` : `<span class="status-dot" title="actif"></span>`;
 
-    // Origine / sous-titre : priorité à sousTitre (plus court), fallback origine
     const originLine = p.sousTitre || p.origine || '';
 
     // Pack info : poids · MOQ · DLC
@@ -2100,6 +3027,26 @@ function renderMain() {
       ? `<div class="p-pack">${packParts.join('<span class="sep">·</span>')}</div>`
       : '';
 
+    // Badge marge + sparkline 4 canaux
+    const margePct = computeMarginPct(p);
+    const badgeCls = marginBadgeClass(margePct);
+    const margeBadge = badgeCls
+      ? `<span class="margin-badge ${badgeCls}">Marge ${Math.round(margePct)} %</span>`
+      : '';
+
+    let spark = '';
+    if (p.ppc && p.ppc > 0 && p.cost) {
+      const canaux = [p.pxGrossiste, p.pxAgent, p.pxEpicier, p.pxPlateforme];
+      const maxV = Math.max(...canaux.filter(Boolean), 1);
+      spark = '<div class="margin-spark">' + canaux.map(v => {
+        if (!v) return '<span class="bar" style="height:2px;opacity:0.3"></span>';
+        const h = Math.max(2, Math.round((v / maxV) * 14));
+        const mPct = ((v - p.cost) / v) * 100;
+        const cls = mPct >= 40 ? 'good' : (mPct >= 30 ? 'mid' : 'bad');
+        return `<span class="bar ${cls}" style="height:${h}px" title="${fmtEuro(v)} € HT · ${Math.round(mPct)} %"></span>`;
+      }).join('') + '</div>';
+    }
+
     // Bloc prix : PPR + grossiste OU placeholder
     let priceBlock;
     if (p.ppc && p.ppc > 0) {
@@ -2110,9 +3057,10 @@ function renderMain() {
       priceBlock = `
         <div class="p-ppc">${ttc}<span class="p-ppc-cur">€ TTC</span></div>
         ${gross ? `<div class="p-channel">${gross}</div>` : ''}
+        ${margeBadge}
+        ${spark}
       `;
     } else if (cat.code === 'AV') {
-      // PLV souvent offerte — pas d'alerte
       priceBlock = `<div class="p-channel" style="opacity:0.5;">—</div>`;
     } else {
       priceBlock = `<div class="p-missing">⚠ PPR à définir</div>`;
@@ -2124,6 +3072,7 @@ function renderMain() {
     const thumbClass = p.photo ? 'product-thumb has-image' : 'product-thumb';
 
     card.innerHTML = `
+      <input type="checkbox" class="card-select" data-code="${p.code}" ${selected.has(p.code) ? 'checked' : ''} aria-label="Sélectionner ${p.nom}">
       <div class="${thumbClass}">
         ${thumbContent}
         ${statusDot}
@@ -2140,7 +3089,15 @@ function renderMain() {
         </div>
       </div>
     `;
-    card.onclick = () => openModal(idx);
+    // Checkbox bulk : ne pas ouvrir la modal
+    card.querySelector('.card-select').addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleSelect(p.code);
+    });
+    card.onclick = (e) => {
+      if (e.target.classList && e.target.classList.contains('card-select')) return;
+      openModal(idx);
+    };
     grid.appendChild(card);
   });
 
@@ -2246,17 +3203,8 @@ function openModal(idx) {
   fill('reprise', p.reprise);
   fill('notes-logistique', p.notesLog);
 
-  // Photo
-  const pz = document.getElementById('photo-zone');
-  const pzt = document.getElementById('photo-zone-text');
-  if (p.photo) {
-    pz.classList.add('has-image');
-    pz.innerHTML = `<input type="file" id="f-photo" accept="image/*" style="display:none"><img src="${p.photo}" alt=""><button class="remove-btn" type="button" onclick="removePhoto(event)">Retirer</button>`;
-  } else {
-    pz.classList.remove('has-image');
-    pz.innerHTML = `<input type="file" id="f-photo" accept="image/*" style="display:none"><div class="photo-zone-text" id="photo-zone-text">Glisser une photo ici ou cliquer pour sélectionner<br><span style="font-size:0.75rem;opacity:0.7;">JPG, PNG · max 2 Mo conseillé</span></div>`;
-  }
-  bindPhotoZone();
+  // Photo (URL Supabase Storage si présente, sinon vide)
+  renderPhotoZone(p.photo || null);
 
   // Preview init
   updatePreview();
@@ -2268,6 +3216,38 @@ function openModal(idx) {
 
   // Ajouter la nav prev/next en bas du panel actif
   renderPanelNav();
+
+  // V3.2 · score complétion + vérif EAN + draft restore
+  currentDraftCode = p.code;
+  updateCompletionIndicator(p);
+  validateEanField();
+  const draft = loadDraft(p.code);
+  const badge = document.getElementById('draft-badge');
+  if (badge) badge.style.display = 'none';
+  if (draft && !isNew && draftIsDifferent(draft.data, p)) {
+    setTimeout(async () => {
+      const ok = await mfConfirm(
+        `Un brouillon non enregistré existe pour ce produit (${fmtRelative(new Date(draft.at))}). Le restaurer ?`,
+        { title: 'Brouillon trouvé', okLabel: 'Restaurer' }
+      );
+      if (ok) {
+        const d = draft.data;
+        Object.entries({
+          'nom': d.nom, 'sous-titre': d.sousTitre, 'desc-courte': d.descCourte, 'desc-longue': d.descLongue,
+          'rationnel': d.rationnel, 'ingredients': d.ingredients, 'allergenes': d.allergenes,
+          'origine': d.origine, 'recette': d.recette, 'tags': d.tags, 'gout': d.gout,
+          'cost': d.cost, 'ppc': d.ppc, 'px-grossiste': d.pxGrossiste, 'px-agent': d.pxAgent,
+          'px-epicier': d.pxEpicier, 'px-plateforme': d.pxPlateforme,
+          'pack-ean': d.packEAN, 'pack-sku': d.packSKU, 'notes-logistique': d.notesLog
+        }).forEach(([k, v]) => { if (v !== undefined) fill(k, v); });
+        updatePreview(); updateMargins(); updateCompletionIndicator(collectForm()); validateEanField();
+        badge.style.display = '';
+        showToast('Brouillon restauré');
+      } else {
+        clearDraft(p.code);
+      }
+    }, 150);
+  }
 
   document.getElementById('modal').classList.add('open');
 }
@@ -2334,6 +3314,65 @@ function collectForm() {
 
 let currentPhoto = null;
 
+// --- V3.2 · Upload Supabase Storage + conversion WebP ---
+const PHOTO_BUCKET = 'catalogue-photos';
+const PHOTO_MAX_WIDTH = 1600; // redimensionnement côté client avant upload
+const PHOTO_WEBP_QUALITY = 0.85;
+
+function fileToImage(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+function imageToWebpBlob(img, maxWidth, quality) {
+  return new Promise((resolve, reject) => {
+    const ratio = img.naturalWidth > maxWidth ? maxWidth / img.naturalWidth : 1;
+    const w = Math.round(img.naturalWidth * ratio);
+    const h = Math.round(img.naturalHeight * ratio);
+    const canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, w, h);
+    canvas.toBlob(b => b ? resolve(b) : reject(new Error('toBlob failed')), 'image/webp', quality);
+  });
+}
+async function uploadPhotoToStorage(file, productCode) {
+  if (!productCode) throw new Error('Code produit manquant');
+  const img = await fileToImage(file);
+  const blob = await imageToWebpBlob(img, PHOTO_MAX_WIDTH, PHOTO_WEBP_QUALITY);
+  const ts = Date.now();
+  const path = `${productCode}/${ts}.webp`;
+  const { error } = await db.storage.from(PHOTO_BUCKET).upload(path, blob, {
+    contentType: 'image/webp',
+    upsert: true,
+    cacheControl: '31536000'
+  });
+  if (error) throw error;
+  const { data } = db.storage.from(PHOTO_BUCKET).getPublicUrl(path);
+  return { url: data.publicUrl, w: img.naturalWidth, h: img.naturalHeight, size: blob.size };
+}
+
+function renderPhotoZone(photoUrl) {
+  const zone = document.getElementById('photo-zone');
+  if (!zone) return;
+  if (photoUrl) {
+    zone.classList.add('has-image');
+    zone.innerHTML = `<input type="file" id="f-photo" accept="image/*" style="display:none"><img src="${photoUrl}" alt=""><button class="remove-btn" type="button" onclick="removePhoto(event)">Retirer</button>`;
+  } else {
+    zone.classList.remove('has-image');
+    zone.innerHTML = `<input type="file" id="f-photo" accept="image/*" style="display:none"><div class="photo-zone-text" id="photo-zone-text">Glisser une photo ici ou cliquer pour sélectionner<br><span style="font-size:0.75rem;opacity:0.7;">JPG, PNG, WebP · redim auto en WebP ≤ 1600 px</span></div>`;
+  }
+  bindPhotoZone();
+}
+
 function bindPhotoZone() {
   const zone = document.getElementById('photo-zone');
   const input = zone.querySelector('#f-photo');
@@ -2341,59 +3380,166 @@ function bindPhotoZone() {
     if (e.target.classList.contains('remove-btn')) return;
     input.click();
   };
-  input.onchange = (e) => {
+  zone.ondragover = (e) => { e.preventDefault(); zone.style.borderColor = 'var(--rose)'; };
+  zone.ondragleave = () => { zone.style.borderColor = ''; };
+  zone.ondrop = async (e) => {
+    e.preventDefault();
+    zone.style.borderColor = '';
+    const f = e.dataTransfer.files?.[0];
+    if (f) await handlePhotoUpload(f, zone);
+  };
+  input.onchange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      currentPhoto = ev.target.result;
-      zone.classList.add('has-image');
-      zone.innerHTML = `<input type="file" id="f-photo" accept="image/*" style="display:none"><img src="${currentPhoto}" alt=""><button class="remove-btn" type="button" onclick="removePhoto(event)">Retirer</button>`;
-      bindPhotoZone();
-    };
-    reader.readAsDataURL(file);
+    await handlePhotoUpload(file, zone);
   };
+}
+
+async function handlePhotoUpload(file, zone) {
+  if (!file.type.startsWith('image/')) {
+    showToast('Fichier non supporté (image attendue)', { danger: true });
+    return;
+  }
+  const code = getVal('code') || currentDraftCode;
+  if (!code) { showToast('Enregistrer un code produit avant d\'uploader', { danger: true }); return; }
+  // UI loading
+  zone.innerHTML = `<input type="file" id="f-photo" accept="image/*" style="display:none"><div class="photo-zone-text" style="padding:20px;"><em>Upload en cours…</em></div>`;
+  try {
+    const { url, w, h, size } = await uploadPhotoToStorage(file, code);
+    currentPhoto = url;
+    renderPhotoZone(url);
+    const kb = Math.round(size / 1024);
+    showToast(`Photo uploadée · ${w}×${h} · ${kb} KB`);
+    triggerAutosaveAndCompletion();
+  } catch (err) {
+    console.error('Upload error', err);
+    showToast('Erreur d\'upload : ' + (err.message || 'inconnue'), { danger: true });
+    renderPhotoZone(currentPhoto);
+  }
 }
 
 function removePhoto(e) {
   e.stopPropagation();
   currentPhoto = null;
-  const zone = document.getElementById('photo-zone');
-  zone.classList.remove('has-image');
-  zone.innerHTML = `<input type="file" id="f-photo" accept="image/*" style="display:none"><div class="photo-zone-text">Glisser une photo ici ou cliquer pour sélectionner<br><span style="font-size:0.75rem;opacity:0.7;">JPG, PNG · max 2 Mo conseillé</span></div>`;
-  bindPhotoZone();
+  renderPhotoZone(null);
+  triggerAutosaveAndCompletion();
 }
 
 function updatePreview() {
-  const nom = getVal('nom') || '—';
-  const sous = getVal('sous-titre') || '';
-  const desc = getVal('desc-courte') || '';
-  document.getElementById('preview-name').textContent = nom + (sous ? ` · ` : '');
-  document.getElementById('preview-name').innerHTML = nom + (sous ? ` <span style="font-size:0.85rem;opacity:0.6;">· ${sous}</span>` : '');
-  document.getElementById('preview-desc').textContent = desc;
+  const host = document.getElementById('live-preview-card');
+  if (!host) return;
+  const code = getVal('code') || '—';
+  const nom = getVal('nom') || 'Sans nom';
+  const sous = getVal('sous-titre');
+  const origine = getVal('origine');
+  const descCourte = getVal('desc-courte');
+  const packPoids = getNum('pack-poids');
+  const packMOQ = getNum('pack-moq');
+  const packDLC = getNum('pack-dlc');
+  const ppc = getNum('ppc');
+  const cost = getNum('cost');
+  const pxGross = getNum('px-grossiste');
+  const pxAgent = getNum('px-agent');
+  const pxEpi = getNum('px-epicier');
+  const pxPlat = getNum('px-plateforme');
+  const statut = getVal('statut') || 'actif';
+  const packParts = [];
+  if (packPoids) packParts.push(`<span><strong>${packPoids} g</strong></span>`);
+  if (packMOQ) packParts.push(`<span>MOQ <strong>${packMOQ}</strong></span>`);
+  if (packDLC) packParts.push(`<span>DLC <strong>${packDLC} j</strong></span>`);
+  const packInfo = packParts.length ? `<div class="p-pack">${packParts.join('<span class="sep">·</span>')}</div>` : '';
+  let badge = '', spark = '';
+  if (cost && pxGross) {
+    const pct = ((pxGross - cost) / pxGross) * 100;
+    const cls = pct >= 40 ? 'good' : (pct >= 30 ? 'mid' : 'bad');
+    badge = `<span class="margin-badge ${cls}">Marge ${Math.round(pct)} %</span>`;
+  }
+  if (cost && ppc) {
+    const canaux = [pxGross, pxAgent, pxEpi, pxPlat];
+    const maxV = Math.max(...canaux.filter(Boolean), 1);
+    spark = '<div class="margin-spark">' + canaux.map(v => {
+      if (!v) return '<span class="bar" style="height:2px;opacity:0.3"></span>';
+      const h = Math.max(2, Math.round((v / maxV) * 14));
+      const mp = ((v - cost) / v) * 100;
+      const cls = mp >= 40 ? 'good' : (mp >= 30 ? 'mid' : 'bad');
+      return `<span class="bar ${cls}" style="height:${h}px"></span>`;
+    }).join('') + '</div>';
+  }
+  let priceBlock;
+  if (ppc && ppc > 0) {
+    priceBlock = `<div class="p-ppc">${fmtEuro(ppc)}<span class="p-ppc-cur">€ TTC</span></div>` +
+      (pxGross ? `<div class="p-channel"><span class="tag">Gross.</span>${fmtEuro(pxGross)} € HT</div>` : '') +
+      badge + spark;
+  } else {
+    priceBlock = `<div class="p-missing">⚠ PPR à définir</div>`;
+  }
+  const originLine = sous || origine || '';
+  const thumb = currentPhoto ? `<img src="${currentPhoto}" alt="${nom}">` : BOTANICAL_SVG;
+  const thumbClass = currentPhoto ? 'product-thumb has-image' : 'product-thumb';
+  const statusDotCls = statut === 'actif' ? '' : ' ' + statut;
+  host.innerHTML = `
+    <div class="product-card" style="cursor:default;margin-top:4px;">
+      <div class="${thumbClass}">
+        ${thumb}
+        <span class="status-dot${statusDotCls}"></span>
+        <span class="code-pill">${code}</span>
+      </div>
+      <div class="product-body">
+        <div class="body-main">
+          <div class="p-name">${nom}</div>
+          ${originLine ? `<div class="p-origin">${originLine}</div>` : ''}
+          ${packInfo}
+        </div>
+        <div class="body-price">${priceBlock}</div>
+      </div>
+    </div>
+    ${descCourte ? `<div style="font-family:var(--sans);font-size:0.78rem;color:var(--marron);opacity:0.72;margin-top:10px;line-height:1.5;">${descCourte}</div>` : ''}
+  `;
 }
 
 function updateMargins() {
   const cost = getNum('cost');
   const preview = document.getElementById('margin-preview');
+  if (!preview) return;
   if (!cost) {
-    preview.innerHTML = 'Renseigner le coût de revient pour voir les marges.';
+    preview.innerHTML = '<em style="opacity:0.6;">Renseigner le coût de revient pour voir les marges canal par canal.</em>';
     return;
   }
   const canals = [
     {label:'Grossiste', key:'px-grossiste'},
     {label:'Agent', key:'px-agent'},
-    {label:'Épicier direct', key:'px-epicier'},
-    {label:'Plateforme B2B', key:'px-plateforme'}
+    {label:'Épicier', key:'px-epicier'},
+    {label:'Plateforme', key:'px-plateforme'}
   ];
-  const html = canals.map(c => {
+  const ppc = getNum('ppc');
+  let html = '<div class="margin-live">' +
+    '<div class="margin-live-header">Canal</div>' +
+    '<div class="margin-live-header" style="text-align:right;">Prix HT</div>' +
+    '<div class="margin-live-header" style="text-align:right;">Marge €</div>' +
+    '<div class="margin-live-header" style="text-align:right;">Marge %</div>';
+  let flagLow = false;
+  canals.forEach(c => {
     const px = getNum(c.key);
-    if (!px) return `<div style="color:var(--marron);opacity:0.4;">• ${c.label} : — prix non renseigné</div>`;
+    if (!px) {
+      html += `<div class="margin-live-cell" style="opacity:0.4;"><strong>${c.label}</strong></div>` +
+              `<div class="margin-live-cell" style="text-align:right;opacity:0.4;">—</div>` +
+              `<div class="margin-live-cell" style="text-align:right;opacity:0.4;">—</div>` +
+              `<div class="margin-live-cell" style="text-align:right;opacity:0.4;">—</div>`;
+      return;
+    }
     const marge = px - cost;
-    const margePct = ((marge/px)*100).toFixed(0);
-    const color = marge < cost*0.3 ? '#BF646D' : (marge > cost ? '#968A42' : 'var(--marron)');
-    return `<div>• <strong>${c.label}</strong> : ${marge.toFixed(2)}€ de marge · <span style="color:${color};font-weight:500;">${margePct}%</span></div>`;
-  }).join('');
+    const pct = (marge / px) * 100;
+    const cls = pct >= 40 ? 'pct-good' : (pct >= 30 ? 'pct-mid' : 'pct-bad');
+    if (pct < 30) flagLow = true;
+    html += `<div class="margin-live-cell"><strong>${c.label}</strong>${ppc ? `<span style="font-size:0.7rem;opacity:0.55;">${c.label === 'Grossiste' ? 'coef ' + (ppc/px).toFixed(2) : ''}</span>` : ''}</div>` +
+            `<div class="margin-live-cell" style="text-align:right;">${px.toFixed(2)} €</div>` +
+            `<div class="margin-live-cell" style="text-align:right;">${marge.toFixed(2)} €</div>` +
+            `<div class="margin-live-cell ${cls}" style="text-align:right;">${pct.toFixed(0)} %</div>`;
+  });
+  html += '</div>';
+  if (flagLow) {
+    html += '<div style="margin-top:10px;padding:8px 12px;background:rgba(191,100,109,0.08);border-left:2px solid var(--vieux-rose);border-radius:3px;color:var(--vieux-rose);font-size:0.8rem;">Marge &lt; 30 % sur au moins un canal. Vérifier coût de revient ou revoir le PPR.</div>';
+  }
   preview.innerHTML = html;
 }
 
@@ -2511,7 +3657,8 @@ document.getElementById('btn-override-packaging').onclick = async () => {
 };
 
 document.getElementById('btn-revert-packaging').onclick = async () => {
-  if (!confirm("Revenir aux valeurs de la catégorie ? Les valeurs manuelles actuelles du produit seront écrasées.")) return;
+  const ok = await mfConfirm("Revenir aux valeurs de la catégorie ? Les valeurs manuelles actuelles du produit seront écrasées.", { title: 'Retour valeurs catégorie', danger: true, okLabel: 'Revenir' });
+  if (!ok) return;
   if (editing === -1) return;
   const p = state.produits[editing];
   const cat = state.categories.find(c => c.code === p.categorie);
@@ -2537,6 +3684,54 @@ document.getElementById('btn-revert-packaging').onclick = async () => {
 });
 ['cost','px-grossiste','px-agent','px-epicier','px-plateforme','ppc'].forEach(id => {
   document.getElementById('f-' + id).addEventListener('input', updateMargins);
+});
+
+// V3.2 · autosave + completion + EAN validation hook (écoute toute input modale)
+function validateEanField() {
+  const input = document.getElementById('f-pack-ean');
+  const status = document.getElementById('ean-status');
+  const btn = document.getElementById('btn-gen-ean');
+  if (!input) return;
+  const v = (input.value || '').trim();
+  if (!v) {
+    if (status) { status.textContent = 'optionnel'; status.style.color = ''; }
+    if (btn) btn.classList.remove('invalid');
+    return;
+  }
+  const ok = isValidEAN13(v);
+  if (status) {
+    status.textContent = ok ? 'EAN-13 valide' : 'EAN invalide';
+    status.style.color = ok ? 'var(--vert)' : 'var(--vieux-rose)';
+  }
+  if (btn) btn.classList.toggle('invalid', !ok);
+}
+document.getElementById('f-pack-ean').addEventListener('input', validateEanField);
+document.getElementById('btn-gen-ean').onclick = () => {
+  document.getElementById('f-pack-ean').value = generateEAN13();
+  validateEanField();
+  showToast('EAN-13 généré');
+  try { triggerAutosaveAndCompletion(); } catch(e) {}
+};
+
+// Score complétion live + autosave + preview
+function triggerAutosaveAndCompletion() {
+  const snapshot = collectForm();
+  updateCompletionIndicator(snapshot);
+  updatePreview();
+  if (!currentDraftCode) return;
+  clearTimeout(autosaveTimer);
+  autosaveTimer = setTimeout(() => {
+    saveDraft(currentDraftCode, snapshot);
+  }, 800);
+}
+// Un seul listener global sur la modal
+document.getElementById('modal').addEventListener('input', (e) => {
+  if (!e.target.matches('input, textarea, select')) return;
+  triggerAutosaveAndCompletion();
+});
+document.getElementById('modal').addEventListener('change', (e) => {
+  if (!e.target.matches('input, textarea, select')) return;
+  triggerAutosaveAndCompletion();
 });
 
 // Override checkbox : toggle readonly, recompute if re-enabling auto mode
@@ -2658,8 +3853,12 @@ document.querySelectorAll('.ai-btn').forEach(btn => {
 document.getElementById('btn-save').onclick = async () => {
   const p = collectForm();
   if (!p.nom || p.nom.trim() === '') {
-    showToast('Le nom est requis');
+    showToast('Le nom est requis', { danger: true });
     return;
+  }
+  if (p.packEAN && !isValidEAN13(p.packEAN)) {
+    const ok = await mfConfirm('L\'EAN saisi n\'est pas valide (checksum invalide). Enregistrer quand même ?', { title: 'EAN invalide', danger: true, okLabel: 'Enregistrer' });
+    if (!ok) return;
   }
   // Préserver l'id si édition
   if (editing !== -1) p.id = state.produits[editing]?.id;
@@ -2667,6 +3866,7 @@ document.getElementById('btn-save').onclick = async () => {
     const saved = await upsertProduitRemote(p);
     if (editing === -1) state.produits.push(saved);
     else state.produits[editing] = saved;
+    clearDraft(p.code);
     closeModal();
     render();
     showToast('Enregistré');
@@ -2676,14 +3876,30 @@ document.getElementById('btn-save').onclick = async () => {
 };
 
 document.getElementById('btn-delete').onclick = async () => {
-  if (!confirm('Supprimer définitivement ce produit ?')) return;
   const toDelete = state.produits[editing];
+  if (!toDelete) return;
+  const ok = await mfConfirm(
+    `Supprimer <strong>${toDelete.nom}</strong> (${toDelete.code}) ? Tu pourras annuler pendant 5 secondes.`,
+    { title: 'Supprimer ce produit ?', danger: true, okLabel: 'Supprimer' }
+  );
+  if (!ok) return;
+  const snapshot = { ...toDelete };
   try {
     await deleteProduitRemote(toDelete.id);
     state.produits.splice(editing, 1);
+    clearDraft(snapshot.code);
     closeModal();
     render();
-    showToast('Produit supprimé');
+    showToast('Produit supprimé', {
+      undo: async () => {
+        try {
+          const restore = { ...snapshot }; delete restore.id;
+          await batchUpsertProduitsRemote([restore]);
+          const fresh = await fetchState(); state = fresh; render();
+          showToast('Produit restauré');
+        } catch (err) { remoteError(err); }
+      }
+    });
   } catch (err) {
     remoteError(err);
   }
@@ -2695,6 +3911,8 @@ document.getElementById('modal-close').onclick = closeModal;
 function closeModal() {
   document.getElementById('modal').classList.remove('open');
   currentPhoto = null;
+  currentDraftCode = null;
+  clearTimeout(autosaveTimer);
 }
 
 document.getElementById('btn-new-product').onclick = () => {
@@ -2714,11 +3932,30 @@ window.openModal = function(idx) {
 // EXPORT / IMPORT
 // =========================================
 
-function showToast(msg) {
+let _toastTimer = null;
+function showToast(msg, opts = {}) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
+  t.classList.remove('danger');
+  if (opts.danger) t.classList.add('danger');
+  // Reconstruit contenu (message + éventuel bouton undo)
+  t.innerHTML = '';
+  const span = document.createElement('span');
+  span.textContent = msg;
+  t.appendChild(span);
+  if (typeof opts.undo === 'function') {
+    const btn = document.createElement('button');
+    btn.className = 'toast-undo';
+    btn.textContent = 'Annuler';
+    btn.onclick = () => {
+      clearTimeout(_toastTimer);
+      t.classList.remove('show');
+      opts.undo();
+    };
+    t.appendChild(btn);
+  }
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2400);
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => t.classList.remove('show'), opts.undo ? 5000 : 2400);
 }
 
 document.getElementById('btn-export-json').onclick = () => {
@@ -2772,7 +4009,8 @@ document.getElementById('file-import').onchange = (e) => {
 };
 
 document.getElementById('btn-reset').onclick = async () => {
-  if (!confirm('Supprimer TOUS les produits et remettre les coefs aux défauts ? Action irréversible.')) return;
+  const ok = await mfConfirm('Supprimer <strong>TOUS</strong> les produits et remettre les coefficients aux défauts ? Action irréversible.', { title: 'Réinitialiser la base', danger: true, okLabel: 'Réinitialiser' });
+  if (!ok) return;
   try {
     await deleteAllProduitsRemote();
     await updatePricingRemote(DEFAULT_COEFS);
@@ -2787,7 +4025,10 @@ document.getElementById('btn-reset').onclick = async () => {
 };
 
 document.getElementById('btn-seed').onclick = async () => {
-  if (state.produits.length > 0 && !confirm('Cela ajoute des données démo par dessus (skip si déjà existant). Continuer ?')) return;
+  if (state.produits.length > 0) {
+    const ok = await mfConfirm('Cela ajoute des données démo par dessus (les codes existants sont ignorés). Continuer ?', { title: 'Charger les données démo', okLabel: 'Continuer' });
+    if (!ok) return;
+  }
   try {
     const toAdd = [];
     SEED.forEach(s => {
@@ -2865,8 +4106,9 @@ document.getElementById('btn-pricing').onclick = openPricingModal;
 document.getElementById('modal-pricing-close').onclick = closePricingModal;
 document.getElementById('btn-pricing-cancel').onclick = closePricingModal;
 
-document.getElementById('btn-pricing-reset').onclick = () => {
-  if (!confirm('Réinitialiser les coefficients aux valeurs par défaut ? Les modifications en cours seront perdues.')) return;
+document.getElementById('btn-pricing-reset').onclick = async () => {
+  const ok = await mfConfirm('Réinitialiser les coefficients aux valeurs par défaut ? Les modifications en cours seront perdues.', { title: 'Réinitialiser les coefficients', okLabel: 'Réinitialiser' });
+  if (!ok) return;
   pricingDraft = JSON.parse(JSON.stringify(DEFAULT_COEFS));
   renderPricingGrid();
   showToast('Coefs remis aux défauts (pas encore appliqués)');
@@ -3127,6 +4369,54 @@ function generateAnkorstoreCSV() {
   showToast('CSV Ankorstore exporté');
 }
 
+// V3.2 · Topbar search + sort + sync popover + bulk bar bindings
+(function wireV32UI() {
+  // Search (debounce 120 ms)
+  const search = document.getElementById('topbar-search');
+  if (search) {
+    let st;
+    search.addEventListener('input', (e) => {
+      clearTimeout(st);
+      st = setTimeout(() => { view.q = e.target.value; render(); }, 120);
+    });
+    // Raccourci "/" pour focus
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        search.focus();
+      }
+      if (e.key === 'Escape' && document.activeElement === search) {
+        search.value = ''; view.q = ''; render(); search.blur();
+      }
+    });
+  }
+  // Sort select
+  const sortSel = document.getElementById('sort-select');
+  if (sortSel) {
+    sortSel.value = view.sort;
+    sortSel.addEventListener('change', (e) => { view.sort = e.target.value; render(); });
+  }
+  // Sync dot popover toggle
+  const dot = document.getElementById('sync-dot');
+  const pop = document.getElementById('sync-pop');
+  if (dot && pop) {
+    dot.addEventListener('click', (e) => {
+      e.stopPropagation();
+      pop.classList.toggle('open');
+      updateSyncPop();
+    });
+    document.addEventListener('click', (e) => {
+      if (!pop.contains(e.target) && e.target !== dot) pop.classList.remove('open');
+    });
+  }
+  // Bulk bar
+  document.querySelectorAll('[data-bulk]').forEach(btn => {
+    btn.onclick = () => bulkAction(btn.dataset.bulk);
+  });
+  const bc = document.getElementById('bulk-close');
+  if (bc) bc.onclick = () => clearSelection();
+})();
+
 // Close modals on backdrop click
 document.querySelectorAll('.modal-backdrop').forEach(b => {
   b.onclick = (e) => {
@@ -3136,7 +4426,8 @@ document.querySelectorAll('.modal-backdrop').forEach(b => {
 
 // Logout handler
 document.getElementById('btn-logout').onclick = async () => {
-  if (!confirm('Se déconnecter ?')) return;
+  const ok = await mfConfirm('Se déconnecter de la session Maison Félicien ?', { title: 'Déconnexion', okLabel: 'Se déconnecter' });
+  if (!ok) return;
   await signOut();
 };
 
