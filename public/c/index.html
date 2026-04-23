@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Catalogue · Maison Félicien</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Questrial&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #8B3A43;
+    --vieux-rose: #BF646D;
+    --poudre: #E5B7B3;
+    --vert: #968A42;
+    --blanc: #F0F0E6;
+    --marron: #392D31;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Questrial', sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--sans);
+    background:#FAFAF7;
+    color:var(--marron);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .topstrip{
+    background:var(--marron);
+    color:var(--blanc);
+    padding:8px 20px;
+    font-size:0.68rem;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    text-align:center;
+  }
+  .topstrip .sep{color:var(--poudre);margin:0 8px}
+
+  .cover{
+    background:var(--rose);
+    color:var(--blanc);
+    padding:60px 32px 80px;
+    text-align:center;
+  }
+  .cover .maison{
+    font-size:0.78rem;letter-spacing:0.5em;text-transform:uppercase;
+    color:var(--poudre);margin-bottom:14px;
+  }
+  .cover h1{
+    font-family:var(--serif);font-style:italic;font-weight:500;
+    font-size:clamp(2.6rem, 7vw, 4.8rem);
+    line-height:1;margin-bottom:14px;
+  }
+  .cover h2{
+    font-family:var(--serif);font-weight:400;
+    font-size:1.1rem;letter-spacing:0.1em;color:var(--poudre);
+  }
+  .cover .dist{
+    margin-top:30px;padding-top:22px;border-top:1px solid rgba(240,240,230,0.2);
+    font-size:0.82rem;letter-spacing:0.05em;color:var(--poudre);
+  }
+  .cover .dist strong{color:var(--blanc);font-weight:500;font-family:var(--serif);font-style:italic;font-size:1.05rem;display:inline-block;margin-right:6px;}
+
+  .wrap{max-width:1100px;margin:0 auto;padding:40px 24px 80px;}
+
+  .cat-block{margin-bottom:56px}
+  .cat-head{
+    display:flex;align-items:baseline;gap:12px;
+    margin-bottom:4px;
+  }
+  .cat-num{
+    font-family:var(--serif);font-style:italic;
+    font-size:1.6rem;color:var(--vert);opacity:0.55;
+  }
+  .cat-title{
+    font-family:var(--serif);font-style:italic;font-weight:500;
+    font-size:2rem;color:var(--rose);
+  }
+  .cat-sub{
+    font-size:0.76rem;letter-spacing:0.1em;color:var(--vert);
+    text-transform:uppercase;margin-bottom:20px;
+  }
+
+  .products{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+    gap:14px;
+  }
+  .prod{
+    background:white;
+    border:1px solid rgba(57,45,49,0.08);
+    border-radius:6px;
+    padding:18px;
+    display:grid;
+    grid-template-columns:96px 1fr;
+    gap:14px;
+    align-items:flex-start;
+  }
+  .prod-thumb{
+    width:96px;height:96px;
+    background:linear-gradient(135deg, #F5E0DE 0%, var(--poudre) 100%);
+    border-radius:4px;display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  .prod-thumb img{width:100%;height:100%;object-fit:cover}
+  .prod-thumb svg{
+    width:42px;height:42px;opacity:0.35;stroke:var(--rose);stroke-width:1.6;fill:none;
+  }
+  .prod-code{
+    font-family:ui-monospace,monospace;font-size:0.64rem;
+    color:var(--vert);letter-spacing:0.1em;margin-bottom:4px;
+  }
+  .prod-nom{
+    font-family:var(--serif);font-weight:500;font-size:1.15rem;
+    color:var(--marron);line-height:1.2;margin-bottom:2px;
+  }
+  .prod-st{
+    font-family:var(--serif);font-style:italic;
+    font-size:0.82rem;color:var(--rose);margin-bottom:8px;
+  }
+  .prod-desc{
+    font-size:0.82rem;color:var(--marron);opacity:0.8;
+    line-height:1.55;margin-bottom:10px;
+  }
+  .prod-meta{
+    font-size:0.74rem;color:var(--marron);
+    padding-top:8px;border-top:1px dashed var(--poudre);
+    display:flex;flex-wrap:wrap;gap:8px;
+    font-variant-numeric:tabular-nums;
+  }
+  .prod-meta .tag{
+    display:inline-block;padding:2px 7px;border-radius:100px;
+    background:rgba(139,58,67,0.08);color:var(--rose);
+    font-size:0.66rem;letter-spacing:0.08em;text-transform:uppercase;
+  }
+  .prod-price{
+    font-family:var(--serif);font-weight:500;color:var(--marron);
+    font-size:1.1rem;
+  }
+  .prod-price em{font-style:normal;font-size:0.72rem;color:var(--vert);letter-spacing:0.1em;text-transform:uppercase;margin-left:4px;}
+
+  .state-msg{
+    max-width:520px;margin:80px auto;text-align:center;padding:32px 24px;
+    background:white;border:1px solid var(--poudre);border-radius:6px;
+  }
+  .state-msg h2{
+    font-family:var(--serif);font-style:italic;font-size:1.6rem;
+    color:var(--rose);margin-bottom:10px;
+  }
+  .state-msg p{font-size:0.92rem;color:var(--marron);opacity:0.75;}
+
+  footer{
+    background:var(--marron);color:var(--poudre);
+    padding:30px 20px;text-align:center;font-size:0.76rem;
+    letter-spacing:0.08em;
+  }
+  footer strong{color:var(--blanc);font-weight:500;}
+
+  @media (max-width:640px){
+    .prod{grid-template-columns:1fr;}
+    .prod-thumb{width:100%;height:200px;}
+    .products{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topstrip">
+  Maison Félicien <span class="sep">·</span> Catalogue professionnel <span class="sep">·</span> <span id="canal-label">—</span>
+</div>
+
+<div id="cover-host"></div>
+
+<main class="wrap" id="wrap">
+  <div class="state-msg"><h2>Chargement…</h2><p>Un instant.</p></div>
+</main>
+
+<footer>
+  <strong>Maison Félicien</strong> · pâtisserie artisanale parisienne<br>
+  pro@maison-felicien.com · maison-felicien.com
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+const SUPABASE_URL = 'https://ckvwkwufdlydobjfwvwy.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_HICvkAoFNpeWenSsXT-FFQ_4O0IyS2l';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const BOTANICAL_SVG = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M50 88 Q48 60 48 30 Q48 16 50 12 Q52 16 52 30 Q52 60 50 88"/>
+  <path d="M48 38 Q35 35 25 28"/>
+  <path d="M52 38 Q65 35 75 28"/>
+  <path d="M48 55 Q32 55 22 52"/>
+  <path d="M52 55 Q68 55 78 52"/>
+  <path d="M48 72 Q36 73 28 72"/>
+  <path d="M52 72 Q64 73 72 72"/>
+</svg>`;
+
+const CANAL_LABELS = {
+  grossiste: 'Tarif grossiste',
+  agent: 'Tarif agent commercial',
+  epicier: 'Tarif épicier direct',
+  plateforme: 'Tarif plateforme B2B',
+  public: 'Prix public conseillé'
+};
+
+function getToken() {
+  const url = new URL(window.location.href);
+  // Supporté : /c/:token (via rewrite → ?t=), ou ?t=xxx direct
+  return url.searchParams.get('t') || url.pathname.split('/c/')[1] || '';
+}
+
+function fmtEuro(n) {
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  return Number(n).toFixed(2).replace('.', ',');
+}
+
+function priceForCanal(p, canal) {
+  const map = {
+    grossiste: { field: 'px_grossiste_ht', label: 'HT' },
+    agent: { field: 'px_agent_ht', label: 'HT' },
+    epicier: { field: 'px_epicier_ht', label: 'HT' },
+    plateforme: { field: 'px_plateforme_ht', label: 'HT' },
+    public: { field: 'ppc_ttc', label: 'TTC' }
+  };
+  const m = map[canal] || map.public;
+  return { value: p[m.field], label: m.label };
+}
+
+function renderState(html) {
+  document.getElementById('wrap').innerHTML = `<div class="state-msg">${html}</div>`;
+}
+
+async function load() {
+  const token = getToken();
+  if (!token) {
+    renderState('<h2>Lien invalide</h2><p>Ce lien ne contient pas de jeton d\'accès.</p>');
+    document.getElementById('canal-label').textContent = '—';
+    return;
+  }
+
+  const { data, error } = await db.rpc('get_share_catalogue', { p_token: token });
+
+  if (error) {
+    console.error(error);
+    renderState('<h2>Erreur</h2><p>Impossible de charger le catalogue. Demande un nouveau lien à Maison Félicien.</p>');
+    return;
+  }
+
+  if (!data || data.error) {
+    const msg = {
+      not_found: { h: 'Lien introuvable', p: 'Ce lien n\'existe pas ou a été supprimé.' },
+      revoked: { h: 'Lien désactivé', p: 'Ce lien a été révoqué.' },
+      expired: { h: 'Lien expiré', p: 'Ce lien a atteint sa date limite.' }
+    }[data?.error] || { h: 'Erreur', p: 'Problème inattendu.' };
+    renderState(`<h2>${msg.h}</h2><p>${msg.p}</p>`);
+    return;
+  }
+
+  renderCatalogue(data);
+}
+
+function renderCatalogue(data) {
+  const link = data.link || {};
+  const dist = data.distributeur;
+  const canal = link.canal || 'public';
+
+  // Topstrip
+  document.getElementById('canal-label').textContent = CANAL_LABELS[canal] || '—';
+
+  // Cover
+  const title = link.title || 'Catalogue professionnel';
+  const subtitle = link.subtitle || new Date().getFullYear();
+  const cover = document.getElementById('cover-host');
+  cover.innerHTML = `
+    <section class="cover">
+      <div class="maison">Maison</div>
+      <h1>Félicien</h1>
+      <h2>${title} · ${subtitle}</h2>
+      ${dist ? `<div class="dist"><strong>Pour : ${dist.nom}</strong>${dist.ville ? ' · ' + dist.ville : ''}</div>` : ''}
+    </section>
+  `;
+
+  // Produits par catégorie
+  const byCat = {};
+  (data.produits || []).forEach(p => {
+    byCat[p.categorie_code] = byCat[p.categorie_code] || [];
+    byCat[p.categorie_code].push(p);
+  });
+
+  const wrap = document.getElementById('wrap');
+  const cats = (data.categories || []).filter(c => byCat[c.code]);
+
+  if (cats.length === 0) {
+    renderState('<h2>Catalogue vide</h2><p>Aucun produit à afficher pour ce lien.</p>');
+    return;
+  }
+
+  wrap.innerHTML = cats.map((c, idx) => `
+    <section class="cat-block">
+      <div class="cat-head">
+        <span class="cat-num">${String(idx + 1).padStart(2, '0')}</span>
+        <h2 class="cat-title">${c.nom}</h2>
+      </div>
+      <div class="cat-sub">${c.subtitle || ''}</div>
+      <div class="products">
+        ${byCat[c.code].map(p => renderProduct(p, canal)).join('')}
+      </div>
+    </section>
+  `).join('');
+}
+
+function renderProduct(p, canal) {
+  const { value, label } = priceForCanal(p, canal);
+  const thumb = p.photo_url
+    ? `<img src="${p.photo_url}" alt="${p.nom || ''}">`
+    : BOTANICAL_SVG;
+  const bits = [];
+  if (p.pack_libelle) bits.push(`<span class="tag">${p.pack_libelle}</span>`);
+  if (p.pack_poids_g) bits.push(`${p.pack_poids_g} g`);
+  if (p.pack_moq) bits.push(`MOQ ${p.pack_moq}`);
+  if (p.pack_dlc) bits.push(`DLC ${p.pack_dlc} j`);
+  return `
+    <article class="prod">
+      <div class="prod-thumb">${thumb}</div>
+      <div>
+        <div class="prod-code">${p.code}</div>
+        <div class="prod-nom">${p.nom || ''}</div>
+        ${p.sous_titre ? `<div class="prod-st">${p.sous_titre}</div>` : ''}
+        ${p.desc_courte ? `<div class="prod-desc">${p.desc_courte}</div>` : ''}
+        <div class="prod-meta">
+          ${bits.join('<span style="color:var(--poudre);">·</span>')}
+        </div>
+        ${value ? `<div class="prod-price" style="margin-top:8px;">${fmtEuro(value)} €<em>${label}</em></div>` : ''}
+      </div>
+    </article>
+  `;
+}
+
+load();
+</script>
+
+</body>
+</html>

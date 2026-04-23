@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard · Maison Félicien</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Questrial&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #8B3A43;
+    --vieux-rose: #BF646D;
+    --poudre: #E5B7B3;
+    --vert: #968A42;
+    --blanc: #F0F0E6;
+    --marron: #392D31;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Questrial', sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans);background:#FAFAF7;color:var(--marron);line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh;}
+
+  .topbar{background:var(--marron);color:var(--blanc);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;position:sticky;top:0;z-index:30;}
+  .brand{display:flex;align-items:baseline;gap:10px;}
+  .brand-maison{font-size:0.66rem;letter-spacing:0.4em;color:var(--poudre);text-transform:uppercase;}
+  .brand-name{font-family:var(--serif);font-style:italic;font-size:1.4rem;color:var(--blanc);font-weight:500;}
+  .brand-sub{font-size:0.72rem;letter-spacing:0.1em;color:var(--poudre);margin-left:10px;text-transform:uppercase;}
+  .topbar-nav{display:flex;gap:6px;flex-wrap:wrap;}
+  .topbar-nav a{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;padding:8px 14px;border:1px solid var(--poudre);color:var(--blanc);border-radius:4px;text-decoration:none;transition:all 0.15s;}
+  .topbar-nav a:hover{background:var(--poudre);color:var(--marron);}
+  .topbar-nav a.active{background:var(--poudre);color:var(--marron);}
+
+  .wrap{max-width:1300px;margin:0 auto;padding:32px 24px 80px;}
+  .page-title{font-family:var(--serif);font-style:italic;font-weight:500;font-size:2.2rem;color:var(--rose);margin-bottom:4px;}
+  .page-sub{font-size:0.82rem;color:var(--marron);opacity:0.72;letter-spacing:0.06em;margin-bottom:28px;}
+
+  /* KPIs row */
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:28px;}
+  .kpi{background:white;border:1px solid var(--poudre);border-radius:6px;padding:18px;position:relative;}
+  .kpi-label{font-size:0.64rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--vert);margin-bottom:6px;font-weight:500;}
+  .kpi-value{font-family:var(--serif);font-style:italic;font-size:2.2rem;color:var(--rose);font-weight:500;line-height:1;}
+  .kpi-hint{font-size:0.72rem;color:var(--marron);opacity:0.65;margin-top:6px;}
+  .kpi.warn .kpi-value{color:var(--vieux-rose);}
+  .kpi.ok .kpi-value{color:var(--vert);}
+
+  /* Columns */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  @media(max-width:900px){.cols{grid-template-columns:1fr;}}
+
+  .card{background:white;border:1px solid var(--poudre);border-radius:6px;padding:20px;margin-bottom:20px;}
+  .card-title{font-family:var(--serif);font-style:italic;font-size:1.3rem;color:var(--rose);margin-bottom:4px;}
+  .card-sub{font-size:0.78rem;color:var(--marron);opacity:0.65;margin-bottom:16px;}
+
+  table{width:100%;border-collapse:collapse;font-size:0.85rem;}
+  table th{text-align:left;padding:8px 8px;border-bottom:1px solid var(--poudre);font-family:var(--sans);font-weight:500;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--vert);}
+  table td{padding:8px 8px;border-bottom:1px dashed var(--poudre);font-variant-numeric:tabular-nums;}
+  table tr:last-child td{border-bottom:0;}
+  table tr:hover td{background:rgba(229,183,179,0.08);}
+  .code-mono{font-family:ui-monospace,monospace;font-size:0.72rem;color:var(--vert);letter-spacing:0.06em;}
+  a{color:var(--rose);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  .pill{display:inline-block;padding:2px 8px;border-radius:100px;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;}
+  .pill.good{background:rgba(150,138,66,0.15);color:var(--vert);}
+  .pill.warn{background:rgba(229,183,179,0.35);color:var(--marron);}
+  .pill.bad{background:rgba(191,100,109,0.15);color:var(--vieux-rose);}
+  .pill.neutral{background:rgba(57,45,49,0.08);color:var(--marron);}
+
+  .loading{padding:40px 20px;text-align:center;color:var(--marron);opacity:0.6;font-style:italic;}
+
+  .bar-chart{display:flex;flex-direction:column;gap:6px;}
+  .bar-row{display:grid;grid-template-columns:140px 1fr 40px;gap:10px;align-items:center;font-size:0.82rem;}
+  .bar-row .label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--serif);font-style:italic;color:var(--marron);}
+  .bar-row .track{height:10px;background:var(--blanc);border-radius:100px;overflow:hidden;position:relative;}
+  .bar-row .fill{height:100%;background:var(--rose);border-radius:100px;min-width:2px;}
+  .bar-row .val{text-align:right;font-family:ui-monospace,monospace;font-size:0.78rem;color:var(--rose);font-weight:500;}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-maison">Maison</span>
+    <span class="brand-name">Félicien</span>
+    <span class="brand-sub">· Dashboard</span>
+  </div>
+  <div class="topbar-nav">
+    <a href="/outils/catalogue-builder">Catalogue</a>
+    <a href="/outils/prospection">Prospection</a>
+    <a href="/outils/dashboard" class="active">Dashboard</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-title">Dashboard commercial</div>
+  <div class="page-sub">Vue d'ensemble catalogue · prospection · engagement distributeur</div>
+
+  <div class="kpi-grid" id="kpis"><div class="loading">Chargement…</div></div>
+
+  <div class="cols">
+    <div>
+      <div class="card">
+        <div class="card-title">Produits à compléter</div>
+        <div class="card-sub">Complétion &lt; 60 % — priorisés par écart au seuil publication</div>
+        <table id="t-incomplete"><thead><tr><th>Code</th><th>Nom</th><th>Complétion</th><th>Statut</th></tr></thead><tbody><tr><td colspan="4" class="loading">Chargement…</td></tr></tbody></table>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Marges à surveiller</div>
+        <div class="card-sub">Canal grossiste · &lt; 30 %</div>
+        <table id="t-margin"><thead><tr><th>Code</th><th>Nom</th><th>Coût</th><th>Px gross.</th><th>Marge</th></tr></thead><tbody><tr><td colspan="5" class="loading">Chargement…</td></tr></tbody></table>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-title">Kits les plus consultés</div>
+        <div class="card-sub">Liens trackés par nombre de vues</div>
+        <div id="chart-links"><div class="loading">Chargement…</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Distributeurs à relancer</div>
+        <div class="card-sub">Dernière commande &gt; 90 j ou prospect sans lien envoyé</div>
+        <table id="t-relance"><thead><tr><th>Nom</th><th>Canal</th><th>Dernière</th><th>Action</th></tr></thead><tbody><tr><td colspan="4" class="loading">Chargement…</td></tr></tbody></table>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Historique récent</div>
+        <div class="card-sub">10 dernières actions sur le catalogue</div>
+        <table id="t-audit"><thead><tr><th>Quand</th><th>Action</th><th>Produit</th><th>Qui</th></tr></thead><tbody><tr><td colspan="4" class="loading">Chargement…</td></tr></tbody></table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+const SUPABASE_URL = 'https://ckvwkwufdlydobjfwvwy.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_HICvkAoFNpeWenSsXT-FFQ_4O0IyS2l';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: true, autoRefreshToken: true } });
+
+function fmtEuro(n) { if (n === null || n === undefined || isNaN(n)) return '—'; return Number(n).toFixed(2).replace('.',','); }
+function fmtDate(s) { if (!s) return '—'; return new Date(s).toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'2-digit' }); }
+function daysAgo(s) { if (!s) return null; return Math.round((Date.now() - new Date(s).getTime()) / 86400000); }
+
+function computeCompletion(p) {
+  const weights = {
+    nom:7, sous_titre:3, desc_courte:9, desc_longue:7, ingredients:10,
+    allergenes:6, origine:5, profil_gout:3, tags:3, photo_url:13,
+    ppc_ttc:9, cost_ht:5, pack_poids_g:5
+  };
+  let s = 0;
+  Object.entries(weights).forEach(([k,w]) => {
+    const v = p[k];
+    const filled = (typeof v === 'string') ? v.trim().length>0 : (v !== null && v !== undefined && v !== 0);
+    if (filled) s += w;
+  });
+  // FIC
+  const fic = p.allergenes_fic || {};
+  const keys = Object.keys(fic).filter(x => fic[x] && fic[x] !== false);
+  if (keys.length > 0 || fic._none === true) s += 10;
+  // Publishable
+  if ((p.px_grossiste_ht > 0) || (p.px_agent_ht > 0) || (p.px_epicier_ht > 0) || (p.px_plateforme_ht > 0)) s += 5;
+  return Math.min(100, Math.round(s));
+}
+
+function marginPct(p) {
+  if (!p.cost_ht || !p.px_grossiste_ht || p.px_grossiste_ht <= 0) return null;
+  return ((p.px_grossiste_ht - p.cost_ht) / p.px_grossiste_ht) * 100;
+}
+
+async function initAuth() {
+  const { data: { session: s } } = await db.auth.getSession();
+  if (!s || s.user?.app_metadata?.role !== 'admin') { window.location.href = '/outils/login.html'; return false; }
+  return true;
+}
+
+async function loadData() {
+  const [prod, links, views, dist, audit] = await Promise.all([
+    db.from('catalogue_produits').select('*').order('code'),
+    db.from('catalogue_share_links').select('*, catalogue_distributeurs(nom)').order('views', { ascending: false }),
+    db.from('catalogue_share_views').select('token,viewed_at').order('viewed_at', { ascending: false }).limit(500),
+    db.from('catalogue_distributeurs').select('*').order('last_order_at', { ascending: true, nullsFirst: true }),
+    db.from('catalogue_audit_log').select('*').order('at', { ascending: false }).limit(10)
+  ]);
+  return {
+    produits: prod.data || [],
+    links: links.data || [],
+    views: views.data || [],
+    distributeurs: dist.data || [],
+    audit: audit.data || []
+  };
+}
+
+function renderKPIs(d) {
+  const total = d.produits.length;
+  const publies = d.produits.filter(p => p.statut === 'actif').length;
+  const drafts = d.produits.filter(p => p.statut === 'draft').length;
+  const sansFic = d.produits.filter(p => {
+    const fic = p.allergenes_fic || {};
+    const k = Object.keys(fic).filter(x => fic[x] && fic[x] !== false);
+    return k.length === 0 && fic._none !== true;
+  }).length;
+  const margins = d.produits.map(marginPct).filter(m => m !== null);
+  const avgMargin = margins.length ? Math.round(margins.reduce((a,b) => a+b, 0) / margins.length) : null;
+  const totalViews = d.links.reduce((s, l) => s + (l.views || 0), 0);
+  const activeLinks = d.links.filter(l => !l.revoked && (!l.expires_at || new Date(l.expires_at) > new Date())).length;
+
+  const host = document.getElementById('kpis');
+  host.innerHTML = `
+    <div class="kpi"><div class="kpi-label">Produits</div><div class="kpi-value">${total}</div><div class="kpi-hint">${publies} publiés · ${drafts} brouillons</div></div>
+    <div class="kpi ${avgMargin !== null && avgMargin < 30 ? 'warn' : 'ok'}"><div class="kpi-label">Marge moyenne</div><div class="kpi-value">${avgMargin !== null ? avgMargin + ' %' : '—'}</div><div class="kpi-hint">canal grossiste</div></div>
+    <div class="kpi"><div class="kpi-label">Liens actifs</div><div class="kpi-value">${activeLinks}</div><div class="kpi-hint">${totalViews} vues totales</div></div>
+    <div class="kpi"><div class="kpi-label">Distributeurs</div><div class="kpi-value">${d.distributeurs.length}</div><div class="kpi-hint">dont ${d.distributeurs.filter(x => x.canal === 'prospect').length} prospects</div></div>
+    <div class="kpi ${sansFic > 0 ? 'warn' : 'ok'}"><div class="kpi-label">FIC manquants</div><div class="kpi-value">${sansFic}</div><div class="kpi-hint">allergènes à valider</div></div>
+  `;
+}
+
+function renderIncomplete(d) {
+  const rows = d.produits
+    .map(p => ({ ...p, completion: computeCompletion(p) }))
+    .filter(p => p.completion < 60)
+    .sort((a,b) => a.completion - b.completion)
+    .slice(0, 8);
+  const tbody = document.querySelector('#t-incomplete tbody');
+  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="4" class="loading">Aucun produit en dessous du seuil — bravo.</td></tr>'; return; }
+  tbody.innerHTML = rows.map(p => {
+    const cls = p.completion < 30 ? 'bad' : (p.completion < 50 ? 'warn' : 'neutral');
+    return `
+      <tr>
+        <td><a href="/outils/catalogue-builder"><span class="code-mono">${p.code}</span></a></td>
+        <td>${p.nom || '—'}</td>
+        <td><span class="pill ${cls}">${p.completion} %</span></td>
+        <td><span class="pill neutral">${p.statut}</span></td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function renderMargin(d) {
+  const rows = d.produits
+    .map(p => ({ ...p, m: marginPct(p) }))
+    .filter(p => p.m !== null && p.m < 30)
+    .sort((a,b) => a.m - b.m)
+    .slice(0, 8);
+  const tbody = document.querySelector('#t-margin tbody');
+  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="5" class="loading">Toutes les marges grossiste sont ≥ 30 %.</td></tr>'; return; }
+  tbody.innerHTML = rows.map(p => `
+    <tr>
+      <td><span class="code-mono">${p.code}</span></td>
+      <td>${p.nom || '—'}</td>
+      <td>${fmtEuro(p.cost_ht)} €</td>
+      <td>${fmtEuro(p.px_grossiste_ht)} €</td>
+      <td><span class="pill bad">${Math.round(p.m)} %</span></td>
+    </tr>
+  `).join('');
+}
+
+function renderLinksChart(d) {
+  const top = d.links.filter(l => (l.views || 0) > 0).slice(0, 8);
+  const host = document.getElementById('chart-links');
+  if (!top.length) { host.innerHTML = '<div class="loading">Aucun lien n\'a encore de vues. Crée et partage un kit depuis <a href="/outils/prospection">Prospection</a>.</div>'; return; }
+  const max = Math.max(...top.map(l => l.views || 0), 1);
+  host.innerHTML = '<div class="bar-chart">' + top.map(l => {
+    const pct = (l.views / max) * 100;
+    const label = l.catalogue_distributeurs?.nom || l.title || l.token.slice(0, 8);
+    return `
+      <div class="bar-row">
+        <div class="label" title="${label}">${label}</div>
+        <div class="track"><div class="fill" style="width:${pct}%"></div></div>
+        <div class="val">${l.views}</div>
+      </div>
+    `;
+  }).join('') + '</div>';
+}
+
+function renderRelance(d) {
+  const rows = d.distributeurs.filter(x => {
+    if (x.statut === 'archive' || x.statut === 'perdu') return false;
+    if (!x.last_order_at) return x.canal === 'prospect'; // prospects sans commande
+    return daysAgo(x.last_order_at) > 90;
+  }).slice(0, 8);
+  const tbody = document.querySelector('#t-relance tbody');
+  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="4" class="loading">Aucune relance urgente.</td></tr>'; return; }
+  tbody.innerHTML = rows.map(x => {
+    const ago = x.last_order_at ? daysAgo(x.last_order_at) : null;
+    const label = ago === null ? 'Jamais' : `il y a ${ago} j`;
+    return `
+      <tr>
+        <td><strong>${x.nom}</strong></td>
+        <td><span class="pill neutral">${x.canal}</span></td>
+        <td>${label}</td>
+        <td><a href="/outils/prospection">Préparer kit</a></td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function renderAudit(d) {
+  const tbody = document.querySelector('#t-audit tbody');
+  if (!d.audit.length) { tbody.innerHTML = '<tr><td colspan="4" class="loading">Pas d\'activité récente.</td></tr>'; return; }
+  tbody.innerHTML = d.audit.map(a => {
+    const code = a.after?.code || a.before?.code || '—';
+    const nom = a.after?.nom || a.before?.nom || '';
+    return `
+      <tr>
+        <td>${new Date(a.at).toLocaleString('fr-FR', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })}</td>
+        <td><span class="pill neutral">${a.action}</span></td>
+        <td><span class="code-mono">${code}</span> ${nom.slice(0, 30)}</td>
+        <td style="font-size:0.76rem;opacity:0.7;">${a.actor || '—'}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+(async function init() {
+  if (!(await initAuth())) return;
+  const d = await loadData();
+  renderKPIs(d);
+  renderIncomplete(d);
+  renderMargin(d);
+  renderLinksChart(d);
+  renderRelance(d);
+  renderAudit(d);
+})();
+</script>
+
+</body>
+</html>

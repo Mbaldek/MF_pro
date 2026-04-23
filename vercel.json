@@ -1,6 +1,10 @@
 {
   "version": 2,
   "rewrites": [
-    { "source": "/outils/catalogue-builder", "destination": "/outils/catalogue-builder.html" }
+    { "source": "/outils/catalogue-builder", "destination": "/outils/catalogue-builder.html" },
+    { "source": "/outils/dashboard", "destination": "/outils/dashboard.html" },
+    { "source": "/outils/prospection", "destination": "/outils/prospection.html" },
+    { "source": "/outils/distributeurs", "destination": "/outils/distributeurs.html" },
+    { "source": "/c/:token", "destination": "/c/index.html?t=:token" }
   ]
 }
