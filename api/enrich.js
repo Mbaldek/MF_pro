@@ -66,8 +66,18 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
     return res.status(500).json({ error: 'ANTHROPIC_API_KEY non configurée sur Vercel' });
+  }
+  for (let i = 0; i < apiKey.length; i++) {
+    const code = apiKey.charCodeAt(i);
+    if (code > 127) {
+      return res.status(500).json({
+        error: 'ANTHROPIC_API_KEY contient un caractère non-ASCII',
+        detail: `char code ${code} (U+${code.toString(16).toUpperCase().padStart(4, '0')}) à l'index ${i} — probable auto-correction d'un tiret en cadratin. Recolle la clé en plain-text dans Vercel.`
+      });
+    }
   }
 
   const token = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
