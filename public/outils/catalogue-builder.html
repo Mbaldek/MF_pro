@@ -6,7 +6,8 @@
 <title>Catalogue Builder · Maison Félicien</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Questrial&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Questrial&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/outils/_tokens.css">
 <style>
   :root {
     --rose: #8B3A43;
@@ -123,7 +124,7 @@
 
   /* SIDEBAR */
   .sidebar {
-    background: white;
+    background: var(--mf-paper-pure);
     border-right: 1px solid var(--poudre);
     padding: 20px 16px;
     overflow-y: auto;
@@ -199,7 +200,7 @@
   .main {
     padding: 0 40px 80px;
     overflow-y: auto;
-    background: #FAFAF7;
+    background: var(--mf-paper);
   }
   /* Header catégorie avec chiffre watermark */
   .cat-head {
@@ -294,7 +295,7 @@
     gap: 12px;
   }
   .product-card {
-    background: white;
+    background: var(--mf-paper-pure);
     border: 1px solid rgba(57,45,49,0.08);
     border-radius: 5px;
     overflow: hidden;
@@ -428,7 +429,7 @@
     grid-template-columns: 60px 1fr auto;
     gap: 10px;
     padding: 10px 12px;
-    background: white;
+    background: var(--mf-paper-pure);
     border: 1px solid var(--poudre);
     border-radius: 5px;
     align-items: center;
@@ -483,7 +484,7 @@
     padding: 6px 10px;
     border: 1px solid var(--poudre);
     border-radius: 4px;
-    background: white;
+    background: var(--mf-paper-pure);
     font-size: 0.82rem;
     cursor: pointer;
     transition: all 0.15s;
@@ -608,7 +609,7 @@
     padding: 60px 20px;
     border: 1px dashed var(--poudre);
     border-radius: 6px;
-    background: white;
+    background: var(--mf-paper-pure);
   }
   .empty-state p {
     color: var(--marron);
@@ -641,7 +642,7 @@
   }
 
   .modal-head {
-    background: white;
+    background: var(--mf-paper-pure);
     padding: 16px 20px;
     border-bottom: 1px solid var(--poudre);
     display: flex;
@@ -673,7 +674,7 @@
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 0;
-    background: white;
+    background: var(--mf-paper-pure);
     border-bottom: 1px solid var(--poudre);
     position: sticky;
     top: 57px;
@@ -790,7 +791,7 @@
     white-space: nowrap;
   }
   .panel-nav .btn-ghost {
-    background: white;
+    background: var(--mf-paper-pure);
     color: var(--marron);
     border: 1px solid var(--poudre);
     justify-self: start;
@@ -859,7 +860,7 @@
     font-family: var(--sans);
     font-size: 0.9rem;
     color: var(--marron);
-    background: white;
+    background: var(--mf-paper-pure);
     transition: border-color 0.15s;
   }
   .input:focus, .textarea:focus, .select:focus {
@@ -885,7 +886,7 @@
   }
 
   .card-section {
-    background: white;
+    background: var(--mf-paper-pure);
     border: 1px solid var(--poudre);
     border-radius: 6px;
     padding: 16px;
@@ -909,7 +910,7 @@
     text-align: center;
     cursor: pointer;
     transition: all 0.15s;
-    background: white;
+    background: var(--mf-paper-pure);
     position: relative;
     overflow: hidden;
   }
@@ -960,7 +961,7 @@
   /* MODAL FOOTER */
   .modal-foot {
     padding: 14px 20px;
-    background: white;
+    background: var(--mf-paper-pure);
     border-top: 1px solid var(--poudre);
     display: flex;
     justify-content: space-between;
@@ -1034,7 +1035,7 @@
     text-align: right;
     border: 1px solid var(--poudre);
     border-radius: 3px;
-    background: white;
+    background: var(--mf-paper-pure);
     font-family: var(--sans);
   }
   .price-unit {
@@ -1057,7 +1058,7 @@
 
   /* PREVIEW */
   .preview-box {
-    background: white;
+    background: var(--mf-paper-pure);
     border: 1px solid var(--poudre);
     padding: 20px;
     border-radius: 6px;
@@ -1093,7 +1094,7 @@
     gap: 12px;
   }
   .export-card {
-    background: white;
+    background: var(--mf-paper-pure);
     border: 1px solid var(--poudre);
     border-radius: 6px;
     padding: 18px;
@@ -1168,7 +1169,7 @@
   .sync-pop {
     position: absolute;
     top: 28px; right: 0;
-    background: white;
+    background: var(--mf-paper-pure);
     border: 1px solid var(--poudre);
     border-radius: 6px;
     padding: 10px 14px;
@@ -1210,7 +1211,7 @@
   .chip {
     padding: 5px 10px;
     border: 1px solid var(--poudre);
-    background: white;
+    background: var(--mf-paper-pure);
     border-radius: 100px;
     font-family: var(--sans);
     font-size: 0.7rem;
@@ -1259,7 +1260,7 @@
     padding: 6px 10px;
     border: 1px solid var(--poudre);
     border-radius: 4px;
-    background: white;
+    background: var(--mf-paper-pure);
     font-family: var(--sans);
     font-size: 0.78rem;
     color: var(--marron);
@@ -1483,7 +1484,7 @@
   }
   .mf-dialog-foot {
     padding: 14px 18px;
-    background: white;
+    background: var(--mf-paper-pure);
     border-top: 1px solid var(--poudre);
     display: flex;
     justify-content: flex-end;
@@ -1498,7 +1499,7 @@
     border-radius: 4px;
     cursor: pointer;
     border: 1px solid var(--poudre);
-    background: white;
+    background: var(--mf-paper-pure);
     color: var(--marron);
     transition: all 0.15s;
   }
@@ -1543,7 +1544,7 @@
   .input-with-btn .input { flex: 1; }
   .input-with-btn .gen-btn {
     padding: 0 12px;
-    background: white;
+    background: var(--mf-paper-pure);
     border: 1px solid var(--poudre);
     color: var(--rose);
     font-family: var(--sans);
@@ -1622,6 +1623,8 @@
     <a class="btn" href="/outils/prospection" style="text-decoration:none;display:inline-flex;align-items:center;">Prospection</a>
     <a class="btn" href="/outils/cockpit" style="text-decoration:none;display:inline-flex;align-items:center;">Cockpit</a>
     <a class="btn" href="/outils/guide" style="text-decoration:none;display:inline-flex;align-items:center;">Guide</a>
+    <button type="button" class="btn" onclick="MF && MF.palette.open()" title="Palette ⌘K">⌘ K</button>
+    <button type="button" class="btn mf-theme-toggle" data-theme-toggle title="Basculer clair/sombre" style="width:36px;padding:0;">☾</button>
     <button class="btn" id="btn-cat-settings">Catégorie</button>
     <button class="btn" id="btn-pricing">Tarification</button>
     <button class="btn" id="btn-export-json">Export JSON</button>
@@ -1645,12 +1648,12 @@
     <div class="side-stats" id="side-stats"></div>
 
     <div class="side-label">Actions</div>
-    <button class="btn btn-ghost" style="width:100%;color:var(--marron);border-color:var(--poudre);background:white;margin-bottom:6px;" id="btn-reset">Réinitialiser</button>
-    <button class="btn btn-ghost" style="width:100%;color:var(--marron);border-color:var(--poudre);background:white;margin-bottom:6px;" id="btn-seed">Charger données démo</button>
+    <button class="btn btn-ghost" style="width:100%;color:var(--marron);border-color:var(--poudre);background:var(--mf-paper-pure);margin-bottom:6px;" id="btn-reset">Réinitialiser</button>
+    <button class="btn btn-ghost" style="width:100%;color:var(--marron);border-color:var(--poudre);background:var(--mf-paper-pure);margin-bottom:6px;" id="btn-seed">Charger données démo</button>
 
     <div class="side-label" style="margin-top:18px;">Session</div>
     <div style="font-size:0.72rem;color:var(--marron);opacity:0.7;margin-bottom:8px;word-break:break-all;" id="admin-email">—</div>
-    <button class="btn btn-ghost" style="width:100%;color:var(--vieux-rose);border-color:var(--poudre);background:white;" id="btn-logout">Se déconnecter</button>
+    <button class="btn btn-ghost" style="width:100%;color:var(--vieux-rose);border-color:var(--poudre);background:var(--mf-paper-pure);" id="btn-logout">Se déconnecter</button>
   </aside>
 
   <!-- MAIN -->
@@ -1889,8 +1892,8 @@
             <span id="packaging-inheritance-mode" style="font-size:0.64rem;letter-spacing:0.12em;color:var(--vert);"></span>
           </div>
           <div id="packaging-summary" style="font-size:0.82rem;line-height:1.7;color:var(--marron);margin:6px 0 12px;"></div>
-          <button type="button" class="btn btn-ghost" id="btn-override-packaging" style="background:white;color:var(--marron);border-color:var(--poudre);font-size:0.68rem;">Personnaliser pour ce produit</button>
-          <button type="button" class="btn btn-ghost" id="btn-revert-packaging" style="background:white;color:var(--vieux-rose);border-color:var(--vieux-rose);font-size:0.68rem;display:none;">Revenir aux valeurs catégorie</button>
+          <button type="button" class="btn btn-ghost" id="btn-override-packaging" style="background:var(--mf-paper-pure);color:var(--marron);border-color:var(--poudre);font-size:0.68rem;">Personnaliser pour ce produit</button>
+          <button type="button" class="btn btn-ghost" id="btn-revert-packaging" style="background:var(--mf-paper-pure);color:var(--vieux-rose);border-color:var(--vieux-rose);font-size:0.68rem;display:none;">Revenir aux valeurs catégorie</button>
         </div>
       </div>
 
@@ -2421,6 +2424,7 @@
 
 <div class="toast" id="toast">Sauvegardé</div>
 
+<script src="/outils/_tokens.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
 // =================================================
@@ -3625,7 +3629,7 @@ function renderMain() {
     area.innerHTML = `
       <div class="empty-state">
         <p>Aucun produit ne correspond à la recherche ou aux filtres.</p>
-        <button class="btn btn-ghost" id="btn-clear-filters" style="color:var(--marron);background:white;border-color:var(--poudre);">Effacer les filtres</button>
+        <button class="btn btn-ghost" id="btn-clear-filters" style="color:var(--marron);background:var(--mf-paper-pure);border-color:var(--poudre);">Effacer les filtres</button>
       </div>`;
     const cf = document.getElementById('btn-clear-filters');
     if (cf) cf.onclick = () => {
@@ -4882,7 +4886,7 @@ function renderPricingSimulator() {
     const arrow = delta === null ? '' : (delta > 0.1 ? '↑' : (delta < -0.1 ? '↓' : '→'));
     const color = delta === null ? 'var(--marron)' : (delta > 0 ? 'var(--vert)' : (delta < 0 ? 'var(--vieux-rose)' : 'var(--marron)'));
     html += `
-      <div style="background:white;padding:10px;border:1px solid var(--poudre);border-radius:4px;">
+      <div style="background:var(--mf-paper-pure);padding:10px;border:1px solid var(--poudre);border-radius:4px;">
         <div style="font-size:0.64rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--vert);">${labels[cx]}</div>
         <div style="font-family:var(--serif);font-style:italic;font-size:1.3rem;color:${color};">${newAvg !== null ? newAvg.toFixed(1) + ' %' : '—'} <span style="font-family:var(--sans);font-style:normal;font-size:0.8rem;">${arrow}</span></div>
         <div style="font-size:0.72rem;opacity:0.6;">${oldAvg !== null ? 'avant ' + oldAvg.toFixed(1) + ' %' : '—'}</div>
@@ -5092,7 +5096,7 @@ body{font-family:'Questrial',sans-serif;background:#F0F0E6;color:#392D31;line-he
 .sec-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:2.5rem;color:#8B3A43;margin-bottom:10px}
 .sec-sub{font-size:0.85rem;color:#968A42;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:40px}
 .products{display:grid;grid-template-columns:1fr 1fr;gap:30px}
-.prod{background:white;padding:24px;border-radius:6px;border:1px solid #E5B7B3;page-break-inside:avoid}
+.prod{background:var(--mf-paper-pure);padding:24px;border-radius:6px;border:1px solid #E5B7B3;page-break-inside:avoid}
 .prod-thumb{aspect-ratio:4/3;background:#F0F0E6;border-radius:4px;margin-bottom:16px;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .prod-thumb img{width:100%;height:100%;object-fit:cover}
 .prod-code{font-family:ui-monospace,monospace;font-size:0.7rem;color:#968A42;letter-spacing:0.1em;margin-bottom:6px}
@@ -5383,11 +5387,45 @@ async function init() {
     state = await fetchState();
     currentCatCode = state.categories[0]?.code || 'CC';
     render();
+    registerPaletteActions();
   } catch (err) {
     console.error('Init error', err);
     setSyncStatus('err');
     showToast('Erreur de chargement — vérifier la connexion');
   }
+}
+
+// V3.2 · Command palette actions
+function registerPaletteActions() {
+  if (!window.MF || !MF.palette) return;
+  const actions = [
+    { group: 'Aller à', mark: '→', label: 'Dashboard', run: () => location.href = '/outils/dashboard' },
+    { group: 'Aller à', mark: '→', label: 'Prospection', run: () => location.href = '/outils/prospection' },
+    { group: 'Aller à', mark: '→', label: 'Cockpit distributeurs', run: () => location.href = '/outils/cockpit' },
+    { group: 'Aller à', mark: '→', label: 'Guide utilisateur', run: () => location.href = '/outils/guide' },
+    { group: 'Actions', mark: '+', label: 'Nouveau produit', hint: 'N', run: () => openModal(-1) },
+    { group: 'Actions', mark: '✦', label: 'Ouvrir l\'aperçu catalogue', run: () => document.getElementById('btn-catalog-preview').click() },
+    { group: 'Actions', mark: '€', label: 'Tarification par coefficients', run: () => document.getElementById('btn-pricing').click() },
+    { group: 'Actions', mark: '⟐', label: 'Paramètres catégorie', run: () => document.getElementById('btn-cat-settings').click() },
+    { group: 'Import / export', mark: '↓', label: 'Exporter JSON', run: () => document.getElementById('btn-export-json').click() },
+    { group: 'Import / export', mark: '↑', label: 'Importer JSON', run: () => document.getElementById('btn-import-json').click() },
+    { group: 'Thème', mark: '☾', label: 'Basculer clair / sombre', hint: '⌘J', run: () => MF.theme.toggle() }
+  ];
+  // Catégories
+  state.categories.forEach(c => {
+    actions.push({ group: 'Catégories', mark: '◆', label: c.nom, keywords: c.code, run: () => { currentCatCode = c.code; render(); } });
+  });
+  // Produits (max 50 pour perf)
+  state.produits.slice(0, 50).forEach(p => {
+    actions.push({
+      group: 'Produits',
+      mark: '✦',
+      label: `${p.code} · ${p.nom}`,
+      keywords: [p.sousTitre, p.origine, p.tags].filter(Boolean).join(' '),
+      run: () => { currentCatCode = p.categorie; render(); setTimeout(() => openModal(state.produits.indexOf(p)), 100); }
+    });
+  });
+  MF.palette.register(actions);
 }
 
 // Auto-refresh token listener — redirect to login if session lost
