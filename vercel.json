@@ -7,6 +7,7 @@
     { "source": "/outils/distributeurs", "destination": "/outils/distributeurs.html" },
     { "source": "/outils/cockpit", "destination": "/outils/cockpit.html" },
     { "source": "/outils/guide", "destination": "/outils/guide.html" },
+    { "source": "/outils/design", "destination": "/outils/design.html" },
     { "source": "/c/:token", "destination": "/c/index.html?t=:token" }
   ]
 }

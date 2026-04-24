@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design · Editorial Atelier · Maison Félicien</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Questrial&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/outils/_tokens.css">
+<style>
+  body { overflow-x: hidden; }
+
+  /* ================= HERO MANIFESTO ================= */
+  .manifesto {
+    background: var(--mf-ink);
+    color: var(--mf-paper);
+    padding: 96px 48px 120px;
+    position: relative;
+    overflow: hidden;
+    min-height: 88vh;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  :root[data-theme='dark'] .manifesto { background: #120B0E; }
+  .manifesto::before {
+    content: '';
+    position: absolute;
+    top: -200px; right: -120px;
+    width: 700px; height: 700px;
+    border-radius: 999px;
+    background: radial-gradient(circle, var(--mf-rose) 0%, transparent 70%);
+    opacity: 0.3;
+    filter: blur(80px);
+  }
+  .manifesto::after {
+    content: '◆';
+    position: absolute;
+    bottom: 40px; left: 48px;
+    font-family: var(--font-serif); font-style: italic;
+    color: var(--mf-poudre);
+    font-size: 180px;
+    opacity: 0.08;
+    line-height: 1;
+  }
+  .manifesto-content { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; width: 100%; }
+  .manifesto-eyebrow {
+    font-family: var(--font-sans);
+    font-size: 11px; letter-spacing: 0.4em; text-transform: uppercase;
+    color: var(--mf-poudre); margin-bottom: 24px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .manifesto-eyebrow::before, .manifesto-eyebrow::after {
+    content: ''; flex: 0 0 40px; height: 1px; background: var(--mf-poudre); opacity: 0.5;
+  }
+  .manifesto h1 {
+    font-family: var(--font-serif); font-style: italic; font-weight: 500;
+    font-size: clamp(64px, 11vw, 160px);
+    line-height: 0.92;
+    color: var(--mf-rose);
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .manifesto h1 .amp {
+    color: var(--mf-poudre); font-weight: 400;
+  }
+  .manifesto-lead {
+    font-family: var(--font-serif); font-style: italic;
+    font-size: clamp(20px, 2.2vw, 28px);
+    line-height: 1.4;
+    color: var(--mf-paper);
+    max-width: 780px;
+    opacity: 0.92;
+  }
+  .manifesto-meta {
+    margin-top: 40px;
+    display: flex; gap: 32px; flex-wrap: wrap;
+    font-family: var(--font-sans);
+    font-size: 12px; letter-spacing: 0.1em;
+    color: var(--mf-poudre);
+  }
+  .manifesto-meta strong { display: block; color: var(--mf-paper); font-family: var(--font-serif); font-style: italic; font-size: 18px; margin-top: 4px; }
+
+  /* ================= SECTION WRAPPER ================= */
+  section.stage {
+    position: relative;
+    padding: 96px 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  section.stage .watermark {
+    position: absolute;
+    top: 40px; left: 24px;
+    font-family: var(--font-serif); font-style: italic;
+    font-size: 240px;
+    line-height: 0.8;
+    color: var(--mf-ink);
+    opacity: 0.04;
+    pointer-events: none;
+    z-index: 0;
+    letter-spacing: -0.05em;
+  }
+  :root[data-theme='dark'] section.stage .watermark { color: var(--mf-rose); opacity: 0.08; }
+  section.stage > * { position: relative; z-index: 1; }
+  .stage-eyebrow {
+    font-family: var(--font-sans);
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--mf-vert); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .stage-eyebrow .num {
+    font-family: var(--font-serif); font-style: italic;
+    color: var(--mf-rose); font-size: 16px;
+    letter-spacing: 0;
+  }
+  .stage-title {
+    font-family: var(--font-serif); font-style: italic; font-weight: 500;
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 1.05;
+    color: var(--mf-ink);
+    margin-bottom: 16px;
+  }
+  .stage-title em { color: var(--mf-rose); font-style: italic; }
+  .stage-lead {
+    font-size: 17px;
+    color: var(--mf-muted);
+    max-width: 720px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+  }
+
+  /* ================= DESIGN TOKENS PANEL ================= */
+  .tokens-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .token-card {
+    background: var(--mf-paper-pure);
+    border: 1px solid var(--mf-hairline);
+    border-radius: var(--r-lg);
+    padding: 24px;
+  }
+  .token-card h3 {
+    font-family: var(--font-serif); font-style: italic; font-weight: 500;
+    font-size: 22px; color: var(--mf-rose);
+    margin-bottom: 16px;
+  }
+  .swatch-row { display: flex; flex-direction: column; gap: 8px; }
+  .swatch {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+  .swatch .chip {
+    width: 56px; height: 32px;
+    border-radius: 6px;
+    border: 1px solid var(--mf-hairline);
+  }
+  .swatch .name {
+    font-family: var(--font-sans); font-size: 12px;
+    color: var(--mf-ink); font-weight: 500;
+  }
+  .swatch .hex {
+    color: var(--mf-muted);
+    letter-spacing: 0.04em;
+  }
+
+  .type-scale > div {
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--mf-hairline);
+    display: flex; align-items: baseline; justify-content: space-between;
+  }
+  .type-scale > div:last-child { border-bottom: 0; }
+  .type-scale .label { font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mf-muted-2); }
+
+  /* ================= NOUVELLE MODAL FICHE PRODUIT · showcase ================= */
+  .fiche-wrap {
+    max-width: 1320px;
+    margin: 0 auto;
+    background: var(--mf-paper-pure);
+    border: 1px solid var(--mf-hairline);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-2);
+  }
+  .fiche-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 32px;
+    padding: 32px 36px 24px;
+    background: linear-gradient(180deg, var(--mf-paper) 0%, var(--mf-paper-pure) 100%);
+    border-bottom: 1px solid var(--mf-hairline);
+  }
+  .fiche-head-left .fiche-eyebrow {
+    font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--mf-vert); display: flex; gap: 8px; align-items: center;
+  }
+  .fiche-head-left .fiche-eyebrow code {
+    font-family: var(--font-mono); font-size: 11px; color: var(--mf-ink); letter-spacing: 0.04em;
+    padding: 2px 8px; background: var(--mf-paper-soft); border-radius: 4px;
+  }
+  .fiche-head-left h2 {
+    font-family: var(--font-serif); font-style: italic; font-weight: 500;
+    font-size: 44px; line-height: 1; color: var(--mf-ink);
+    margin: 10px 0 6px; letter-spacing: -0.01em;
+  }
+  .fiche-head-left .fiche-sub {
+    font-family: var(--font-serif); font-style: italic;
+    font-size: 18px; color: var(--mf-rose);
+  }
+  .fiche-head-left .fiche-origin {
+    margin-top: 8px;
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--font-sans); font-size: 12px;
+    color: var(--mf-vert); letter-spacing: 0.04em;
+  }
+  .fiche-head-left .fiche-origin::before { content: '◆'; color: var(--mf-vert); }
+
+  .fiche-head-right {
+    display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
+  }
+  .fiche-status-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    font-weight: 500;
+    background: color-mix(in oklab, var(--mf-vert) 15%, var(--mf-paper-pure));
+    color: var(--mf-vert);
+    border: 1px solid color-mix(in oklab, var(--mf-vert) 30%, transparent);
+  }
+  .fiche-status-pill::before { content: ''; width: 6px; height: 6px; border-radius: 999px; background: currentColor; }
+
+  .fiche-completion {
+    display: flex; flex-direction: column; gap: 6px; align-items: flex-end;
+    min-width: 180px;
+  }
+  .fiche-completion-label { font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mf-muted-2); }
+  .fiche-completion-bar {
+    width: 180px; height: 8px; background: var(--mf-paper-soft);
+    border-radius: 999px; overflow: hidden; position: relative;
+  }
+  .fiche-completion-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--mf-rose-soft), var(--mf-rose));
+    border-radius: 999px;
+    width: 84%;
+    animation: mf-bar-grow 700ms var(--ease-out) both;
+  }
+  .fiche-completion-value { font-family: var(--font-serif); font-style: italic; font-size: 24px; color: var(--mf-rose); font-weight: 500; }
+
+  /* Fiche body split */
+  .fiche-body {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr) 420px;
+    min-height: 700px;
+  }
+  @media (max-width: 1100px) {
+    .fiche-body { grid-template-columns: 1fr; }
+    .fiche-toc { display: none; }
+    .fiche-preview { border-left: 0; border-top: 1px solid var(--mf-hairline); }
+  }
+
+  /* TOC */
+  .fiche-toc {
+    background: var(--mf-paper-soft);
+    border-right: 1px solid var(--mf-hairline);
+    padding: 24px 20px;
+    position: sticky; top: 0;
+    height: fit-content;
+  }
+  .fiche-toc-title {
+    font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--mf-muted-2); margin-bottom: 16px;
+  }
+  .fiche-toc ul { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+  .fiche-toc li a {
+    display: grid;
+    grid-template-columns: 26px 1fr auto;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    color: var(--mf-muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-family: var(--font-sans);
+    transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+    align-items: center;
+  }
+  .fiche-toc li a:hover { background: var(--mf-paper-pure); color: var(--mf-ink); }
+  .fiche-toc li a.active {
+    background: var(--mf-paper-pure);
+    color: var(--mf-rose);
+    box-shadow: 0 1px 2px rgba(42,32,36,0.04);
+  }
+  .fiche-toc li a .n {
+    font-family: var(--font-serif); font-style: italic;
+    color: var(--mf-rose); opacity: 0.7; font-size: 15px;
+  }
+  .fiche-toc li a.active .n { opacity: 1; }
+  .fiche-toc li a .dot {
+    width: 8px; height: 8px; border-radius: 999px;
+    background: var(--mf-vert);
+    opacity: 0.8;
+  }
+  .fiche-toc li a .dot.empty { background: var(--mf-poudre); opacity: 0.5; }
+
+  /* Fiche sections */
+  .fiche-form {
+    padding: 32px 36px;
+    overflow-y: auto;
+    max-height: 720px;
+  }
+  .fiche-section + .fiche-section {
+    margin-top: 40px;
+    padding-top: 40px;
+    border-top: 1px solid var(--mf-hairline);
+  }
+  .fiche-section-head {
+    display: flex; align-items: baseline; gap: 16px;
+    margin-bottom: 20px;
+  }
+  .fiche-section-num {
+    font-family: var(--font-serif); font-style: italic;
+    font-size: 48px; color: var(--mf-rose);
+    opacity: 0.35; line-height: 1;
+  }
+  .fiche-section-title {
+    font-family: var(--font-serif); font-style: italic; font-weight: 500;
+    font-size: 28px; color: var(--mf-ink); line-height: 1.1;
+  }
+  .fiche-section-sub {
+    font-family: var(--font-sans); font-size: 12px; color: var(--mf-muted);
+    letter-spacing: 0.03em;
+    margin-top: 4px;
+  }
+
+  .field-group { margin-bottom: 20px; }
+  .field-group.required .field-label::after {
+    content: '·'; color: var(--mf-rose); font-weight: 700;
+    font-size: 1.4em; margin-left: 4px; line-height: 0; vertical-align: middle;
+  }
+  .field-label {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--mf-vert); font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .field-hint {
+    font-size: 10px; letter-spacing: 0.04em; text-transform: none;
+    color: var(--mf-muted-2); margin-left: 8px; font-weight: 400;
+  }
+  .field-input, .field-textarea, .field-select {
+    width: 100%;
+    padding: 10px 14px;
+    font-family: var(--font-sans); font-size: 15px;
+    color: var(--mf-ink);
+    background: var(--mf-paper-pure);
+    border: 1px solid var(--mf-hairline-strong);
+    border-radius: 6px;
+    transition: border-color var(--dur-fast) var(--ease-out);
+  }
+  .field-input:focus, .field-textarea:focus, .field-select:focus {
+    outline: none; border-color: var(--mf-rose);
+  }
+  .field-textarea { min-height: 90px; resize: vertical; line-height: 1.55; font-family: var(--font-serif); font-style: italic; font-size: 15px; }
+  .field-row { display: grid; gap: 16px; grid-template-columns: 1fr 1fr; }
+  .field-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .field-row.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+  .ai-button {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px;
+    font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--mf-paper);
+    background: linear-gradient(135deg, var(--mf-vert), var(--mf-rose));
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: transform 120ms var(--ease-out);
+  }
+  .ai-button:hover { transform: scale(1.04); }
+
+  /* FIC checklist */
+  .fic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .fic-item {
+    padding: 8px 12px;
+    border: 1px solid var(--mf-hairline-strong);
+    border-radius: 6px;
+    font-family: var(--font-sans); font-size: 12px;
+    display: flex; align-items: center; gap: 7px;
+    background: var(--mf-paper-pure);
+    cursor: pointer;
+    transition: border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+  }
+  .fic-item:hover { border-color: var(--mf-rose); }
+  .fic-item.on { background: color-mix(in oklab, var(--mf-rose) 8%, var(--mf-paper-pure)); border-color: var(--mf-rose); color: var(--mf-rose); }
+  .fic-item input { accent-color: var(--mf-rose); }
+
+  /* Pricing mini-table */
+  .price-matrix {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--mf-hairline);
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: var(--font-mono); font-size: 13px;
+  }
+  .price-matrix div {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--mf-hairline);
+    background: var(--mf-paper-pure);
+  }
+  .price-matrix > div:nth-child(-n+4) {
+    background: var(--mf-paper-soft);
+    font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--mf-muted-2); font-weight: 500;
+  }
+  .price-matrix > div:nth-last-child(-n+4) { border-bottom: 0; }
+  .price-matrix .label-canal {
+    font-family: var(--font-serif); font-style: italic;
+    font-size: 15px; color: var(--mf-ink);
+  }
+  .margin-good { color: var(--mf-vert); font-weight: 500; }
+  .margin-warn { color: var(--mf-warn); }
+  .margin-bad { color: var(--mf-rose-soft); font-weight: 500; }
+
+  /* Preview panel (sticky right) */
+  .fiche-preview {
+    border-left: 1px solid var(--mf-hairline);
+    background: var(--mf-paper-soft);
+    padding: 28px 24px;
+    position: sticky; top: 0;
+    max-height: 720px;
+    overflow-y: auto;
+  }
+  .preview-label {
+    font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--mf-vert); margin-bottom: 12px;
+  }
+  .preview-card {
+    background: var(--mf-paper-pure);
+    border: 1px solid var(--mf-hairline);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .preview-img {
+    aspect-ratio: 4/3;
+    background: linear-gradient(135deg, #F5E0DE 0%, var(--mf-poudre) 100%);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .preview-img svg {
+    width: 64px; height: 64px;
+    stroke: var(--mf-rose); fill: none; stroke-width: 1.6;
+    opacity: 0.45;
+  }
+  .preview-img .code-pill {
+    position: absolute; bottom: 10px; left: 10px;
+    background: rgba(42,32,36,0.85); color: var(--mf-paper);
+    padding: 3px 8px;
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em;
+    border-radius: 3px;
+  }
+  .preview-body {
+    padding: 14px 16px;
+  }
+  .preview-body h4 {
+    font-family: var(--font-serif); font-style: italic; font-weight: 500;
+    font-size: 20px; color: var(--mf-ink); line-height: 1.15;
+  }
+  .preview-body .preview-sub {
+    font-family: var(--font-serif); font-style: italic;
+    color: var(--mf-rose); font-size: 13px; margin-top: 2px;
+  }
+  .preview-body .preview-desc {
+    font-size: 13px; color: var(--mf-muted); margin-top: 10px;
+    line-height: 1.6;
+  }
+  .preview-meta {
+    display: flex; gap: 10px; margin-top: 12px;
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--mf-muted-2);
+  }
+  .preview-meta strong { color: var(--mf-ink); }
+  .preview-price {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 10px 14px 14px;
+    border-top: 1px dashed var(--mf-hairline);
+  }
+  .preview-price .ppr {
+    font-family: var(--font-serif); font-style: italic; font-weight: 500;
+    font-size: 28px; color: var(--mf-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .preview-price .ppr small { font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.12em; color: var(--mf-vert); margin-left: 4px; }
+  .preview-price .margin-pill {
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--mf-vert) 15%, var(--mf-paper-pure));
+    color: var(--mf-vert);
+    font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    border: 1px solid color-mix(in oklab, var(--mf-vert) 30%, transparent);
+  }
+
+  .spark-bars { display: flex; gap: 3px; align-items: flex-end; height: 28px; margin-top: 8px; }
+  .spark-bars .bar { width: 8px; border-radius: 2px 2px 0 0; background: var(--mf-rose); }
+  .spark-bars .bar.vert { background: var(--mf-vert); }
+  .spark-bars .bar.soft { background: var(--mf-rose-soft); }
+
+  .preview-gates {
+    background: color-mix(in oklab, var(--mf-vert) 12%, var(--mf-paper-pure));
+    border: 1px solid color-mix(in oklab, var(--mf-vert) 30%, transparent);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .preview-gates strong {
+    font-family: var(--font-serif); font-style: italic; font-weight: 500;
+    color: var(--mf-vert); display: block; margin-bottom: 6px; font-size: 16px;
+  }
+  .preview-gates ul { list-style: none; font-size: 12px; color: var(--mf-muted); }
+  .preview-gates li { padding: 3px 0; display: flex; align-items: center; gap: 8px; }
+  .preview-gates li::before { content: '✓'; color: var(--mf-vert); font-weight: 500; }
+
+  /* Fiche footer */
+  .fiche-foot {
+    padding: 18px 36px;
+    background: var(--mf-paper-soft);
+    border-top: 1px solid var(--mf-hairline);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .fiche-foot-left { display: flex; gap: 10px; align-items: center; }
+  .fiche-foot-right { display: flex; gap: 10px; }
+  .fiche-foot-meta {
+    font-family: var(--font-sans); font-size: 11px;
+    color: var(--mf-muted); letter-spacing: 0.04em;
+  }
+  .fiche-foot-meta strong { color: var(--mf-ink); font-family: var(--font-serif); font-style: italic; font-weight: 500; margin-right: 4px; }
+
+  /* ================= COMPONENTS GALLERY ================= */
+  .comp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+  .comp-card {
+    background: var(--mf-paper-pure);
+    border: 1px solid var(--mf-hairline);
+    border-radius: var(--r-md);
+    overflow: hidden;
+  }
+  .comp-card-label {
+    padding: 8px 14px;
+    font-family: var(--font-sans);
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--mf-muted-2);
+    background: var(--mf-paper-soft);
+    border-bottom: 1px solid var(--mf-hairline);
+  }
+  .comp-card-body { padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+
+  /* CTA */
+  .final-cta {
+    background: var(--mf-ink);
+    color: var(--mf-paper);
+    padding: 96px 48px;
+    text-align: center;
+    margin-top: 48px;
+  }
+  .final-cta h2 {
+    font-family: var(--font-serif); font-style: italic; font-weight: 500;
+    font-size: clamp(36px, 5vw, 64px);
+    color: var(--mf-paper); line-height: 1.1; margin-bottom: 16px;
+  }
+  .final-cta h2 em { color: var(--mf-poudre); font-style: italic; }
+  .final-cta p {
+    font-family: var(--font-serif); font-style: italic;
+    font-size: 19px; color: var(--mf-poudre); max-width: 620px; margin: 0 auto 32px;
+  }
+  .final-cta .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  footer.mf-foot {
+    padding: 32px 48px;
+    text-align: center;
+    color: var(--mf-muted-2);
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    font-family: var(--font-sans);
+    background: var(--mf-paper);
+    border-top: 1px solid var(--mf-hairline);
+  }
+</style>
+</head>
+<body>
+
+<header class="mf-topbar">
+  <div class="mf-brand">
+    <span class="mf-brand-maison">Maison</span>
+    <span class="mf-brand-name">Félicien</span>
+    <span class="mf-brand-sub">· Design</span>
+  </div>
+  <nav class="mf-nav">
+    <a href="/outils/catalogue-builder">Catalogue</a>
+    <a href="/outils/prospection">Prospection</a>
+    <a href="/outils/cockpit">Cockpit</a>
+    <a href="/outils/dashboard">Dashboard</a>
+    <a href="/outils/guide">Guide</a>
+    <button type="button" class="mf-theme-toggle" data-theme-toggle>☾</button>
+  </nav>
+</header>
+
+<!-- MANIFESTE HERO -->
+<section class="manifesto">
+  <div class="manifesto-content">
+    <div class="manifesto-eyebrow">Direction · Editorial Atelier</div>
+    <h1>Carnet <span class="amp">&amp;</span><br>comptoir.</h1>
+    <p class="manifesto-lead">
+      Un outil interne pour une maison de pâtisserie artisanale parisienne premium.
+      Il ne doit pas ressembler à un SaaS. Il doit ressembler à un carnet de travail relié cuir —
+      précis, feutré, avec des chiffres qui respirent et des italiques qui signent.
+    </p>
+    <div class="manifesto-meta">
+      <div>Typographie<strong>Cormorant Garamond Italic · Questrial</strong></div>
+      <div>Palette<strong>Rose · Vert Olive · Poudré · Marron</strong></div>
+      <div>Motion<strong>Spring douce · 220ms · ease-out</strong></div>
+      <div>Références<strong>Linear · Stripe · Cron · Campsite</strong></div>
+    </div>
+  </div>
+</section>
+
+<!-- TOKENS -->
+<section class="stage">
+  <div class="watermark">01</div>
+  <div class="stage-eyebrow"><span class="num">◆ 01</span> Design tokens</div>
+  <h2 class="stage-title">Les matières <em>premières</em>.</h2>
+  <p class="stage-lead">Tokens partagés chargés par toutes les pages. Light et dark sont first-class — en mode nuit, les surfaces ne sont pas inversées mais rethink en brun noir chaud avec un rose rehaussé.</p>
+
+  <div class="tokens-grid">
+    <div class="token-card">
+      <h3>Palette · light</h3>
+      <div class="swatch-row">
+        <div class="swatch"><div class="chip" style="background:#8B3A43;"></div><span class="name">Rose</span><span class="hex">#8B3A43</span></div>
+        <div class="swatch"><div class="chip" style="background:#BF646D;"></div><span class="name">Rose soft</span><span class="hex">#BF646D</span></div>
+        <div class="swatch"><div class="chip" style="background:#E5B7B3;"></div><span class="name">Poudré</span><span class="hex">#E5B7B3</span></div>
+        <div class="swatch"><div class="chip" style="background:#968A42;"></div><span class="name">Vert olive</span><span class="hex">#968A42</span></div>
+        <div class="swatch"><div class="chip" style="background:#2A2024;"></div><span class="name">Encre</span><span class="hex">#2A2024</span></div>
+        <div class="swatch"><div class="chip" style="background:#FAFAF7;border:1px solid var(--mf-hairline);"></div><span class="name">Papier</span><span class="hex">#FAFAF7</span></div>
+      </div>
+    </div>
+
+    <div class="token-card">
+      <h3>Palette · dark</h3>
+      <div class="swatch-row">
+        <div class="swatch"><div class="chip" style="background:#D4707A;"></div><span class="name">Rose</span><span class="hex">#D4707A</span></div>
+        <div class="swatch"><div class="chip" style="background:#E08F97;"></div><span class="name">Rose soft</span><span class="hex">#E08F97</span></div>
+        <div class="swatch"><div class="chip" style="background:#C2B46A;"></div><span class="name">Vert olive</span><span class="hex">#C2B46A</span></div>
+        <div class="swatch"><div class="chip" style="background:#F0E8DC;"></div><span class="name">Encre</span><span class="hex">#F0E8DC</span></div>
+        <div class="swatch"><div class="chip" style="background:#1A1316;"></div><span class="name">Papier nuit</span><span class="hex">#1A1316</span></div>
+        <div class="swatch"><div class="chip" style="background:#2E2226;"></div><span class="name">Elevated</span><span class="hex">#2E2226</span></div>
+      </div>
+    </div>
+
+    <div class="token-card">
+      <h3>Échelle typographique</h3>
+      <div class="type-scale">
+        <div><span style="font-family:var(--font-serif);font-style:italic;font-size:48px;line-height:0.9;">Ab</span><span class="label">Display · 48</span></div>
+        <div><span style="font-family:var(--font-serif);font-style:italic;font-size:32px;">Titres</span><span class="label">H2 · 32</span></div>
+        <div><span style="font-family:var(--font-serif);font-style:italic;font-size:22px;">Sections</span><span class="label">H3 · 22</span></div>
+        <div><span style="font-family:var(--font-sans);font-size:15px;">Paragraphe body en Questrial</span><span class="label">Body · 15</span></div>
+        <div><span style="font-family:var(--font-mono);font-size:13px;">1 234,56 €</span><span class="label">Mono · 13</span></div>
+        <div><span style="font-family:var(--font-sans);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--mf-muted-2);">Label</span><span class="label">Micro · 11</span></div>
+      </div>
+    </div>
+
+    <div class="token-card">
+      <h3>Motion</h3>
+      <p style="font-size:13px;color:var(--mf-muted);margin-bottom:12px;line-height:1.6;">Spring ease-out cubic-bezier(0.16, 1, 0.3, 1). Durées 120 / 220 / 400 ms. Button press scale(0.97) 80ms.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="mf-btn is-primary">Primary</button>
+        <button class="mf-btn">Survol-moi</button>
+        <button class="mf-btn is-ghost">Ghost</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GROSSE PIÈCE : LA NOUVELLE FICHE PRODUIT -->
+<section class="stage" style="max-width: 1400px;">
+  <div class="watermark">02</div>
+  <div class="stage-eyebrow"><span class="num">◆ 02</span> Modal fiche produit · redesign</div>
+  <h2 class="stage-title">La pièce maîtresse, <em>reformée</em>.</h2>
+  <p class="stage-lead">Abandon des 5 onglets au profit d'un scroll continu avec TOC sticky à gauche. Preview live à droite. Split-pane cinématographique. Gates de publication en vert visible. Hauteur minimale 720px.</p>
+
+  <div class="fiche-wrap">
+    <!-- Head -->
+    <div class="fiche-head">
+      <div class="fiche-head-left">
+        <div class="fiche-eyebrow"><code>CC-001</code> Cub'Cakes · Édition hebdomadaire</div>
+        <h2>Cub'Cake Chocolat Noir 72 %</h2>
+        <div class="fiche-sub">Arriba Nacional · Équateur</div>
+        <div class="fiche-origin">Chocolat Arriba Nacional, province d'Esmeraldas, Équateur</div>
+      </div>
+      <div class="fiche-head-right">
+        <div class="fiche-status-pill">Publié · actif</div>
+        <div class="fiche-completion">
+          <span class="fiche-completion-label">Complétion</span>
+          <span class="fiche-completion-value">84 %</span>
+          <div class="fiche-completion-bar"><div class="fiche-completion-fill"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="fiche-body">
+      <!-- TOC -->
+      <aside class="fiche-toc">
+        <div class="fiche-toc-title">Sections</div>
+        <ul>
+          <li><a href="#sec-identite" class="active"><span class="n">1</span><span>Identité</span><span class="dot"></span></a></li>
+          <li><a href="#sec-description"><span class="n">2</span><span>Descriptions</span><span class="dot"></span></a></li>
+          <li><a href="#sec-composition"><span class="n">3</span><span>Composition</span><span class="dot"></span></a></li>
+          <li><a href="#sec-fic"><span class="n">4</span><span>Allergènes FIC</span><span class="dot"></span></a></li>
+          <li><a href="#sec-packaging"><span class="n">5</span><span>Packaging</span><span class="dot"></span></a></li>
+          <li><a href="#sec-pricing"><span class="n">6</span><span>Tarifs &amp; marges</span><span class="dot"></span></a></li>
+          <li><a href="#sec-photo"><span class="n">7</span><span>Photo</span><span class="dot empty"></span></a></li>
+          <li><a href="#sec-logistique"><span class="n">8</span><span>Logistique</span><span class="dot"></span></a></li>
+          <li><a href="#sec-trads"><span class="n">9</span><span>Traductions</span><span class="dot empty"></span></a></li>
+        </ul>
+      </aside>
+
+      <!-- Form -->
+      <div class="fiche-form">
+        <!-- Identité -->
+        <div class="fiche-section" id="sec-identite">
+          <div class="fiche-section-head">
+            <div class="fiche-section-num">01</div>
+            <div>
+              <div class="fiche-section-title">Identité</div>
+              <div class="fiche-section-sub">Nom, sous-titre et saison d'activité</div>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group required">
+              <label class="field-label">Nom du produit</label>
+              <input class="field-input" value="Cub'Cake Chocolat Noir 72%">
+            </div>
+            <div class="field-group">
+              <label class="field-label">Saison</label>
+              <select class="field-select"><option>Permanente</option></select>
+            </div>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Sous-titre · baseline</label>
+            <input class="field-input" value="Arriba Nacional · Équateur">
+          </div>
+        </div>
+
+        <!-- Descriptions -->
+        <div class="fiche-section" id="sec-description">
+          <div class="fiche-section-head">
+            <div class="fiche-section-num">02</div>
+            <div>
+              <div class="fiche-section-title">Descriptions</div>
+              <div class="fiche-section-sub">Textes catalogue &amp; argumentaire distributeur</div>
+            </div>
+          </div>
+          <div class="field-group required">
+            <label class="field-label">Description courte <span class="field-hint">~30 mots · fiche grossiste &amp; site</span></label>
+            <textarea class="field-textarea">Cube de cake intense au chocolat noir d'origine, fondant et cacaoté, signé d'une fève Arriba d'Équateur.</textarea>
+            <button class="ai-button">✦ Enrichir avec l'IA</button>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Description longue <span class="field-hint">~100 mots · catalogue &amp; storytelling</span></label>
+            <textarea class="field-textarea" style="min-height:140px;">Sourcé auprès d'une coopérative de la province d'Esmeraldas, le cacao Arriba Nacional offre des notes florales et fruitées uniques, fruit d'un terroir volcanique et d'une fermentation lente. Nous le travaillons à 72 % dans un cube dense et court, à la mie serrée et brillante, pour révéler sa longueur cacaotée sans la couvrir de sucre.</textarea>
+            <button class="ai-button">✦ Enrichir avec l'IA</button>
+          </div>
+        </div>
+
+        <!-- Composition -->
+        <div class="fiche-section" id="sec-composition">
+          <div class="fiche-section-head">
+            <div class="fiche-section-num">03</div>
+            <div>
+              <div class="fiche-section-title">Composition</div>
+              <div class="fiche-section-sub">Ingrédients et origine tracée</div>
+            </div>
+          </div>
+          <div class="field-group required">
+            <label class="field-label">Ingrédients</label>
+            <textarea class="field-textarea">Farine de blé T65, beurre AOP, sucre de canne bio, chocolat noir 72 % Équateur, œufs plein air, sel de Guérande.</textarea>
+          </div>
+        </div>
+
+        <!-- FIC -->
+        <div class="fiche-section" id="sec-fic">
+          <div class="fiche-section-head">
+            <div class="fiche-section-num">04</div>
+            <div>
+              <div class="fiche-section-title">Allergènes FIC</div>
+              <div class="fiche-section-sub">Règlement INCO 1169/2011 · 14 allergènes officiels</div>
+            </div>
+          </div>
+          <div class="fic-grid">
+            <label class="fic-item on"><input type="checkbox" checked>Gluten</label>
+            <label class="fic-item"><input type="checkbox">Crustacés</label>
+            <label class="fic-item on"><input type="checkbox" checked>Œufs</label>
+            <label class="fic-item"><input type="checkbox">Poissons</label>
+            <label class="fic-item"><input type="checkbox">Arachides</label>
+            <label class="fic-item"><input type="checkbox">Soja</label>
+            <label class="fic-item on"><input type="checkbox" checked>Lait</label>
+            <label class="fic-item"><input type="checkbox">Fruits à coque</label>
+            <label class="fic-item"><input type="checkbox">Céleri</label>
+            <label class="fic-item"><input type="checkbox">Moutarde</label>
+            <label class="fic-item"><input type="checkbox">Sésame</label>
+            <label class="fic-item"><input type="checkbox">Sulfites</label>
+            <label class="fic-item"><input type="checkbox">Lupin</label>
+            <label class="fic-item"><input type="checkbox">Mollusques</label>
+          </div>
+          <button class="ai-button" style="margin-top:12px;">✦ Déduire depuis les ingrédients</button>
+        </div>
+
+        <!-- Pricing -->
+        <div class="fiche-section" id="sec-pricing">
+          <div class="fiche-section-head">
+            <div class="fiche-section-num">06</div>
+            <div>
+              <div class="fiche-section-title">Tarifs &amp; marges</div>
+              <div class="fiche-section-sub">PPR TTC · prix par canal · marges live</div>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label class="field-label">Coût de revient HT <span class="field-hint">€</span></label>
+              <input class="field-input" value="0.95" style="font-family:var(--font-mono);">
+            </div>
+            <div class="field-group required">
+              <label class="field-label">PPR TTC <span class="field-hint">€</span></label>
+              <input class="field-input" value="4.50" style="font-family:var(--font-mono);">
+            </div>
+          </div>
+          <div class="price-matrix">
+            <div>Canal</div><div style="text-align:right;">Prix HT</div><div style="text-align:right;">Marge €</div><div style="text-align:right;">Marge %</div>
+            <div class="label-canal">Grossiste</div><div style="text-align:right;">1,76 €</div><div style="text-align:right;">0,81 €</div><div style="text-align:right;"><span class="margin-good">46 %</span></div>
+            <div class="label-canal">Agent</div><div style="text-align:right;">1,97 €</div><div style="text-align:right;">1,02 €</div><div style="text-align:right;"><span class="margin-good">52 %</span></div>
+            <div class="label-canal">Épicier</div><div style="text-align:right;">2,12 €</div><div style="text-align:right;">1,17 €</div><div style="text-align:right;"><span class="margin-good">55 %</span></div>
+            <div class="label-canal">Plateforme</div><div style="text-align:right;">1,92 €</div><div style="text-align:right;">0,97 €</div><div style="text-align:right;"><span class="margin-good">51 %</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview -->
+      <aside class="fiche-preview">
+        <div class="preview-label">Aperçu · carte boutique</div>
+        <div class="preview-card">
+          <div class="preview-img">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 88 Q48 60 48 30 Q48 16 50 12 Q52 16 52 30 Q52 60 50 88"/><path d="M48 38 Q35 35 25 28"/><path d="M52 38 Q65 35 75 28"/><path d="M48 55 Q32 55 22 52"/><path d="M52 55 Q68 55 78 52"/><path d="M48 72 Q36 73 28 72"/><path d="M52 72 Q64 73 72 72"/></svg>
+            <span class="code-pill">CC-001</span>
+          </div>
+          <div class="preview-body">
+            <h4>Cub'Cake Chocolat Noir 72 %</h4>
+            <div class="preview-sub">◆ Arriba Nacional · Équateur</div>
+            <div class="preview-desc">Cube intense au chocolat noir d'origine, fondant et cacaoté.</div>
+            <div class="preview-meta"><strong>85 g</strong><span>·</span>MOQ <strong>6</strong><span>·</span>DLC <strong>5 j</strong></div>
+          </div>
+          <div class="preview-price">
+            <div class="ppr">4,50 <small>€ TTC</small></div>
+            <div class="margin-pill">Marge 46 %</div>
+          </div>
+          <div style="padding:0 14px 14px;">
+            <div class="spark-bars">
+              <div class="bar vert" style="height:18px;" title="Grossiste 46%"></div>
+              <div class="bar vert" style="height:22px;"></div>
+              <div class="bar vert" style="height:26px;"></div>
+              <div class="bar" style="height:20px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="preview-label" style="margin-top:20px;">Gates publication</div>
+        <div class="preview-gates">
+          <strong>Prêt pour publication</strong>
+          <ul>
+            <li>Nom renseigné</li>
+            <li>Description courte (26 mots)</li>
+            <li>Ingrédients &amp; FIC validés</li>
+            <li>PPR &amp; au moins 1 canal</li>
+            <li>Photo attendue ▲</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Footer -->
+    <div class="fiche-foot">
+      <div class="fiche-foot-left">
+        <span class="fiche-foot-meta"><strong>v14</strong> · dernière modif il y a 2 min · par marion@</span>
+      </div>
+      <div class="fiche-foot-right">
+        <button class="mf-btn is-ghost">Historique</button>
+        <button class="mf-btn is-danger">Supprimer</button>
+        <button class="mf-btn">Enregistrer brouillon</button>
+        <button class="mf-btn is-primary">Publier</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:32px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;">
+    <div class="token-card">
+      <h3>✂ Abandonné</h3>
+      <ul style="font-size:13px;color:var(--mf-muted);line-height:1.8;list-style:none;">
+        <li>· 5 onglets qui cachent l'info</li>
+        <li>· Drawer right qui casse le contexte</li>
+        <li>· Preview limitée au bas du form</li>
+        <li>· Boutons Save / Delete au footer uniquement</li>
+      </ul>
+    </div>
+    <div class="token-card">
+      <h3>✓ Retenu</h3>
+      <ul style="font-size:13px;color:var(--mf-muted);line-height:1.8;list-style:none;">
+        <li>· Scroll continu avec TOC sticky</li>
+        <li>· Split-pane form / preview live</li>
+        <li>· Gates publication en vert dédié</li>
+        <li>· Actions contextuelles ⌘S / ⌘P / Esc</li>
+        <li>· Sections numérotées en serif italic</li>
+        <li>· Pills statut colorées par workflow</li>
+      </ul>
+    </div>
+    <div class="token-card">
+      <h3>✦ Motion</h3>
+      <ul style="font-size:13px;color:var(--mf-muted);line-height:1.8;list-style:none;">
+        <li>· TOC active follow on scroll</li>
+        <li>· Dot FIC : vert quand rempli</li>
+        <li>· Completion bar anim 700ms</li>
+        <li>· Spark bars stagger 30ms</li>
+        <li>· Card preview lift-1 au hover</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- COMPONENTS GALLERY -->
+<section class="stage">
+  <div class="watermark">03</div>
+  <div class="stage-eyebrow"><span class="num">◆ 03</span> Pièces</div>
+  <h2 class="stage-title">Composants assumés.</h2>
+  <p class="stage-lead">Chaque atom est pensé par état. Pas de shadow par défaut — elle est réservée aux éléments flottants. Focus rings animés. Motion spring partout où c'est cliquable.</p>
+
+  <div class="comp-grid">
+    <div class="comp-card">
+      <div class="comp-card-label">Boutons</div>
+      <div class="comp-card-body">
+        <button class="mf-btn is-primary">Primary action</button>
+        <button class="mf-btn">Default</button>
+        <button class="mf-btn is-ghost">Ghost</button>
+        <button class="mf-btn is-danger">Danger</button>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="comp-card-label">Pills statut</div>
+      <div class="comp-card-body" style="flex-direction:row;flex-wrap:wrap;gap:8px;">
+        <span class="mf-pill primary">● Publié</span>
+        <span class="mf-pill warn">● En revue</span>
+        <span class="mf-pill">● Brouillon</span>
+        <span class="mf-pill ok">● Actif</span>
+        <span class="mf-pill danger">● À risque</span>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="comp-card-label">KPI secondaire</div>
+      <div class="comp-card-body">
+        <div class="mf-kpi" style="border:0;padding:0;">
+          <div class="mf-kpi-eyebrow">Marge moyenne grossiste</div>
+          <div class="mf-kpi-value rose">46 %</div>
+          <div class="mf-kpi-delta up">↑ +2 pts vs mois dernier</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="comp-card-label">Input label</div>
+      <div class="comp-card-body">
+        <div>
+          <label class="mf-label">Nom du produit</label>
+          <input class="mf-input" value="Cub'Cake Pistache Sicilienne">
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="comp-card-label">Toast + palette</div>
+      <div class="comp-card-body">
+        <div style="position:relative;padding:20px;background:var(--mf-ink);border-radius:999px;color:var(--mf-paper);font-size:12px;letter-spacing:0.1em;text-transform:uppercase;display:inline-flex;align-items:center;gap:12px;align-self:center;">Enregistré · v15 créée<span style="padding:4px 10px;border:1px solid rgba(240,232,220,0.3);border-radius:999px;font-size:10px;">Annuler</span></div>
+        <div style="background:var(--mf-paper-pure);border:1px solid var(--mf-hairline);border-radius:8px;overflow:hidden;">
+          <div style="padding:10px 14px;font-family:var(--font-serif);font-style:italic;font-size:15px;color:var(--mf-ink);border-bottom:1px solid var(--mf-hairline);">⌕ tarifi…</div>
+          <div style="padding:6px 0;">
+            <div style="padding:4px 14px;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--mf-muted-2);">Actions</div>
+            <div style="padding:8px 14px;display:flex;align-items:center;gap:10px;background:var(--mf-paper-soft);"><span style="font-family:var(--font-serif);font-style:italic;color:var(--mf-rose);">€</span><span style="flex:1;font-size:13px;">Tarification par coefficients</span><span style="font-family:var(--font-mono);font-size:10px;padding:2px 6px;background:var(--mf-paper-pure);border:1px solid var(--mf-hairline);border-radius:4px;">⏎</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="comp-card-label">Empty state</div>
+      <div class="comp-card-body" style="align-items:center;text-align:center;">
+        <div style="font-family:var(--font-serif);font-style:italic;color:var(--mf-poudre);font-size:48px;opacity:0.6;">✦</div>
+        <div style="font-family:var(--font-serif);font-style:italic;font-size:18px;color:var(--mf-ink);">Rien à relancer</div>
+        <div style="font-size:13px;color:var(--mf-muted);">Tous les distributeurs actifs ont eu une interaction récente.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2>Reste à <em>voir en mouvement</em>.</h2>
+  <p>Ouvre le dashboard ou la prospection — le design system est déjà appliqué. La refonte complète de la modal produit arrive dans le prochain sprint.</p>
+  <div class="actions">
+    <a href="/outils/dashboard" class="mf-btn is-primary">Dashboard</a>
+    <a href="/outils/prospection" class="mf-btn" style="background:var(--mf-paper);color:var(--mf-ink);border-color:var(--mf-paper);">Prospection</a>
+    <a href="/outils/catalogue-builder" class="mf-btn" style="background:transparent;color:var(--mf-paper);border-color:var(--mf-poudre);">Catalogue</a>
+  </div>
+</section>
+
+<footer class="mf-foot">
+  Maison Félicien · pâtisserie artisanale parisienne · backoffice pro
+</footer>
+
+<script src="/outils/_tokens.js"></script>
+<script>
+// Scroll-link TOC
+const tocLinks = document.querySelectorAll('.fiche-toc a');
+const sections = [...tocLinks].map(l => document.querySelector(l.getAttribute('href'))).filter(Boolean);
+
+document.querySelector('.fiche-form').addEventListener('scroll', () => {
+  const scrollTop = document.querySelector('.fiche-form').scrollTop;
+  let current = sections[0]?.id;
+  for (const s of sections) {
+    if (s.offsetTop - 100 <= scrollTop) current = s.id;
+  }
+  tocLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+});
+
+// Click TOC scroll to
+tocLinks.forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      document.querySelector('.fiche-form').scrollTo({ top: target.offsetTop - 30, behavior: 'smooth' });
+    }
+  });
+});
+
+// FIC toggle demo
+document.querySelectorAll('.fic-item').forEach(item => {
+  item.addEventListener('click', (e) => {
+    const cb = item.querySelector('input');
+    if (e.target.tagName !== 'INPUT') cb.checked = !cb.checked;
+    item.classList.toggle('on', cb.checked);
+  });
+});
+</script>
+
+</body>
+</html>

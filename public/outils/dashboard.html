@@ -9,7 +9,118 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Questrial&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/outils/_tokens.css">
 <style>
-  /* Page-specific */
+  /* Page-specific · audace éditoriale */
+  body { overflow-x: hidden; }
+
+  .dash-intro {
+    background: var(--mf-ink);
+    color: var(--mf-paper);
+    padding: 80px 48px 96px;
+    margin: 0 calc(-1 * var(--sp-5));
+    margin-top: -32px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--mf-hairline);
+  }
+  :root[data-theme='dark'] .dash-intro { background: #120B0E; }
+  .dash-intro::before {
+    content: '';
+    position: absolute;
+    top: -200px; right: -180px;
+    width: 680px; height: 680px;
+    border-radius: 999px;
+    background: radial-gradient(circle, var(--mf-rose) 0%, transparent 68%);
+    opacity: 0.28;
+    filter: blur(80px);
+    animation: dash-pulse 12s ease-in-out infinite;
+  }
+  @keyframes dash-pulse {
+    0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.28; }
+    50% { transform: scale(1.12) translate(-20px, 10px); opacity: 0.35; }
+  }
+  .dash-intro-content {
+    max-width: 1200px; margin: 0 auto; position: relative; z-index: 1;
+    padding: 0 calc(var(--sp-5) - 0px);
+  }
+  .dash-intro .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 11px; letter-spacing: 0.4em; text-transform: uppercase;
+    color: var(--mf-poudre); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .dash-intro .eyebrow::before {
+    content: ''; width: 40px; height: 1px; background: var(--mf-poudre); opacity: 0.6;
+  }
+  .dash-intro h1 {
+    font-family: var(--font-serif); font-style: italic; font-weight: 500;
+    font-size: clamp(56px, 10vw, 128px);
+    line-height: 0.92;
+    color: var(--mf-rose);
+    letter-spacing: -0.02em;
+    margin-bottom: 18px;
+  }
+  .dash-intro p.lead {
+    font-family: var(--font-serif); font-style: italic;
+    font-size: clamp(18px, 2vw, 24px);
+    line-height: 1.4;
+    color: var(--mf-paper);
+    opacity: 0.88;
+    max-width: 640px;
+  }
+  .dash-intro .pulse-stats {
+    margin-top: 40px;
+    display: flex; gap: 40px; flex-wrap: wrap;
+  }
+  .dash-intro .pulse-stat {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .dash-intro .pulse-stat .val {
+    font-family: var(--font-serif); font-style: italic;
+    font-size: 44px; font-weight: 500;
+    color: var(--mf-paper); line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .dash-intro .pulse-stat .lbl {
+    font-family: var(--font-sans);
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--mf-poudre);
+  }
+
+  .dash-section {
+    position: relative;
+    padding-top: 40px;
+  }
+  .dash-section .watermark {
+    position: absolute;
+    top: 0; left: -10px;
+    font-family: var(--font-serif); font-style: italic;
+    font-size: 180px;
+    line-height: 0.8;
+    color: var(--mf-ink);
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 0;
+    letter-spacing: -0.05em;
+  }
+  :root[data-theme='dark'] .dash-section .watermark { color: var(--mf-rose); opacity: 0.12; }
+  .dash-section > * { position: relative; z-index: 1; }
+  .dash-section-head {
+    display: flex; align-items: baseline; gap: 14px;
+    margin-bottom: 20px;
+  }
+  .dash-section-head .num {
+    font-family: var(--font-serif); font-style: italic;
+    color: var(--mf-rose); font-size: 22px;
+  }
+  .dash-section-head h2 {
+    font-family: var(--font-serif); font-style: italic; font-weight: 500;
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1;
+    color: var(--mf-ink);
+    letter-spacing: -0.01em;
+  }
+  .dash-section-head h2 em { color: var(--mf-rose); }
+
   .dash-hero {
     display: grid;
     grid-template-columns: 1.2fr 0.8fr;
@@ -197,13 +308,21 @@
   </nav>
 </header>
 
-<main class="mf-wrap">
-  <div class="mf-eyebrow" id="greet-eyebrow">Ton Atelier</div>
-  <h1 class="mf-page-title">Bonjour.</h1>
-  <p class="mf-page-sub">État du catalogue, du pipeline distributeur, et de la maison — en un regard.</p>
+<!-- HERO ÉDITORIAL -->
+<section class="dash-intro">
+  <div class="dash-intro-content">
+    <div class="eyebrow" id="greet-eyebrow">Ton Atelier</div>
+    <h1>Bonjour.</h1>
+    <p class="lead">État du catalogue, du pipeline distributeur, et de la maison — en un regard.</p>
+    <div class="pulse-stats" id="pulse-stats">
+      <div class="pulse-stat"><span class="val" id="pulse-prod">—</span><span class="lbl">produits au catalogue</span></div>
+      <div class="pulse-stat"><span class="val" id="pulse-dist">—</span><span class="lbl">distributeurs en base</span></div>
+      <div class="pulse-stat"><span class="val" id="pulse-views">—</span><span class="lbl">vues sur 7 jours</span></div>
+    </div>
+  </div>
+</section>
 
-  <div class="mf-divider"><span class="mf-divider-star">✦ ✦ ✦</span></div>
-
+<main class="mf-wrap" style="padding-top: var(--sp-7);">
   <!-- HERO : 1 KPI principal + Today -->
   <section class="dash-hero mf-stagger">
     <div class="mf-kpi-hero" id="hero-card">
@@ -369,6 +488,16 @@ function renderHero(d) {
     <a href="/outils/cockpit" class="mf-btn is-primary">Ouvrir le cockpit</a>
     <a href="/outils/prospection" class="mf-btn">Créer un kit</a>
   `;
+}
+
+function renderPulseStats(d) {
+  // Chiffres pulse en dark hero
+  const total = d.produits.length;
+  const dist = d.distributeurs.length;
+  const views7 = d.views.filter(v => (Date.now() - new Date(v.viewed_at).getTime()) < 7 * 86400 * 1000).length;
+  document.getElementById('pulse-prod').textContent = total;
+  document.getElementById('pulse-dist').textContent = dist;
+  document.getElementById('pulse-views').textContent = views7;
 }
 
 function renderToday(d) {
@@ -571,6 +700,7 @@ function setEyebrow() {
   registerPaletteActions();
   if (!(await initAuth())) return;
   const d = await loadData();
+  renderPulseStats(d);
   renderHero(d);
   renderToday(d);
   renderKPIs(d);
