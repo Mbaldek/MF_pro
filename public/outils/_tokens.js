@@ -259,6 +259,41 @@
         child.style.animationDelay = (i * 30) + 'ms';
       });
     });
+
+    // Auto-add ripple class sur tous les boutons .mf-btn (non déjà explicite)
+    document.querySelectorAll('.mf-btn, .canal-chip, .fic-item, .today-action, button[data-canal]').forEach(el => {
+      if (!el.classList.contains('mf-ripple')) el.classList.add('mf-ripple');
+    });
+
+    // IntersectionObserver pour .mf-reveal (lazy scroll animation)
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('is-visible');
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+      document.querySelectorAll('.mf-reveal').forEach(el => io.observe(el));
+    } else {
+      document.querySelectorAll('.mf-reveal').forEach(el => el.classList.add('is-visible'));
+    }
+
+    // Split-text effect pour éléments .mf-chars-in (un span par mot/caractère)
+    document.querySelectorAll('.mf-chars-in').forEach(el => {
+      if (el.dataset.split) return;
+      el.dataset.split = '1';
+      const text = el.textContent;
+      el.innerHTML = '';
+      const parts = text.split('');
+      parts.forEach((ch, i) => {
+        const s = document.createElement('span');
+        s.textContent = ch === ' ' ? ' ' : ch;
+        s.style.animationDelay = (i * 28) + 'ms';
+        el.appendChild(s);
+      });
+    });
   });
 
   // Expose API
