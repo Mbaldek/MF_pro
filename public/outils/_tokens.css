@@ -193,33 +193,165 @@ textarea:focus-visible {
   color: var(--mf-poudre); margin-left: 4px;
 }
 
-/* Topnav links */
-.mf-nav { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
-.mf-nav a, .mf-nav button.mf-nav-btn {
-  font-family: var(--font-sans);
-  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
-  padding: 8px 14px;
-  color: var(--mf-poudre);
-  text-decoration: none;
+/* Burger button (dans topbar) */
+.mf-burger {
+  width: 40px; height: 40px;
+  background: transparent;
+  color: var(--mf-paper);
+  border: 1px solid color-mix(in oklab, var(--mf-poudre) 50%, transparent);
   border-radius: var(--r-sm);
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 4px;
+  font-family: var(--font-sans);
   transition: background var(--dur-fast) var(--ease-out),
-              color var(--dur-fast) var(--ease-out);
+              border-color var(--dur-fast) var(--ease-out),
+              transform 80ms linear;
+  padding: 0;
+}
+.mf-burger:hover { background: color-mix(in oklab, var(--mf-paper) 15%, transparent); border-color: var(--mf-poudre); }
+.mf-burger:active { transform: scale(0.95); }
+.mf-burger svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.6; fill: none; stroke-linecap: round; }
+/* Deux barres horizontales animées → croix quand .open */
+.mf-burger .bar {
+  display: block;
+  width: 18px; height: 1.4px;
+  background: currentColor;
+  transition: transform 320ms var(--ease-out), opacity 180ms var(--ease-out);
+  position: relative;
+}
+.mf-burger .bar + .bar { margin-top: 4px; }
+.mf-burger.open .bar:nth-child(1) { transform: translateY(2.7px) rotate(45deg); }
+.mf-burger.open .bar:nth-child(2) { transform: translateY(-2.7px) rotate(-45deg); }
+
+/* Backdrop pour le drawer nav */
+.mf-nav-backdrop {
+  position: fixed; inset: 0;
+  background: color-mix(in oklab, var(--mf-ink) 55%, transparent);
+  backdrop-filter: blur(6px);
+  z-index: 99;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 240ms var(--ease-out);
+}
+.mf-nav-backdrop.open { opacity: 1; pointer-events: auto; }
+
+/* Nav drawer (remplace la nav horizontale) */
+.mf-nav {
+  position: fixed;
+  top: 0; right: 0;
+  height: 100dvh;
+  width: min(420px, 92vw);
+  background: var(--mf-paper-pure);
+  border-left: 1px solid var(--mf-hairline);
+  box-shadow: var(--shadow-2);
+  z-index: 100;
+  padding: 96px 28px 32px;
+  transform: translateX(110%);
+  transition: transform 360ms var(--ease-out);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+}
+.mf-nav.open { transform: translateX(0); }
+.mf-nav .mf-nav-title {
+  font-family: var(--font-sans);
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--mf-muted-2);
+  padding: 0 16px;
+  margin-bottom: 12px;
+}
+.mf-nav a, .mf-nav button.mf-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--mf-ink);
+  letter-spacing: 0;
+  text-transform: none;
+  border-radius: var(--r-md);
   background: transparent;
   border: 0;
   cursor: pointer;
+  text-decoration: none;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out),
+    padding-left var(--dur-fast) var(--ease-out);
   position: relative;
+  text-align: left;
+  line-height: 1.2;
 }
 .mf-nav a:hover, .mf-nav button.mf-nav-btn:hover {
-  background: color-mix(in oklab, var(--mf-paper) 15%, transparent);
-  color: var(--mf-paper);
+  background: var(--mf-paper-soft);
+  color: var(--mf-rose);
+  transform: translateX(3px);
+  padding-left: 20px;
 }
 .mf-nav a.active {
-  color: var(--mf-paper);
-  background: color-mix(in oklab, var(--mf-paper) 12%, transparent);
+  color: var(--mf-rose);
+  background: color-mix(in oklab, var(--mf-rose) 6%, transparent);
 }
-.mf-nav a.active::after {
-  content: ''; position: absolute; left: 12px; right: 12px; bottom: 2px;
-  height: 1px; background: var(--mf-poudre);
+.mf-nav a.active::before {
+  content: '';
+  position: absolute; left: 4px; top: 18px; bottom: 18px;
+  width: 2px;
+  background: var(--mf-rose);
+  border-radius: 999px;
+}
+.mf-nav .mf-nav-hint {
+  font-family: var(--font-mono); font-size: 10px;
+  color: var(--mf-muted-2);
+  padding: 2px 6px;
+  background: var(--mf-paper-soft);
+  border: 1px solid var(--mf-hairline);
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+}
+
+.mf-nav-footer {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--mf-hairline);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding-left: 16px; padding-right: 16px;
+  font-family: var(--font-sans);
+  font-size: 11px; letter-spacing: 0.1em;
+  color: var(--mf-muted-2);
+  text-transform: uppercase;
+}
+.mf-nav-footer .mf-theme-toggle {
+  margin-left: auto;
+  border-color: var(--mf-hairline);
+  color: var(--mf-ink);
+}
+
+.mf-nav-close {
+  position: absolute;
+  top: 24px; right: 24px;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--mf-hairline);
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--mf-muted);
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.mf-nav-close:hover {
+  border-color: var(--mf-rose);
+  color: var(--mf-rose);
+  background: var(--mf-paper-soft);
 }
 
 /* Theme toggle inline */

@@ -297,16 +297,25 @@
     <span class="mf-brand-name">Félicien</span>
     <span class="mf-brand-sub">· Dashboard</span>
   </div>
-  <nav class="mf-nav">
-    <a href="/outils/catalogue-builder">Catalogue</a>
-    <a href="/outils/prospection">Prospection</a>
-    <a href="/outils/cockpit">Cockpit</a>
-    <a href="/outils/dashboard" class="active">Dashboard</a>
-    <a href="/outils/guide">Guide</a>
-    <button type="button" class="mf-nav-btn" onclick="MF.palette.open()" title="Command palette (⌘K)">⌘ K</button>
-    <button type="button" class="mf-theme-toggle" data-theme-toggle title="Basculer le thème">☾</button>
-  </nav>
+  <button type="button" class="mf-burger" data-burger aria-label="Menu" aria-controls="mf-main-nav">
+    <span class="bar"></span><span class="bar"></span>
+  </button>
 </header>
+<nav class="mf-nav" id="mf-main-nav" aria-label="Navigation principale">
+  <button type="button" class="mf-nav-close" data-burger-close aria-label="Fermer">✕</button>
+  <div class="mf-nav-title">Atelier Maison Félicien</div>
+  <a href="/outils/catalogue-builder">Catalogue</a>
+  <a href="/outils/prospection">Prospection</a>
+  <a href="/outils/cockpit">Cockpit distributeurs</a>
+  <a href="/outils/dashboard" class="active">Dashboard</a>
+  <a href="/outils/guide">Guide utilisateur</a>
+  <a href="/outils/design">Design system</a>
+  <button type="button" class="mf-nav-btn" onclick="MF.palette.open()">Ouvrir la palette <span class="mf-nav-hint">⌘ K</span></button>
+  <div class="mf-nav-footer">
+    Thème
+    <button type="button" class="mf-theme-toggle" data-theme-toggle title="Basculer le thème">☾</button>
+  </div>
+</nav>
 
 <!-- HERO ÉDITORIAL -->
 <section class="dash-intro">

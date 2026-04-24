@@ -14,16 +14,21 @@
   }
 
   function applyTheme(theme) {
+    // Si la page force un theme (ex: <html data-force-theme="dark">), on ignore le choix
+    const forced = document.documentElement.getAttribute('data-force-theme');
+    if (forced) theme = forced;
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem(THEME_KEY, theme);
+    if (!forced) localStorage.setItem(THEME_KEY, theme);
     // Update toggle icons everywhere
     document.querySelectorAll('[data-theme-toggle]').forEach(btn => {
       btn.textContent = theme === 'dark' ? '☀' : '☾';
       btn.setAttribute('aria-label', theme === 'dark' ? 'Passer en mode jour' : 'Passer en mode nuit');
+      btn.style.display = forced ? 'none' : '';
     });
   }
 
   function toggleTheme() {
+    if (document.documentElement.getAttribute('data-force-theme')) return;
     const next = (document.documentElement.getAttribute('data-theme') || getTheme()) === 'dark' ? 'light' : 'dark';
     applyTheme(next);
   }
@@ -251,6 +256,65 @@
     const btn = e.target.closest('[data-theme-toggle]');
     if (btn) { e.preventDefault(); toggleTheme(); }
   });
+
+  // ========== Burger nav ==========
+  function ensureBurgerBackdrop() {
+    let b = document.querySelector('.mf-nav-backdrop');
+    if (!b) {
+      b = document.createElement('div');
+      b.className = 'mf-nav-backdrop';
+      b.setAttribute('data-burger-close', '');
+      document.body.appendChild(b);
+    }
+    return b;
+  }
+  function openBurger() {
+    const nav = document.querySelector('.mf-nav');
+    if (!nav) return;
+    ensureBurgerBackdrop().classList.add('open');
+    nav.classList.add('open');
+    document.querySelectorAll('[data-burger]').forEach(b => b.classList.add('open'));
+    document.body.style.overflow = 'hidden';
+  }
+  function closeBurger() {
+    const nav = document.querySelector('.mf-nav');
+    if (nav) nav.classList.remove('open');
+    const bd = document.querySelector('.mf-nav-backdrop');
+    if (bd) bd.classList.remove('open');
+    document.querySelectorAll('[data-burger]').forEach(b => b.classList.remove('open'));
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('click', (e) => {
+    const toggle = e.target.closest('[data-burger]');
+    if (toggle) {
+      e.preventDefault();
+      const nav = document.querySelector('.mf-nav');
+      if (nav && nav.classList.contains('open')) closeBurger();
+      else openBurger();
+      return;
+    }
+    const closer = e.target.closest('[data-burger-close]');
+    if (closer) { e.preventDefault(); closeBurger(); return; }
+    // Fermer le drawer quand on clique sur un lien ou une action du drawer
+    // (sauf le theme toggle)
+    const insideNav = e.target.closest('.mf-nav');
+    if (insideNav) {
+      const link = e.target.closest('a[href]');
+      const button = e.target.closest('button:not([data-theme-toggle]):not([data-burger-close])');
+      if (link || button) {
+        // laisse l'action se produire puis ferme
+        setTimeout(closeBurger, 80);
+      }
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const nav = document.querySelector('.mf-nav');
+      if (nav && nav.classList.contains('open')) closeBurger();
+    }
+  });
+  // Expose
+  global.MF_burger = { open: openBurger, close: closeBurger };
 
   // Page stagger animation (classes .mf-stagger > * se voient setter animation-delay)
   document.addEventListener('DOMContentLoaded', () => {

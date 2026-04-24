@@ -1847,20 +1847,35 @@
     <input type="search" id="topbar-search" placeholder="Rechercher produit, code, ingrédient…" autocomplete="off">
   </div>
   <div class="topbar-actions">
-    <a class="btn" href="/outils/dashboard" style="text-decoration:none;display:inline-flex;align-items:center;">Dashboard</a>
-    <a class="btn" href="/outils/prospection" style="text-decoration:none;display:inline-flex;align-items:center;">Prospection</a>
-    <a class="btn" href="/outils/cockpit" style="text-decoration:none;display:inline-flex;align-items:center;">Cockpit</a>
-    <a class="btn" href="/outils/guide" style="text-decoration:none;display:inline-flex;align-items:center;">Guide</a>
-    <button type="button" class="btn" onclick="MF && MF.palette.open()" title="Palette ⌘K">⌘ K</button>
-    <button type="button" class="btn mf-theme-toggle" data-theme-toggle title="Basculer clair/sombre" style="width:36px;padding:0;">☾</button>
-    <button class="btn" id="btn-cat-settings">Catégorie</button>
-    <button class="btn" id="btn-pricing">Tarification</button>
-    <button class="btn" id="btn-export-json">Export JSON</button>
-    <button class="btn" id="btn-import-json">Import JSON</button>
-    <input type="file" id="file-import" accept=".json" style="display:none">
     <button class="btn btn-primary" id="btn-catalog-preview">Aperçu catalogue</button>
+    <button type="button" class="mf-burger" data-burger aria-label="Menu" aria-controls="mf-main-nav">
+      <span class="bar"></span><span class="bar"></span>
+    </button>
+    <input type="file" id="file-import" accept=".json" style="display:none">
   </div>
 </header>
+<nav class="mf-nav" id="mf-main-nav" aria-label="Navigation principale">
+  <button type="button" class="mf-nav-close" data-burger-close aria-label="Fermer">✕</button>
+  <div class="mf-nav-title">Pages</div>
+  <a href="/outils/catalogue-builder" class="active">Catalogue</a>
+  <a href="/outils/prospection">Prospection</a>
+  <a href="/outils/cockpit">Cockpit distributeurs</a>
+  <a href="/outils/dashboard">Dashboard</a>
+  <a href="/outils/guide">Guide utilisateur</a>
+  <a href="/outils/design">Design system</a>
+
+  <div class="mf-nav-title" style="margin-top:20px;">Actions catalogue</div>
+  <button type="button" class="mf-nav-btn" id="btn-cat-settings">Paramètres catégorie</button>
+  <button type="button" class="mf-nav-btn" id="btn-pricing">Tarification par coefs</button>
+  <button type="button" class="mf-nav-btn" id="btn-export-json">Exporter JSON</button>
+  <button type="button" class="mf-nav-btn" id="btn-import-json">Importer JSON</button>
+  <button type="button" class="mf-nav-btn" onclick="MF && MF.palette.open()">Palette <span class="mf-nav-hint">⌘ K</span></button>
+
+  <div class="mf-nav-footer">
+    Thème
+    <button type="button" class="mf-theme-toggle" data-theme-toggle title="Basculer clair/sombre">☾</button>
+  </div>
+</nav>
 
 <div class="layout">
 

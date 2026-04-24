@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-force-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -173,15 +173,20 @@
     <span class="brand-name">Félicien</span>
     <span class="brand-sub">· Guide</span>
   </div>
-  <div class="topbar-nav">
-    <a href="/outils/catalogue-builder">Catalogue</a>
-    <a href="/outils/prospection">Prospection</a>
-    <a href="/outils/cockpit">Cockpit</a>
-    <a href="/outils/dashboard">Dashboard</a>
-    <a href="/outils/guide" class="active">Guide</a>
-    <button type="button" class="mf-theme-toggle" data-theme-toggle>☾</button>
-  </div>
+  <button type="button" class="mf-burger" data-burger aria-label="Menu" aria-controls="mf-main-nav">
+    <span class="bar"></span><span class="bar"></span>
+  </button>
 </header>
+<nav class="mf-nav" id="mf-main-nav" aria-label="Navigation principale">
+  <button type="button" class="mf-nav-close" data-burger-close aria-label="Fermer">✕</button>
+  <div class="mf-nav-title">Atelier Maison Félicien</div>
+  <a href="/outils/catalogue-builder">Catalogue</a>
+  <a href="/outils/prospection">Prospection</a>
+  <a href="/outils/cockpit">Cockpit distributeurs</a>
+  <a href="/outils/dashboard">Dashboard</a>
+  <a href="/outils/guide" class="active">Guide utilisateur</a>
+  <a href="/outils/design">Design system</a>
+</nav>
 
 <div class="layout">
   <aside class="side-nav">
