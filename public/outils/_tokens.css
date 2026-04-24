@@ -193,36 +193,143 @@ textarea:focus-visible {
   color: var(--mf-poudre); margin-left: 4px;
 }
 
-/* Burger button (dans topbar) */
+/* ============================================================
+   Burger éditorial Maison Félicien
+   Pill serif italique · 3 barres asymétriques animées · label
+   ============================================================ */
 .mf-burger {
-  width: 40px; height: 40px;
-  background: transparent;
-  color: var(--mf-paper);
-  border: 1px solid color-mix(in oklab, var(--mf-poudre) 50%, transparent);
-  border-radius: var(--r-sm);
+  --burger-bar: var(--mf-poudre);
+  --burger-label: var(--mf-paper);
+  --burger-border: color-mix(in oklab, var(--mf-poudre) 40%, transparent);
+  --burger-bg: transparent;
+
+  position: relative;
+  display: inline-flex; align-items: center;
+  gap: 10px;
+  padding: 8px 16px 8px 14px;
+  background: var(--burger-bg);
+  color: var(--burger-label);
+  border: 1px solid var(--burger-border);
+  border-radius: 999px;
   cursor: pointer;
-  display: inline-flex; align-items: center; justify-content: center;
-  gap: 4px;
-  font-family: var(--font-sans);
-  transition: background var(--dur-fast) var(--ease-out),
-              border-color var(--dur-fast) var(--ease-out),
-              transform 80ms linear;
-  padding: 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1;
+  letter-spacing: 0;
+  transition:
+    background var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out),
+    color var(--dur) var(--ease-out),
+    transform 100ms linear,
+    box-shadow var(--dur) var(--ease-out);
+  text-transform: none;
+  height: 40px;
 }
-.mf-burger:hover { background: color-mix(in oklab, var(--mf-paper) 15%, transparent); border-color: var(--mf-poudre); }
-.mf-burger:active { transform: scale(0.95); }
-.mf-burger svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.6; fill: none; stroke-linecap: round; }
-/* Deux barres horizontales animées → croix quand .open */
+.mf-burger:hover {
+  --burger-bar: var(--mf-paper);
+  --burger-label: var(--mf-paper);
+  --burger-border: var(--mf-poudre);
+  --burger-bg: color-mix(in oklab, var(--mf-rose) 38%, transparent);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px -6px color-mix(in oklab, var(--mf-rose) 40%, transparent);
+}
+.mf-burger:active { transform: translateY(0) scale(0.97); }
+
+/* Icône = 3 barres asymétriques 14 / 20 / 10 px */
+.mf-burger .mf-burger-icon {
+  position: relative;
+  width: 20px; height: 14px;
+  display: flex; flex-direction: column; justify-content: center; gap: 3px;
+  flex-shrink: 0;
+}
 .mf-burger .bar {
   display: block;
-  width: 18px; height: 1.4px;
-  background: currentColor;
-  transition: transform 320ms var(--ease-out), opacity 180ms var(--ease-out);
-  position: relative;
+  height: 1.4px;
+  background: var(--burger-bar);
+  border-radius: 999px;
+  transform-origin: center;
+  transition:
+    width var(--dur) var(--ease-out),
+    transform var(--dur) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out),
+    background var(--dur) var(--ease-out);
 }
-.mf-burger .bar + .bar { margin-top: 4px; }
-.mf-burger.open .bar:nth-child(1) { transform: translateY(2.7px) rotate(45deg); }
-.mf-burger.open .bar:nth-child(2) { transform: translateY(-2.7px) rotate(-45deg); }
+.mf-burger .bar:nth-child(1) { width: 14px; align-self: flex-start; }
+.mf-burger .bar:nth-child(2) { width: 20px; }
+.mf-burger .bar:nth-child(3) { width: 10px; align-self: flex-end; }
+
+.mf-burger:hover .bar:nth-child(1) { width: 18px; }
+.mf-burger:hover .bar:nth-child(2) { width: 20px; }
+.mf-burger:hover .bar:nth-child(3) { width: 16px; }
+
+/* État ouvert : 3 barres → croix serrée */
+.mf-burger.open .mf-burger-icon { gap: 0; }
+.mf-burger.open .bar:nth-child(1) {
+  width: 18px;
+  transform: translateY(6px) rotate(45deg);
+  align-self: center;
+}
+.mf-burger.open .bar:nth-child(2) { opacity: 0; width: 0; transform: scaleX(0); }
+.mf-burger.open .bar:nth-child(3) {
+  width: 18px;
+  transform: translateY(-4px) rotate(-45deg);
+  align-self: center;
+}
+
+/* Label "Menu" / "Fermer" en serif italic, cross-fade */
+.mf-burger .mf-burger-label {
+  display: inline-block;
+  position: relative;
+  min-width: 54px;
+  text-align: left;
+  color: var(--burger-label);
+}
+.mf-burger .mf-burger-label::before,
+.mf-burger .mf-burger-label::after {
+  transition: opacity var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
+  position: absolute;
+  inset: 0;
+}
+.mf-burger .mf-burger-label::before {
+  content: 'Menu';
+  position: relative;
+  opacity: 1;
+  transform: translateY(0);
+}
+.mf-burger .mf-burger-label::after {
+  content: 'Fermer';
+  opacity: 0;
+  transform: translateY(4px);
+}
+.mf-burger.open .mf-burger-label::before {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+.mf-burger.open .mf-burger-label::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* État ouvert : remplissage rose plein */
+.mf-burger.open {
+  --burger-bar: var(--mf-paper);
+  --burger-label: var(--mf-paper);
+  --burger-border: var(--mf-rose);
+  --burger-bg: var(--mf-rose);
+  box-shadow: 0 10px 24px -8px color-mix(in oklab, var(--mf-rose) 55%, transparent);
+}
+.mf-burger.open:hover {
+  --burger-bg: var(--mf-ink);
+  --burger-border: var(--mf-ink);
+}
+
+/* Responsive : masquer label en dessous de 380px (pure icône) */
+@media (max-width: 380px) {
+  .mf-burger { padding: 8px 10px; }
+  .mf-burger .mf-burger-label { display: none; }
+}
 
 /* Backdrop pour le drawer nav */
 .mf-nav-backdrop {
