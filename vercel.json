@@ -5,6 +5,8 @@
     { "source": "/outils/dashboard", "destination": "/outils/dashboard.html" },
     { "source": "/outils/prospection", "destination": "/outils/prospection.html" },
     { "source": "/outils/distributeurs", "destination": "/outils/distributeurs.html" },
+    { "source": "/outils/cockpit", "destination": "/outils/cockpit.html" },
+    { "source": "/outils/guide", "destination": "/outils/guide.html" },
     { "source": "/c/:token", "destination": "/c/index.html?t=:token" }
   ]
 }

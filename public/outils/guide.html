@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guide · Maison Félicien Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Questrial&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #8B3A43;
+    --vieux-rose: #BF646D;
+    --poudre: #E5B7B3;
+    --vert: #968A42;
+    --blanc: #F0F0E6;
+    --marron: #392D31;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Questrial', sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--sans);background:#FAFAF7;color:var(--marron);line-height:1.55;-webkit-font-smoothing:antialiased;}
+
+  .topbar{background:var(--marron);color:var(--blanc);padding:14px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;position:sticky;top:0;z-index:40;}
+  .brand{display:flex;align-items:baseline;gap:10px;}
+  .brand-maison{font-size:0.66rem;letter-spacing:0.4em;color:var(--poudre);text-transform:uppercase;}
+  .brand-name{font-family:var(--serif);font-style:italic;font-size:1.4rem;color:var(--blanc);font-weight:500;}
+  .brand-sub{font-size:0.72rem;letter-spacing:0.1em;color:var(--poudre);margin-left:10px;text-transform:uppercase;}
+  .topbar-nav{display:flex;gap:6px;flex-wrap:wrap;}
+  .topbar-nav a{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;padding:8px 14px;border:1px solid var(--poudre);color:var(--blanc);border-radius:4px;text-decoration:none;transition:all 0.15s;}
+  .topbar-nav a:hover,.topbar-nav a.active{background:var(--poudre);color:var(--marron);}
+
+  .layout{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 60px);}
+  @media(max-width:900px){.layout{grid-template-columns:1fr;}}
+
+  /* Menu latéral gauche */
+  .side-nav{
+    background:white;border-right:1px solid var(--poudre);padding:28px 16px;
+    position:sticky;top:60px;align-self:start;max-height:calc(100vh - 60px);overflow-y:auto;
+  }
+  .side-nav-title{
+    font-family:var(--serif);font-style:italic;font-size:1.35rem;color:var(--rose);
+    margin-bottom:4px;
+  }
+  .side-nav-sub{
+    font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--vert);
+    margin-bottom:24px;
+  }
+  .nav-group{margin-bottom:20px;}
+  .nav-group-label{
+    font-size:0.64rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--vert);
+    opacity:0.8;margin-bottom:8px;font-weight:500;padding-left:4px;
+  }
+  .nav-link{
+    display:block;padding:8px 10px;border-radius:4px;color:var(--marron);
+    text-decoration:none;font-size:0.85rem;margin-bottom:2px;
+    border-left:2px solid transparent;transition:all 0.15s;
+  }
+  .nav-link:hover{background:var(--blanc);border-left-color:var(--poudre);}
+  .nav-link.current{background:rgba(139,58,67,0.07);color:var(--rose);border-left-color:var(--rose);font-weight:500;}
+  .nav-link .k{
+    float:right;font-family:ui-monospace,monospace;font-size:0.66rem;
+    color:var(--vert);background:var(--blanc);padding:1px 5px;border-radius:2px;
+    opacity:0.7;
+  }
+
+  .content{padding:40px 48px 120px;max-width:960px;}
+  @media(max-width:900px){.content{padding:24px 20px 80px;}}
+
+  .page-title{font-family:var(--serif);font-style:italic;font-weight:500;font-size:2.6rem;color:var(--rose);margin-bottom:4px;line-height:1.1;}
+  .page-intro{font-size:0.92rem;color:var(--marron);opacity:0.72;max-width:640px;margin-bottom:36px;line-height:1.7;}
+
+  h2{
+    font-family:var(--serif);font-style:italic;font-weight:500;font-size:1.9rem;
+    color:var(--rose);margin-top:56px;margin-bottom:8px;scroll-margin-top:80px;
+    padding-bottom:6px;border-bottom:1px solid var(--poudre);
+  }
+  h2 .num{
+    font-family:var(--serif);font-style:italic;color:var(--vert);opacity:0.55;margin-right:10px;
+  }
+  h2:first-of-type{margin-top:0;}
+  h3{
+    font-family:var(--serif);font-style:italic;font-weight:500;font-size:1.3rem;
+    color:var(--marron);margin-top:28px;margin-bottom:6px;scroll-margin-top:80px;
+  }
+  h3::before{content:'◆';color:var(--vert);margin-right:8px;font-size:0.7em;}
+
+  p{margin-bottom:10px;font-size:0.93rem;color:var(--marron);}
+  p.lead{color:var(--vieux-rose);font-style:italic;font-family:var(--serif);font-size:1.05rem;}
+  ul,ol{padding-left:24px;margin-bottom:14px;}
+  li{margin:4px 0;font-size:0.9rem;}
+  code{font-family:ui-monospace,'SF Mono',monospace;font-size:0.82rem;background:var(--blanc);padding:1px 6px;border-radius:3px;color:var(--rose);}
+
+  .callout{
+    background:var(--blanc);border-left:3px solid var(--vert);
+    padding:14px 18px;border-radius:0 5px 5px 0;margin:14px 0;
+    font-size:0.88rem;
+  }
+  .callout.warn{border-left-color:var(--vieux-rose);background:rgba(191,100,109,0.05);}
+  .callout.ok{border-left-color:var(--vert);}
+  .callout strong{color:var(--rose);font-weight:500;}
+
+  .shortcut-table{
+    width:100%;border-collapse:collapse;margin:12px 0 18px;font-size:0.86rem;
+  }
+  .shortcut-table td{padding:6px 10px;border-bottom:1px dashed var(--poudre);}
+  .shortcut-table td:first-child{
+    font-family:ui-monospace,monospace;color:var(--rose);font-size:0.78rem;
+    white-space:nowrap;width:180px;
+  }
+
+  .step-list{counter-reset:step;list-style:none;padding:0;}
+  .step-list li{
+    counter-increment:step;padding:10px 14px 10px 48px;margin-bottom:6px;
+    background:white;border:1px solid var(--poudre);border-radius:5px;
+    position:relative;
+  }
+  .step-list li::before{
+    content:counter(step);position:absolute;left:14px;top:10px;
+    width:22px;height:22px;border-radius:50%;background:var(--rose);color:white;
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--serif);font-style:italic;font-size:0.85rem;
+  }
+
+  .feature-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:10px;margin:14px 0 20px;
+  }
+  .feat{
+    background:white;border:1px solid var(--poudre);border-radius:5px;
+    padding:12px 14px;font-size:0.85rem;
+  }
+  .feat strong{font-family:var(--serif);font-style:italic;color:var(--rose);display:block;margin-bottom:3px;font-size:1rem;}
+
+  .cta-row{
+    display:flex;gap:10px;margin:16px 0;flex-wrap:wrap;
+  }
+  .cta{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:10px 16px;background:var(--rose);color:var(--blanc);
+    border-radius:4px;text-decoration:none;font-size:0.78rem;
+    letter-spacing:0.1em;text-transform:uppercase;transition:all 0.15s;
+  }
+  .cta:hover{background:var(--marron);}
+  .cta.ghost{background:white;color:var(--marron);border:1px solid var(--poudre);}
+  .cta.ghost:hover{border-color:var(--rose);color:var(--rose);}
+
+  .pill{
+    display:inline-block;padding:2px 8px;border-radius:100px;font-size:0.64rem;
+    letter-spacing:0.12em;text-transform:uppercase;
+  }
+  .pill.new{background:rgba(150,138,66,0.2);color:var(--vert);}
+  .pill.pro{background:rgba(139,58,67,0.1);color:var(--rose);}
+
+  .toc-mobile{display:none;}
+  @media(max-width:900px){
+    .side-nav{display:none;}
+    .toc-mobile{
+      display:block;margin-bottom:24px;padding:12px 14px;background:white;
+      border:1px solid var(--poudre);border-radius:5px;font-size:0.86rem;
+    }
+    .toc-mobile a{color:var(--rose);margin-right:12px;text-decoration:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-maison">Maison</span>
+    <span class="brand-name">Félicien</span>
+    <span class="brand-sub">· Guide</span>
+  </div>
+  <div class="topbar-nav">
+    <a href="/outils/catalogue-builder">Catalogue</a>
+    <a href="/outils/prospection">Prospection</a>
+    <a href="/outils/cockpit">Cockpit</a>
+    <a href="/outils/dashboard">Dashboard</a>
+    <a href="/outils/guide" class="active">Guide</a>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="side-nav">
+    <div class="side-nav-title">Guide</div>
+    <div class="side-nav-sub">Maison Félicien Pro</div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Commencer</div>
+      <a href="#intro" class="nav-link">Vue d'ensemble</a>
+      <a href="#architecture" class="nav-link">Architecture</a>
+      <a href="#access" class="nav-link">Connexion & rôles</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Catalogue</div>
+      <a href="#catalogue" class="nav-link">Builder produits</a>
+      <a href="#workflow" class="nav-link">Workflow publication</a>
+      <a href="#fic" class="nav-link">Allergènes FIC</a>
+      <a href="#versions" class="nav-link">Historique & versions</a>
+      <a href="#translations" class="nav-link">Traductions EN / JA</a>
+      <a href="#ia" class="nav-link">Enrichissement IA</a>
+      <a href="#photos" class="nav-link">Photos & Storage</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Prix & marges</div>
+      <a href="#pricing" class="nav-link">Coefficients canal</a>
+      <a href="#simulator" class="nav-link">Simulateur live</a>
+      <a href="#benchmark" class="nav-link">Benchmark marché</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Commercial</div>
+      <a href="#prospection" class="nav-link">Kits &amp; liens partagés</a>
+      <a href="#cockpit" class="nav-link">Cockpit distributeurs <span class="pill new">NEW</span></a>
+      <a href="#brevo" class="nav-link">Brevo · séquences email <span class="pill new">NEW</span></a>
+      <a href="#dashboard" class="nav-link">Dashboard pilotage</a>
+      <a href="#public-share" class="nav-link">Page publique /c/:token</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Productivité</div>
+      <a href="#shortcuts" class="nav-link">Raccourcis clavier</a>
+      <a href="#bulk" class="nav-link">Actions en lot</a>
+      <a href="#import-export" class="nav-link">Import / export</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Support</div>
+      <a href="#faq" class="nav-link">Questions fréquentes</a>
+      <a href="#changelog" class="nav-link">Historique versions</a>
+    </div>
+  </aside>
+
+  <main class="content">
+    <div class="toc-mobile">
+      <strong style="color:var(--rose);">Navigation rapide · </strong>
+      <a href="#catalogue">Catalogue</a>
+      <a href="#prospection">Prospection</a>
+      <a href="#cockpit">Cockpit</a>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#shortcuts">Raccourcis</a>
+    </div>
+
+    <h1 class="page-title" id="intro">Guide de l'outil</h1>
+    <p class="page-intro">Tout ce que tu peux faire depuis <code>pro.maison-felicien.com</code>. Le backoffice couvre la gestion du catalogue B2B, la prospection distributeurs, la conformité légale et le pilotage commercial. Chaque module est accessible à 1 clic via la barre de navigation noire en haut.</p>
+
+    <div class="cta-row">
+      <a href="/outils/catalogue-builder" class="cta">Ouvrir le catalogue</a>
+      <a href="/outils/cockpit" class="cta">Ouvrir le cockpit</a>
+      <a href="/outils/dashboard" class="cta ghost">Voir le dashboard</a>
+    </div>
+
+    <h2 id="architecture"><span class="num">01</span>Architecture</h2>
+    <p>Le backoffice est un ensemble de pages HTML statiques hébergées sur Vercel, connectées à Supabase (PostgreSQL + Auth + Storage) et à des APIs serverless pour l'IA Claude et l'emailing Brevo.</p>
+
+    <div class="feature-grid">
+      <div class="feat"><strong>Catalogue</strong>Gestion des produits, prix, photos, workflow de publication</div>
+      <div class="feat"><strong>Prospection</strong>Kits de vente personnalisés, liens de partage trackés</div>
+      <div class="feat"><strong>Cockpit</strong>CRM de chasse distributeurs + séquences email Brevo</div>
+      <div class="feat"><strong>Dashboard</strong>KPIs pilotage commercial en temps réel</div>
+    </div>
+
+    <h2 id="access"><span class="num">02</span>Connexion &amp; rôles</h2>
+    <p>Toutes les pages admin sont protégées par Supabase Auth avec le rôle <code>admin</code>. Un utilisateur sans ce rôle est redirigé vers la page de connexion.</p>
+    <ul>
+      <li>Login unique à <code>/outils/login.html</code></li>
+      <li>Session persistante 7 jours (rafraîchie automatiquement)</li>
+      <li>Les pages publiques <code>/c/:token</code> ne nécessitent aucune auth (lien secret)</li>
+    </ul>
+
+    <h2 id="catalogue"><span class="num">03</span>Catalogue builder</h2>
+    <p class="lead">Le cœur du backoffice — gestion des produits, packaging, prix par canal, photos, et préparation à la publication B2B.</p>
+    <p>Accessible à <a href="/outils/catalogue-builder">/outils/catalogue-builder</a>. Chaque produit est géré via une modale à 5 onglets :</p>
+
+    <h3>1. Identité</h3>
+    <p>Nom, sous-titre, saison, descriptions (courte / longue), rationnel commercial, ingrédients, allergènes, origine, recette/storytelling. Les champs marqués <code>·</code> rose sont obligatoires avant publication.</p>
+
+    <h3>2. Packaging</h3>
+    <p>Format (UNITE, BOITE_6, POT, etc.), libellé, nombre d'unités, MOQ, DLC, poids, dimensions. Codification EAN-13 et SKU.</p>
+    <div class="callout ok">
+      <strong>Astuce</strong> — Le bouton <em>Générer</em> à côté du champ EAN crée un EAN-13 valide (checksum mod-10) avec le préfixe fabricant français 3770.
+    </div>
+
+    <h3>3. Tarifs</h3>
+    <p>Coût de revient HT, PPR TTC, prix par canal (Grossiste, Agent, Épicier, Plateforme). Le toggle <em>Override</em> permet de figer manuellement les prix plutôt que les laisser calculés depuis le PPR.</p>
+
+    <h3>4. Photo</h3>
+    <p>Drag &amp; drop d'une image JPG/PNG. Conversion automatique en WebP ≤ 1600 px côté client, upload vers Supabase Storage. Bucket <code>catalogue-photos</code>, URL CDN publique.</p>
+
+    <h3>5. Logistique</h3>
+    <p>Mode d'expédition, franco négocié, délai réassort, conditions de paiement, reprise invendus, notes libres.</p>
+
+    <h2 id="workflow"><span class="num">04</span>Workflow de publication</h2>
+    <p>Un produit traverse 5 statuts de sa création à sa fin de vie :</p>
+    <ol>
+      <li><strong>Brouillon</strong> — en cours de saisie, pas visible des distributeurs</li>
+      <li><strong>En revue</strong> — en attente de validation interne</li>
+      <li><strong>Publié</strong> — actif dans les catalogues et exports</li>
+      <li><strong>En pause</strong> — temporairement retiré (rupture, saison)</li>
+      <li><strong>Archivé</strong> — retiré définitivement sans perte d'historique</li>
+    </ol>
+    <p>Le passage en <em>Publié</em> est bloqué tant que les <strong>gates de publication</strong> ne sont pas satisfaites : nom, description courte ≥ 20c, ingrédients, allergènes FIC validés, PPR &gt; 0, au moins un canal de prix, photo présente.</p>
+    <div class="callout">
+      Le bloc vert/rouge en bas de la modale liste les critères restants en temps réel. Le bouton <em>Publier</em> devient actif quand tout est au vert.
+    </div>
+
+    <h2 id="fic"><span class="num">05</span>Allergènes FIC</h2>
+    <p>Règlement européen INCO 1169/2011 — liste des 14 allergènes majeurs à déclarer obligatoirement.</p>
+    <p>Dans l'onglet <em>Identité</em>, la section <strong>Conformité FIC</strong> propose les 14 cases à cocher (gluten, crustacés, œufs, poissons, arachides, soja, lait, fruits à coque, céleri, moutarde, sésame, sulfites, lupin, mollusques).</p>
+    <ul>
+      <li>Clic sur une case = « contient »</li>
+      <li><code>Shift</code> + clic = marquer en « trace »</li>
+      <li>Case <em>Aucun de ces 14</em> = valide explicitement un produit sans allergène</li>
+      <li>Bouton <em>✦ Déduire depuis les ingrédients</em> = détection automatique via regex (à valider manuellement ensuite)</li>
+    </ul>
+
+    <h2 id="versions"><span class="num">06</span>Historique &amp; versions</h2>
+    <p>Chaque produit conserve un snapshot immuable à chaque étape clé : création, publication, dépublication, archivage, revert.</p>
+    <p>Bouton <em>Historique</em> en bas de la modale produit :</p>
+    <ul>
+      <li>Liste des versions numérotées (v1, v2, ...) avec date, action, auteur</li>
+      <li><em>Diff</em> — dépliage inline des différences champ par champ</li>
+      <li><em>Revert</em> — restauration d'une version antérieure (crée une nouvelle version, non destructif)</li>
+    </ul>
+    <p>L'<em>audit log</em> global est aussi consultable sur le <a href="/outils/dashboard">dashboard</a>.</p>
+
+    <h2 id="translations"><span class="num">07</span>Traductions EN / JA</h2>
+    <p>Le règlement Ankorstore international et la cible Japon (pâtisserie française haut de gamme) justifient une traduction professionnelle du catalogue.</p>
+    <p>Dans l'onglet <em>Identité</em>, section <strong>Traductions</strong> : deux onglets <code>EN</code> et <code>日本語</code> avec les 4 champs principaux (nom, sous-titre, desc courte, desc longue). Chaque champ a un bouton <em>✦ FR→EN</em> / <em>✦ FR→日本語</em> qui appelle Claude Sonnet avec un prompt dédié par langue (ton premium, préservation des AOP/IGP, pas d'anglicisme).</p>
+    <p>Les pages publiques <code>/c/:token</code> supportent <code>?lang=en</code> ou <code>?lang=ja</code> avec fallback FR automatique.</p>
+
+    <h2 id="ia"><span class="num">08</span>Enrichissement IA</h2>
+    <p>4 champs textuels sont enrichissables par Claude Sonnet via le bouton <em>✦ Enrichir avec l'IA</em> :</p>
+    <div class="feature-grid">
+      <div class="feat"><strong>Desc courte</strong>25-35 mots, ton sensoriel, 1-2 phrases</div>
+      <div class="feat"><strong>Desc longue</strong>80-120 mots, storytelling, matière &amp; geste</div>
+      <div class="feat"><strong>Rationnel</strong>3-5 bullets B2B : différenciation, rotation, prix</div>
+      <div class="feat"><strong>Recette</strong>60-90 mots, un seul angle technique ou saisonnier</div>
+    </div>
+    <div class="callout">
+      Les prompts appliquent des <strong>règles strictes Maison Félicien</strong> : pas d'origine inventée, pas de producteur fictif, pas de superlatif vide, pas d'emoji. Si une info manque, l'IA reste évocatrice plutôt que d'inventer.
+    </div>
+
+    <h2 id="photos"><span class="num">09</span>Photos &amp; Storage</h2>
+    <p>Upload réel via Supabase Storage, bucket <code>catalogue-photos</code> (public read, upload signé admin).</p>
+    <ol>
+      <li>Drop ou sélectionne un JPG/PNG</li>
+      <li>Conversion client en WebP (qualité 85 %)</li>
+      <li>Redim ≤ 1600 px par le plus grand côté</li>
+      <li>Upload vers le bucket, URL CDN retournée</li>
+      <li>Cache immutable 1 an</li>
+    </ol>
+
+    <h2 id="pricing"><span class="num">10</span>Coefficients par canal</h2>
+    <p>Modèle PPR ÷ coefficient. Chaque catégorie (CC, CK, CB, GR, AV) a 4 coefficients, un par canal.</p>
+    <p>Bouton <em>Tarification</em> en topbar → grille éditable 5 × 4. <em>Réinitialiser aux défauts</em> revient aux coefs initiaux (CC 2.56/2.29/2.12/2.34, CK 2.57/2.29/2.11/2.34, CB 2.58/2.29/2.11/2.35, GR 2.58/2.31/2.11/2.35, AV 1.00 partout).</p>
+
+    <h2 id="simulator"><span class="num">11</span>Simulateur live</h2>
+    <p>Dans la modale <em>Tarification</em>, en dessous de la grille, un simulateur se met à jour en live quand tu modifies un coef :</p>
+    <ul>
+      <li>4 tuiles (Grossiste / Agent / Épicier / Plateforme) montrant la <strong>marge moyenne projetée</strong></li>
+      <li>Flèche directionnelle ↑ ↓ → par rapport à la marge actuelle</li>
+      <li>Alerte rouge listant les canaux qui feraient passer des produits sous 30 % de marge</li>
+      <li>Nombre de produits affectés (non-overridés avec PPR et coût renseignés)</li>
+    </ul>
+
+    <h2 id="benchmark"><span class="num">12</span>Benchmark marché</h2>
+    <p>Dans l'onglet <em>Tarifs</em> d'un produit, la section <strong>Benchmark concurrent</strong> permet de saisir le PPR observé chez un concurrent (Hermé, Popelini, L'Éclair de Génie, etc.) et la source.</p>
+    <p>L'écart avec ton PPR est affiché en temps réel avec code couleur :</p>
+    <ul>
+      <li>Vert ± 5 % → aligné marché</li>
+      <li>Poudré &lt; -5 % → marge possible à la hausse</li>
+      <li>Rose &gt; +5 % → vérifier le positionnement</li>
+    </ul>
+
+    <h2 id="prospection"><span class="num">13</span>Kits &amp; liens partagés</h2>
+    <p class="lead">Générer un catalogue filtré à envoyer à un prospect, avec prix canal contextualisé et tracking d'ouverture.</p>
+    <p>Page <a href="/outils/prospection">/outils/prospection</a>. Un « kit » = un sous-ensemble du catalogue ciblé sur un canal (grossiste, agent, épicier, plateforme, public) pour un distributeur spécifique ou en prospection froide.</p>
+
+    <h3>Créer un kit</h3>
+    <ol class="step-list">
+      <li>Choisis le canal tarifaire (détermine quel prix sera affiché)</li>
+      <li>Sélectionne éventuellement un distributeur (pré-créé dans l'onglet Distributeurs) — son nom apparaîtra dans la cover du catalogue</li>
+      <li>Donne un titre (ex. « Sélection automne-hiver ») et une date d'expiration (30/60/90 jours ou jamais)</li>
+      <li>Coche les produits à inclure — <em>Tous actifs</em> pour sélectionner tout, <em>Aucun</em> pour remettre à zéro</li>
+      <li>Clic <em>Générer le lien</em> — l'URL est copiée dans le presse-papier</li>
+    </ol>
+
+    <h3>Suivi des liens</h3>
+    <p>Table <em>Liens actifs</em> : chaque lien affiche son nombre de vues, sa dernière consultation, sa date d'expiration. Boutons <em>Copier</em> (URL) et <em>Révoquer</em> (désactivation définitive).</p>
+
+    <h2 id="public-share"><span class="num">14</span>Page publique /c/:token</h2>
+    <p>Servie par <code>public/c/index.html</code> via un rewrite Vercel. Quand un prospect clique sur un lien partagé :</p>
+    <ul>
+      <li>Appel RPC Postgres <code>get_share_catalogue</code> (security definer, anon key OK)</li>
+      <li>Vérification token (non expiré, non révoqué) puis incrément du compteur de vues</li>
+      <li>Render du catalogue avec cover personnalisée (mention distributeur si présent), prix canal contextualisé, sélection filtrée par codes</li>
+      <li>Language switcher FR / EN / 日本語 (bascule <code>?lang=xx</code>)</li>
+      <li>Gestion propre des états <em>not_found</em> / <em>revoked</em> / <em>expired</em></li>
+      <li><code>noindex, nofollow</code> meta pour éviter tout référencement Google</li>
+    </ul>
+
+    <h2 id="cockpit"><span class="num">15</span>Cockpit distributeurs <span class="pill new">NOUVEAU</span></h2>
+    <p class="lead">Module de chasse active B2B : qualifier, contacter, relancer, signer de nouveaux distributeurs.</p>
+    <p>Page <a href="/outils/cockpit">/outils/cockpit</a>. Complète la table <em>Distributeurs</em> simple avec un pipeline 13 statuts, qualification tier A/B/C, journal d'interactions, préparation de séquences email Brevo.</p>
+
+    <h3>Trois cibles</h3>
+    <div class="feature-grid">
+      <div class="feat"><strong>Grossistes</strong>Référenceurs épicerie fine. Cycle long, coefficient 2.56-2.58</div>
+      <div class="feat"><strong>Agents commerciaux</strong>Commission ~12 %, territoire exclusif possible, cycle plus court</div>
+      <div class="feat"><strong>Plateformes B2B</strong>Ankorstore, Faire, La Ruche Pro, Pourdebon. Inscription sur brand portal puis relance curation</div>
+    </div>
+
+    <h3>Pipeline à 13 statuts</h3>
+    <p>identifié → contacté → relance 1 → relance 2 → réponse → dégustation → RDV → devis → signé → actif. Plus : à risque, perdu, snooze.</p>
+
+    <h3>Qualification tier</h3>
+    <ul>
+      <li><strong>Tier A</strong> — cible prioritaire, potentiel fort, pitch sur mesure</li>
+      <li><strong>Tier B</strong> — standard, séquence automatique</li>
+      <li><strong>Tier C</strong> — long shot, veille</li>
+    </ul>
+
+    <h3>Journal des interactions</h3>
+    <p>Sur la fiche d'un distributeur, une timeline chronologique inverse enregistre :</p>
+    <ul>
+      <li>Emails envoyés, ouverts, répondus (via webhook Brevo)</li>
+      <li>Appels sortants / entrants</li>
+      <li>RDV physique / visio</li>
+      <li>Dégustation envoyée, devis envoyé, signature</li>
+      <li>Notes libres</li>
+    </ul>
+
+    <h2 id="brevo"><span class="num">16</span>Brevo · séquences email <span class="pill new">NOUVEAU</span></h2>
+    <p>Trois séquences email pré-rédigées et versionnées en base, prêtes à être envoyées via Brevo (emailing pro avec délivrabilité, DKIM/SPF et warming).</p>
+
+    <h3>Séquence A · Grossistes</h3>
+    <ul>
+      <li><strong>J+0</strong> — proposition marque, positionnement tarifaire, logistique (300 mots)</li>
+      <li><strong>J+10</strong> — relance avec preuve sociale (rotation 3,8 j, 91 % réassort)</li>
+      <li><strong>J+21</strong> — clôture polie (« je ferme le dossier »)</li>
+    </ul>
+
+    <h3>Séquence B · Agents commerciaux</h3>
+    <ul>
+      <li><strong>J+0</strong> — 12 % commission + exclusivité territoire + pack agent</li>
+      <li><strong>J+7</strong> — relance courte, question binaire oui/non</li>
+    </ul>
+
+    <h3>Séquence C · Plateformes B2B</h3>
+    <ul>
+      <li><strong>J+0</strong> — one-shot post-inscription brand portal, angle mise en avant éditoriale</li>
+    </ul>
+
+    <h3>Workflow</h3>
+    <ol class="step-list">
+      <li>L'admin crée le contact Brevo (nom + email + attributs société/type/tier) via le bouton <em>Lancer séquence</em> sur la fiche</li>
+      <li>Le contact est ajouté à la liste Brevo correspondante (grossiste / agent / plateforme)</li>
+      <li>Brevo exécute la cadence automatisée (J+0, J+10, J+21 selon séquence)</li>
+      <li>Les events (ouvert, répondu, bounce) reviennent par webhook sur <code>/api/brevo-webhook</code></li>
+      <li>Le statut du distributeur s'actualise automatiquement : réponse → <em>réponse</em>, etc.</li>
+    </ol>
+
+    <div class="callout warn">
+      <strong>Prérequis Brevo</strong> — Avant d'utiliser les séquences : créer un compte Brevo, valider le domaine maison-felicien.com (DKIM/SPF/DMARC), créer 3 listes et renseigner les variables <code>BREVO_API_KEY</code>, <code>BREVO_LIST_GROSSISTES</code>, etc. dans Vercel. Détails complets dans le README.
+    </div>
+
+    <h2 id="dashboard"><span class="num">17</span>Dashboard pilotage</h2>
+    <p>Page <a href="/outils/dashboard">/outils/dashboard</a>. Vue d'ensemble temps réel pour décider quoi faire aujourd'hui :</p>
+    <ul>
+      <li><strong>5 KPIs</strong> — produits total / marge moyenne grossiste / liens actifs / distributeurs / FIC manquants</li>
+      <li><strong>Produits à compléter</strong> — &lt; 60 % de complétion, triés croissant</li>
+      <li><strong>Marges à surveiller</strong> — canal grossiste sous 30 %</li>
+      <li><strong>Kits les plus consultés</strong> — bar chart top 8</li>
+      <li><strong>Distributeurs à relancer</strong> — dernière commande &gt; 90 j ou prospect sans commande</li>
+      <li><strong>Historique récent</strong> — 10 dernières actions audit</li>
+    </ul>
+
+    <h2 id="shortcuts"><span class="num">18</span>Raccourcis clavier</h2>
+    <table class="shortcut-table">
+      <tr><td><code>/</code></td><td>Focus barre de recherche produits</td></tr>
+      <tr><td><code>Esc</code></td><td>Effacer la recherche / fermer la modale</td></tr>
+      <tr><td><code>Shift</code> + clic sur allergène FIC</td><td>Marquer en « trace »</td></tr>
+      <tr><td><code>Ctrl</code> + clic sur une carte</td><td>Ouvrir dans un nouvel onglet</td></tr>
+    </table>
+
+    <h2 id="bulk"><span class="num">19</span>Actions en lot</h2>
+    <p>Dans le catalogue, une case à cocher apparaît en haut à gauche de chaque carte au survol. Sélectionne plusieurs produits pour faire apparaître la barre flottante avec :</p>
+    <ul>
+      <li><strong>Dupliquer</strong> — génère N copies avec code auto + suffixe « (copie) » + statut pause</li>
+      <li><strong>Pause / Activer / Archiver</strong> — transition de statut groupée</li>
+      <li><strong>Supprimer</strong> — avec fenêtre d'annulation 5 secondes (toast undo)</li>
+    </ul>
+
+    <h2 id="import-export"><span class="num">20</span>Import / export</h2>
+    <ul>
+      <li><strong>Export JSON</strong> — dump complet de la base (catalogue + coefs + stats) pour backup ou migration</li>
+      <li><strong>Import JSON</strong> — restauration complète depuis un dump, upsert par code</li>
+      <li><strong>CSV Ankorstore</strong> — export filtré prêt à importer dans le brand portal Ankorstore</li>
+      <li><strong>HTML catalogue</strong> — ouvre une version imprimable A4 dans un nouvel onglet</li>
+      <li><strong>Fiche grossiste</strong> — même rendu filtré par produits avec prix grossiste &gt; 0</li>
+      <li><strong>CSV Brevo</strong> — export contacts distributeurs filtrés par type (grossiste, agent, plateforme), format Brevo compatible</li>
+    </ul>
+
+    <h2 id="faq"><span class="num">21</span>Questions fréquentes</h2>
+
+    <h3>Pourquoi mon produit reste en brouillon ?</h3>
+    <p>Regarde le bloc rouge en bas de la modale. Il liste les critères manquants pour publier. Remplis-les et le bouton <em>Publier</em> s'activera.</p>
+
+    <h3>Comment revenir à une ancienne version ?</h3>
+    <p>Ouvre la modale du produit → bouton <em>Historique</em> en bas → <em>Revenir</em> sur la version désirée. Un snapshot <em>revert</em> est créé (non destructif).</p>
+
+    <h3>Le lien que j'ai partagé ne marche plus, pourquoi ?</h3>
+    <p>3 raisons possibles : expiration atteinte, lien révoqué, ou token invalide. Vérifie sur <a href="/outils/prospection">/outils/prospection</a> → table Liens actifs.</p>
+
+    <h3>Un distributeur ne reçoit pas les emails Brevo</h3>
+    <p>Vérifie : 1) qu'il a un email renseigné, 2) qu'il est bien dans la bonne liste Brevo (cocher dans l'interface Brevo), 3) que le domaine Maison Félicien est validé (DKIM/SPF verts dans Brevo), 4) qu'il n'est pas en hard bounce.</p>
+
+    <h3>Puis-je avoir plusieurs admins ?</h3>
+    <p>Oui — créer un utilisateur Supabase Auth et lui assigner <code>app_metadata.role = 'admin'</code> via le dashboard Supabase. Multi-utilisateur sans limite.</p>
+
+    <h2 id="changelog"><span class="num">22</span>Historique des versions</h2>
+    <div class="feature-grid">
+      <div class="feat"><strong>v1.0</strong>CRUD produits + localStorage</div>
+      <div class="feat"><strong>v2.0</strong>Migration Supabase + auth admin</div>
+      <div class="feat"><strong>v3.1</strong>Redesign horizontal cards + packaging catégorie</div>
+      <div class="feat"><strong>v3.2</strong>Search / filtres / bulk / autosave / Storage</div>
+      <div class="feat"><strong>V2.1</strong>Workflow publication + FIC + versioning</div>
+      <div class="feat"><strong>V2.2</strong>Prospection trackée + liens /c/:token</div>
+      <div class="feat"><strong>V2.3</strong>Dashboard commercial</div>
+      <div class="feat"><strong>V2.4</strong>Multi-langue FR / EN / JA</div>
+      <div class="feat"><strong>V2.5</strong>Simulateur coefs + benchmark marché</div>
+      <div class="feat"><strong>V3</strong>Cockpit distributeurs + Brevo</div>
+      <div class="feat"><strong>V3</strong>Guide utilisateur</div>
+    </div>
+
+    <div style="margin-top:60px;padding:24px;background:var(--marron);color:var(--blanc);border-radius:6px;text-align:center;">
+      <div style="font-family:var(--serif);font-style:italic;font-size:1.4rem;margin-bottom:4px;">Maison Félicien</div>
+      <div style="font-size:0.78rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--poudre);">pâtisserie artisanale parisienne · backoffice pro</div>
+    </div>
+  </main>
+</div>
+
+<script>
+// Highlight current section in side nav based on scroll
+const links = document.querySelectorAll('.nav-link');
+const sections = [...links].map(l => document.querySelector(l.getAttribute('href'))).filter(Boolean);
+
+function updateCurrent() {
+  const scrollY = window.scrollY + 120;
+  let current = null;
+  for (const s of sections) {
+    if (s.offsetTop <= scrollY) current = s.id;
+  }
+  links.forEach(l => {
+    l.classList.toggle('current', l.getAttribute('href') === '#' + current);
+  });
+}
+window.addEventListener('scroll', updateCurrent, { passive: true });
+updateCurrent();
+</script>
+
+</body>
+</html>

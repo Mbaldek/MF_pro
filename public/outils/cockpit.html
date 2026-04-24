@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cockpit distributeurs · Maison Félicien</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Questrial&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #8B3A43;
+    --vieux-rose: #BF646D;
+    --poudre: #E5B7B3;
+    --vert: #968A42;
+    --blanc: #F0F0E6;
+    --marron: #392D31;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Questrial', sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans);background:#FAFAF7;color:var(--marron);line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh;}
+
+  .topbar{background:var(--marron);color:var(--blanc);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;position:sticky;top:0;z-index:30;}
+  .brand{display:flex;align-items:baseline;gap:10px;}
+  .brand-maison{font-size:0.66rem;letter-spacing:0.4em;color:var(--poudre);text-transform:uppercase;}
+  .brand-name{font-family:var(--serif);font-style:italic;font-size:1.4rem;color:var(--blanc);font-weight:500;}
+  .brand-sub{font-size:0.72rem;letter-spacing:0.1em;color:var(--poudre);margin-left:10px;text-transform:uppercase;}
+  .topbar-nav{display:flex;gap:6px;flex-wrap:wrap;}
+  .topbar-nav a{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;padding:8px 14px;border:1px solid var(--poudre);color:var(--blanc);border-radius:4px;text-decoration:none;transition:all 0.15s;}
+  .topbar-nav a:hover,.topbar-nav a.active{background:var(--poudre);color:var(--marron);}
+
+  .wrap{max-width:1400px;margin:0 auto;padding:28px 24px 80px;}
+  .page-title{font-family:var(--serif);font-style:italic;font-weight:500;font-size:2.2rem;color:var(--rose);margin-bottom:4px;line-height:1.1;}
+  .page-sub{font-size:0.82rem;color:var(--marron);opacity:0.72;letter-spacing:0.06em;margin-bottom:20px;}
+
+  /* Stats cards */
+  .stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:24px;}
+  .stat{background:white;border:1px solid var(--poudre);border-radius:6px;padding:14px 16px;}
+  .stat-label{font-size:0.64rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--vert);font-weight:500;margin-bottom:4px;}
+  .stat-value{font-family:var(--serif);font-style:italic;font-size:1.8rem;color:var(--rose);line-height:1;font-weight:500;}
+  .stat-hint{font-size:0.7rem;color:var(--marron);opacity:0.6;margin-top:4px;}
+
+  /* Main tabs (type) */
+  .main-tabs{display:flex;gap:2px;border-bottom:1px solid var(--poudre);margin-bottom:14px;flex-wrap:wrap;}
+  .main-tab{
+    padding:10px 18px;background:transparent;border:0;
+    font-family:var(--sans);font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;
+    color:var(--marron);cursor:pointer;border-bottom:3px solid transparent;
+    opacity:0.6;transition:all 0.15s;
+  }
+  .main-tab.active{color:var(--rose);border-bottom-color:var(--rose);opacity:1;font-weight:500;}
+  .main-tab .count{background:var(--blanc);color:var(--marron);font-size:0.68rem;padding:1px 7px;border-radius:100px;margin-left:6px;}
+  .main-tab.active .count{background:var(--rose);color:var(--blanc);}
+
+  /* View switcher (table / kanban) */
+  .view-switch{display:flex;gap:4px;margin-bottom:14px;}
+  .view-switch button{
+    padding:6px 12px;background:white;border:1px solid var(--poudre);
+    border-radius:4px;cursor:pointer;font-size:0.7rem;letter-spacing:0.1em;
+    text-transform:uppercase;color:var(--marron);
+  }
+  .view-switch button.on{background:var(--rose);color:var(--blanc);border-color:var(--rose);}
+
+  /* Toolbar (filtres + search) */
+  .toolbar{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap;}
+  .toolbar input,.toolbar select{
+    padding:7px 10px;border:1px solid var(--poudre);border-radius:4px;
+    font-family:var(--sans);font-size:0.82rem;color:var(--marron);background:white;
+  }
+  .toolbar input:focus,.toolbar select:focus{outline:none;border-color:var(--rose);}
+  .toolbar .search{flex:1;min-width:200px;}
+  .toolbar-spacer{flex:1;}
+  .btn{
+    font-family:var(--sans);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;
+    padding:8px 14px;border:1px solid var(--poudre);background:white;color:var(--marron);
+    border-radius:4px;cursor:pointer;transition:all 0.15s;
+  }
+  .btn:hover{border-color:var(--rose);color:var(--rose);}
+  .btn.primary{background:var(--rose);color:var(--blanc);border-color:var(--rose);}
+  .btn.primary:hover{background:var(--marron);border-color:var(--marron);color:var(--blanc);}
+  .btn.small{padding:5px 10px;font-size:0.62rem;}
+  .btn.danger{color:var(--vieux-rose);border-color:var(--vieux-rose);}
+  .btn.danger:hover{background:var(--vieux-rose);color:var(--blanc);}
+
+  /* Table */
+  .table-wrap{background:white;border:1px solid var(--poudre);border-radius:6px;overflow:hidden;}
+  table{width:100%;border-collapse:collapse;font-size:0.84rem;}
+  thead{background:var(--blanc);}
+  th{text-align:left;padding:10px 12px;font-family:var(--sans);font-weight:500;font-size:0.66rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--vert);border-bottom:1px solid var(--poudre);}
+  td{padding:10px 12px;border-bottom:1px dashed var(--poudre);vertical-align:middle;}
+  tr:last-child td{border-bottom:0;}
+  tr:hover td{background:rgba(229,183,179,0.1);cursor:pointer;}
+  .td-societe strong{font-family:var(--serif);font-style:italic;font-size:1rem;color:var(--marron);display:block;}
+  .td-societe em{font-style:normal;font-size:0.72rem;color:var(--marron);opacity:0.6;}
+  .tier-pill{
+    display:inline-block;width:22px;height:22px;border-radius:50%;
+    text-align:center;line-height:22px;font-family:var(--serif);font-style:italic;
+    font-size:0.85rem;font-weight:500;
+  }
+  .tier-A{background:var(--rose);color:var(--blanc);}
+  .tier-B{background:rgba(150,138,66,0.2);color:var(--vert);}
+  .tier-C{background:var(--blanc);color:var(--marron);border:1px dashed var(--poudre);}
+
+  .pipe-pill{
+    display:inline-block;padding:3px 8px;border-radius:100px;font-size:0.62rem;
+    letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap;
+  }
+  .pipe-identifie{background:rgba(57,45,49,0.07);color:var(--marron);}
+  .pipe-contacte,.pipe-relance_1,.pipe-relance_2{background:rgba(181,164,108,0.2);color:#8a7a3c;}
+  .pipe-reponse,.pipe-degustation,.pipe-rdv{background:rgba(122,163,207,0.2);color:#3d6c94;}
+  .pipe-devis{background:rgba(139,58,67,0.1);color:var(--rose);}
+  .pipe-signe,.pipe-actif{background:rgba(150,138,66,0.2);color:var(--vert);font-weight:500;}
+  .pipe-a_risque{background:rgba(191,100,109,0.2);color:var(--vieux-rose);}
+  .pipe-perdu{background:rgba(57,45,49,0.1);color:var(--marron);opacity:0.6;}
+  .pipe-snooze{background:var(--blanc);color:var(--marron);opacity:0.7;}
+
+  /* Kanban */
+  .kanban{display:flex;gap:12px;overflow-x:auto;padding-bottom:20px;}
+  .kb-col{
+    min-width:260px;width:260px;flex-shrink:0;
+    background:var(--blanc);border-radius:6px;padding:10px;
+  }
+  .kb-col-head{
+    font-family:var(--sans);font-size:0.64rem;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--marron);margin-bottom:10px;font-weight:500;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .kb-col-head .cnt{background:white;padding:2px 8px;border-radius:100px;color:var(--rose);font-size:0.7rem;}
+  .kb-card{
+    background:white;border:1px solid var(--poudre);border-radius:5px;
+    padding:10px 12px;margin-bottom:8px;cursor:grab;
+    transition:all 0.12s;
+  }
+  .kb-card:hover{border-color:var(--rose);box-shadow:0 4px 12px rgba(139,58,67,0.1);}
+  .kb-card.drag{opacity:0.4;}
+  .kb-card strong{font-family:var(--serif);font-style:italic;font-size:0.95rem;color:var(--marron);display:block;}
+  .kb-card em{font-style:normal;font-size:0.7rem;color:var(--vert);letter-spacing:0.04em;}
+  .kb-card .meta{display:flex;gap:6px;align-items:center;margin-top:6px;font-size:0.72rem;color:var(--marron);opacity:0.65;}
+  .kb-col.over{background:rgba(139,58,67,0.08);}
+
+  /* Modal fiche distributeur */
+  .modal-backdrop{
+    position:fixed;inset:0;background:rgba(57,45,49,0.55);
+    display:none;align-items:center;justify-content:center;z-index:50;
+    backdrop-filter:blur(3px);padding:20px;
+  }
+  .modal-backdrop.open{display:flex;}
+  .modal{
+    background:white;border-radius:8px;max-width:780px;width:100%;max-height:90vh;
+    overflow-y:auto;
+  }
+  .modal-head{
+    padding:20px 24px;border-bottom:1px solid var(--poudre);
+    display:flex;justify-content:space-between;align-items:flex-start;gap:16px;
+    background:var(--blanc);
+  }
+  .modal-title{font-family:var(--serif);font-style:italic;font-size:1.5rem;color:var(--rose);font-weight:500;line-height:1.2;}
+  .modal-close{background:transparent;border:0;font-size:1.6rem;color:var(--marron);cursor:pointer;padding:4px 10px;line-height:1;}
+  .modal-body{padding:20px 24px;}
+  .modal-foot{padding:14px 24px;background:var(--blanc);border-top:1px solid var(--poudre);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+
+  .field{margin-bottom:12px;}
+  .field-label{font-size:0.66rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--vert);margin-bottom:5px;font-weight:500;}
+  .input,.select,.textarea{width:100%;padding:8px 12px;border:1px solid var(--poudre);border-radius:4px;font-family:var(--sans);font-size:0.86rem;color:var(--marron);background:white;}
+  .input:focus,.select:focus,.textarea:focus{outline:none;border-color:var(--rose);}
+  .textarea{min-height:60px;resize:vertical;}
+  .row{display:grid;gap:10px;grid-template-columns:1fr;}
+  @media(min-width:520px){.row.cols-2{grid-template-columns:1fr 1fr;}.row.cols-3{grid-template-columns:1fr 1fr 1fr;}}
+
+  .card-section{background:white;border:1px solid var(--poudre);border-radius:5px;padding:14px;margin-bottom:12px;}
+  .card-section-title{font-family:var(--serif);font-style:italic;font-size:1rem;color:var(--rose);margin-bottom:8px;padding-bottom:6px;border-bottom:1px dashed var(--poudre);}
+
+  .timeline{list-style:none;padding:0;}
+  .tl-item{display:grid;grid-template-columns:110px 1fr;gap:10px;padding:8px 0;border-bottom:1px dashed var(--poudre);font-size:0.82rem;}
+  .tl-item:last-child{border-bottom:0;}
+  .tl-item .when{color:var(--vert);font-size:0.72rem;}
+  .tl-item .what strong{font-family:var(--serif);font-style:italic;color:var(--rose);font-weight:500;display:block;}
+  .tl-item .what em{font-style:normal;color:var(--marron);opacity:0.75;font-size:0.78rem;}
+
+  .sequence-card{
+    background:var(--blanc);border-left:3px solid var(--rose);border-radius:0 5px 5px 0;
+    padding:12px 14px;margin-bottom:10px;font-size:0.82rem;
+  }
+  .sequence-card strong{display:block;font-family:var(--serif);font-style:italic;font-size:0.95rem;color:var(--rose);margin-bottom:3px;}
+
+  /* Sequences modal dédiée */
+  .seq-body{max-height:70vh;overflow-y:auto;padding:4px;}
+  .seq-step{background:white;border:1px solid var(--poudre);border-radius:5px;padding:14px;margin-bottom:10px;}
+  .seq-step .hd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+  .seq-step .num{font-family:var(--serif);font-style:italic;font-size:1.3rem;color:var(--rose);}
+  .seq-step .delay{font-size:0.7rem;color:var(--vert);letter-spacing:0.08em;text-transform:uppercase;}
+  .seq-step .corps{font-family:ui-monospace,monospace;font-size:0.78rem;line-height:1.6;background:var(--blanc);padding:10px;border-radius:4px;white-space:pre-wrap;max-height:240px;overflow-y:auto;}
+
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--vert);color:var(--blanc);padding:10px 22px;border-radius:100px;font-size:0.76rem;letter-spacing:0.1em;text-transform:uppercase;transition:transform 0.3s;z-index:60;box-shadow:0 8px 24px rgba(0,0,0,0.25);}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  .toast.danger{background:var(--vieux-rose);}
+
+  .empty{padding:40px 20px;text-align:center;color:var(--marron);opacity:0.6;font-size:0.9rem;}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-maison">Maison</span>
+    <span class="brand-name">Félicien</span>
+    <span class="brand-sub">· Cockpit distributeurs</span>
+  </div>
+  <div class="topbar-nav">
+    <a href="/outils/catalogue-builder">Catalogue</a>
+    <a href="/outils/prospection">Prospection</a>
+    <a href="/outils/cockpit" class="active">Cockpit</a>
+    <a href="/outils/dashboard">Dashboard</a>
+    <a href="/outils/guide">Guide</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-title">Cockpit distributeurs</div>
+  <div class="page-sub">Chasse B2B active · pipeline · séquences email Brevo</div>
+
+  <div class="stats-row" id="stats"></div>
+
+  <div class="main-tabs" id="main-tabs">
+    <button class="main-tab active" data-type="all">Tous <span class="count" id="cnt-all">—</span></button>
+    <button class="main-tab" data-type="grossiste">Grossistes <span class="count" id="cnt-grossiste">—</span></button>
+    <button class="main-tab" data-type="agent">Agents <span class="count" id="cnt-agent">—</span></button>
+    <button class="main-tab" data-type="plateforme">Plateformes <span class="count" id="cnt-plateforme">—</span></button>
+  </div>
+
+  <div class="view-switch">
+    <button data-view="table" class="on">Table</button>
+    <button data-view="kanban">Pipeline</button>
+    <button style="margin-left:auto;" id="btn-seq">Voir les 3 séquences</button>
+    <button id="btn-export" class="primary">Exporter CSV Brevo</button>
+    <button id="btn-new">+ Nouveau distributeur</button>
+  </div>
+
+  <div class="toolbar">
+    <input class="search" id="search" placeholder="Rechercher société, contact, notes…">
+    <select id="f-tier">
+      <option value="">Tous tiers</option>
+      <option value="A">Tier A</option>
+      <option value="B">Tier B</option>
+      <option value="C">Tier C</option>
+    </select>
+    <select id="f-statut">
+      <option value="">Tout pipeline</option>
+      <option value="identifie">Identifié</option>
+      <option value="contacte">Contacté</option>
+      <option value="relance_1">Relance 1</option>
+      <option value="relance_2">Relance 2</option>
+      <option value="reponse">Réponse</option>
+      <option value="degustation">Dégustation</option>
+      <option value="rdv">RDV</option>
+      <option value="devis">Devis</option>
+      <option value="signe">Signé</option>
+      <option value="actif">Actif</option>
+      <option value="a_risque">À risque</option>
+      <option value="perdu">Perdu</option>
+      <option value="snooze">Snooze</option>
+    </select>
+  </div>
+
+  <div id="view-table">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Société</th><th>Type</th><th>Tier</th><th>Pipeline</th><th>Contact</th><th>Dernière action</th><th></th></tr>
+        </thead>
+        <tbody id="tbody"><tr><td colspan="7" class="empty">Chargement…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="view-kanban" style="display:none;"><div class="kanban" id="kanban"></div></div>
+</main>
+
+<!-- MODAL FICHE DISTRIBUTEUR -->
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title" id="d-title">—</div>
+        <div style="font-size:0.76rem;color:var(--marron);opacity:0.6;margin-top:2px;" id="d-sub"></div>
+      </div>
+      <button class="modal-close" id="d-close">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="card-section">
+        <div class="card-section-title">Identité</div>
+        <div class="row cols-2">
+          <div class="field"><div class="field-label">Société</div><input class="input" id="f-nom"></div>
+          <div class="field">
+            <div class="field-label">Type</div>
+            <select class="select" id="f-canal">
+              <option value="grossiste">Grossiste</option>
+              <option value="agent">Agent commercial</option>
+              <option value="plateforme">Plateforme B2B</option>
+              <option value="epicier">Épicier direct</option>
+              <option value="prospect">Prospect (non qualifié)</option>
+            </select>
+          </div>
+        </div>
+        <div class="row cols-3">
+          <div class="field"><div class="field-label">Prénom contact</div><input class="input" id="f-prenom"></div>
+          <div class="field"><div class="field-label">Nom contact</div><input class="input" id="f-nom-contact"></div>
+          <div class="field">
+            <div class="field-label">Tier</div>
+            <select class="select" id="f-tier-form">
+              <option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option>
+            </select>
+          </div>
+        </div>
+        <div class="row cols-2">
+          <div class="field"><div class="field-label">Email</div><input class="input" id="f-email" type="email"></div>
+          <div class="field"><div class="field-label">Téléphone</div><input class="input" id="f-telephone"></div>
+        </div>
+        <div class="row cols-2">
+          <div class="field"><div class="field-label">Site web</div><input class="input" id="f-site"></div>
+          <div class="field"><div class="field-label">Formulaire « devenir fournisseur »</div><input class="input" id="f-formulaire"></div>
+        </div>
+      </div>
+
+      <div class="card-section">
+        <div class="card-section-title">Qualification</div>
+        <div class="row cols-2">
+          <div class="field"><div class="field-label">Type détail</div><input class="input" id="f-type-detail" placeholder="Ex : Grossiste · épicerie sucrée/salée"></div>
+          <div class="field"><div class="field-label">Source prospection</div><input class="input" id="f-source" placeholder="SIAL 2026, annuaire CGF…"></div>
+        </div>
+        <div class="field"><div class="field-label">Notes / angle</div><textarea class="textarea" id="f-notes" placeholder="Pitch spécifique, contexte, historique..."></textarea></div>
+      </div>
+
+      <div class="card-section">
+        <div class="card-section-title">Pipeline</div>
+        <div class="row cols-2">
+          <div class="field">
+            <div class="field-label">Statut</div>
+            <select class="select" id="f-pipeline">
+              <option value="identifie">Identifié</option>
+              <option value="contacte">Contacté</option>
+              <option value="relance_1">Relance 1</option>
+              <option value="relance_2">Relance 2</option>
+              <option value="reponse">Réponse</option>
+              <option value="degustation">Dégustation</option>
+              <option value="rdv">RDV</option>
+              <option value="devis">Devis</option>
+              <option value="signe">Signé</option>
+              <option value="actif">Actif</option>
+              <option value="a_risque">À risque</option>
+              <option value="perdu">Perdu</option>
+              <option value="snooze">Snooze</option>
+            </select>
+          </div>
+          <div class="field"><div class="field-label">Prochaine relance (date)</div><input type="date" class="input" id="f-relance"></div>
+        </div>
+      </div>
+
+      <div class="card-section" id="seq-card">
+        <div class="card-section-title">Séquence email Brevo</div>
+        <div id="seq-state"></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
+          <button class="btn" id="btn-launch-A">Lancer Séquence A · Grossiste</button>
+          <button class="btn" id="btn-launch-B">Lancer Séquence B · Agent</button>
+          <button class="btn" id="btn-launch-C">Lancer Séquence C · Plateforme</button>
+        </div>
+      </div>
+
+      <div class="card-section">
+        <div class="card-section-title" style="display:flex;justify-content:space-between;align-items:center;">
+          <span>Timeline des interactions</span>
+          <button class="btn small" id="btn-add-inter">+ Interaction</button>
+        </div>
+        <div id="add-inter-form" style="display:none;margin-bottom:10px;padding:10px;background:var(--blanc);border-radius:4px;">
+          <div class="row cols-2" style="margin-bottom:8px;">
+            <select class="select" id="inter-type">
+              <option value="appel_sortant">Appel sortant</option>
+              <option value="appel_entrant">Appel entrant</option>
+              <option value="rdv_physique">RDV physique</option>
+              <option value="rdv_visio">RDV visio</option>
+              <option value="degustation_envoyee">Dégustation envoyée</option>
+              <option value="devis_envoye">Devis envoyé</option>
+              <option value="signature">Signature</option>
+              <option value="note_libre">Note libre</option>
+            </select>
+            <input class="input" id="inter-desc" placeholder="Description courte">
+          </div>
+          <button class="btn primary small" id="inter-save">Ajouter</button>
+          <button class="btn small" id="inter-cancel">Annuler</button>
+        </div>
+        <ul class="timeline" id="timeline"></ul>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn danger" id="d-delete" style="display:none;">Supprimer</button>
+      <div style="flex:1;"></div>
+      <button class="btn" id="d-cancel">Annuler</button>
+      <button class="btn primary" id="d-save">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL SEQUENCES -->
+<div class="modal-backdrop" id="modal-seq">
+  <div class="modal" style="max-width:900px;">
+    <div class="modal-head">
+      <div class="modal-title">Séquences email Brevo</div>
+      <button class="modal-close" id="seq-close">×</button>
+    </div>
+    <div class="modal-body seq-body" id="seq-content"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast">OK</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+const SUPABASE_URL = 'https://ckvwkwufdlydobjfwvwy.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_HICvkAoFNpeWenSsXT-FFQ_4O0IyS2l';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: true, autoRefreshToken: true } });
+
+const PIPE_LABELS = {
+  identifie:'Identifié', contacte:'Contacté', relance_1:'Relance 1', relance_2:'Relance 2',
+  reponse:'Réponse', degustation:'Dégustation', rdv:'RDV', devis:'Devis',
+  signe:'Signé', actif:'Actif', a_risque:'À risque', perdu:'Perdu', snooze:'Snooze'
+};
+const PIPE_ORDER = ['identifie','contacte','relance_1','relance_2','reponse','degustation','rdv','devis','signe','actif','a_risque','perdu','snooze'];
+const INTER_LABELS = {
+  email_envoye:'Email envoyé', email_ouvert:'Email ouvert', email_repondu:'Email répondu',
+  appel_sortant:'Appel sortant', appel_entrant:'Appel entrant',
+  rdv_physique:'RDV physique', rdv_visio:'RDV visio',
+  degustation_envoyee:'Dégustation envoyée', devis_envoye:'Devis envoyé',
+  signature:'Signature', note_libre:'Note', statut_change:'Changement de statut'
+};
+
+let distributeurs = [];
+let templates = [];
+let sequences = [];
+let currentFilter = { type: 'all', tier: '', statut: '', q: '' };
+let currentView = 'table';
+let editingId = null;
+let session = null;
+let _toastTimer;
+
+function toast(msg, danger) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.toggle('danger', !!danger);
+  t.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+function fmtDate(s) { if (!s) return '—'; return new Date(s).toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'2-digit' }); }
+function fmtDateTime(s) { if (!s) return '—'; return new Date(s).toLocaleString('fr-FR', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }); }
+
+async function initAuth() {
+  const { data: { session: s } } = await db.auth.getSession();
+  if (!s || s.user?.app_metadata?.role !== 'admin') { window.location.href = '/outils/login.html'; return false; }
+  session = s;
+  return true;
+}
+
+async function loadAll() {
+  const [d, t, s] = await Promise.all([
+    db.from('catalogue_distributeurs').select('*').order('societe', { ascending: true }).then(r => {
+      if (r.error) throw r.error;
+      return r.data.map(x => ({ ...x, societe: x.nom })); // alias nom → societe pour compat
+    }),
+    db.from('email_templates').select('*').order('sequence_id').order('step'),
+    db.from('email_sequences').select('*')
+  ]);
+  distributeurs = d;
+  templates = (t.data || []);
+  sequences = (s.data || []);
+  render();
+}
+
+function render() {
+  renderStats();
+  renderCounts();
+  if (currentView === 'table') { document.getElementById('view-table').style.display = ''; document.getElementById('view-kanban').style.display = 'none'; renderTable(); }
+  else { document.getElementById('view-table').style.display = 'none'; document.getElementById('view-kanban').style.display = ''; renderKanban(); }
+}
+
+function filtered() {
+  return distributeurs.filter(d => {
+    if (currentFilter.type !== 'all' && d.canal !== currentFilter.type) return false;
+    if (currentFilter.tier && d.tier !== currentFilter.tier) return false;
+    if (currentFilter.statut && d.pipeline_statut !== currentFilter.statut) return false;
+    if (currentFilter.q) {
+      const q = currentFilter.q.toLowerCase();
+      const hay = [d.societe, d.prenom, d.nom_contact, d.email, d.type_detail, d.notes].filter(Boolean).join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function renderStats() {
+  const total = distributeurs.length;
+  const ident = distributeurs.filter(d => d.pipeline_statut === 'identifie').length;
+  const contact = distributeurs.filter(d => ['contacte','relance_1','relance_2'].includes(d.pipeline_statut)).length;
+  const pipeline = distributeurs.filter(d => ['reponse','degustation','rdv','devis'].includes(d.pipeline_statut)).length;
+  const signed = distributeurs.filter(d => ['signe','actif'].includes(d.pipeline_statut)).length;
+  const atRisk = distributeurs.filter(d => d.pipeline_statut === 'a_risque').length;
+
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><div class="stat-label">Total</div><div class="stat-value">${total}</div><div class="stat-hint">prospects + actifs</div></div>
+    <div class="stat"><div class="stat-label">Identifiés</div><div class="stat-value">${ident}</div><div class="stat-hint">à contacter</div></div>
+    <div class="stat"><div class="stat-label">Contactés</div><div class="stat-value">${contact}</div><div class="stat-hint">séquence en cours</div></div>
+    <div class="stat"><div class="stat-label">Pipeline</div><div class="stat-value">${pipeline}</div><div class="stat-hint">RDV, devis, dégustation</div></div>
+    <div class="stat"><div class="stat-label">Signés / actifs</div><div class="stat-value">${signed}</div><div class="stat-hint">clients réels</div></div>
+    ${atRisk > 0 ? `<div class="stat" style="background:rgba(191,100,109,0.08);border-color:var(--vieux-rose);"><div class="stat-label">À risque</div><div class="stat-value" style="color:var(--vieux-rose);">${atRisk}</div><div class="stat-hint">action nécessaire</div></div>` : ''}
+  `;
+}
+
+function renderCounts() {
+  ['all','grossiste','agent','plateforme'].forEach(t => {
+    const c = t === 'all' ? distributeurs.length : distributeurs.filter(d => d.canal === t).length;
+    const el = document.getElementById('cnt-' + t);
+    if (el) el.textContent = c;
+  });
+}
+
+function renderTable() {
+  const tbody = document.getElementById('tbody');
+  const rows = filtered();
+  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty">Aucun distributeur pour ces filtres.</td></tr>'; return; }
+  tbody.innerHTML = rows.map(d => {
+    const tierCls = d.tier ? `tier-${d.tier}` : 'tier-C';
+    const tierLabel = d.tier || '—';
+    const lastInter = d.date_dernier_contact || d.last_email_replied_at || d.last_email_sent_at;
+    return `
+      <tr data-id="${d.id}">
+        <td class="td-societe"><strong>${d.societe || '—'}</strong>${d.type_detail ? `<em>${d.type_detail}</em>` : ''}</td>
+        <td>${d.canal}</td>
+        <td><span class="tier-pill ${tierCls}">${tierLabel}</span></td>
+        <td><span class="pipe-pill pipe-${d.pipeline_statut || 'identifie'}">${PIPE_LABELS[d.pipeline_statut] || d.pipeline_statut}</span></td>
+        <td>${d.prenom || ''} ${d.nom_contact || ''}<br><small style="opacity:0.65;">${d.email || '—'}</small></td>
+        <td>${lastInter ? fmtDate(lastInter) : '—'}</td>
+        <td><button class="btn small" data-open-id="${d.id}">Ouvrir</button></td>
+      </tr>
+    `;
+  }).join('');
+  tbody.querySelectorAll('tr').forEach(tr => {
+    tr.onclick = (e) => {
+      if (e.target.tagName === 'BUTTON') return;
+      openModal(tr.dataset.id);
+    };
+  });
+  tbody.querySelectorAll('[data-open-id]').forEach(btn => {
+    btn.onclick = (e) => { e.stopPropagation(); openModal(btn.dataset.openId); };
+  });
+}
+
+function renderKanban() {
+  const host = document.getElementById('kanban');
+  const rows = filtered();
+  const byStatut = {};
+  PIPE_ORDER.forEach(s => { byStatut[s] = []; });
+  rows.forEach(d => { (byStatut[d.pipeline_statut] || byStatut.identifie).push(d); });
+
+  host.innerHTML = PIPE_ORDER.map(s => `
+    <div class="kb-col" data-statut="${s}">
+      <div class="kb-col-head">${PIPE_LABELS[s]} <span class="cnt">${byStatut[s].length}</span></div>
+      ${byStatut[s].map(d => `
+        <div class="kb-card" draggable="true" data-id="${d.id}">
+          <strong>${d.societe}</strong>
+          ${d.type_detail ? `<em>${d.type_detail}</em>` : ''}
+          <div class="meta">
+            ${d.tier ? `<span class="tier-pill tier-${d.tier}" style="width:18px;height:18px;line-height:18px;font-size:0.68rem;">${d.tier}</span>` : ''}
+            <span>${d.canal}</span>
+            ${d.date_dernier_contact ? `<span>· ${fmtDate(d.date_dernier_contact)}</span>` : ''}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+
+  // Drag & drop
+  host.querySelectorAll('.kb-card').forEach(card => {
+    card.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('text/plain', card.dataset.id);
+      card.classList.add('drag');
+    });
+    card.addEventListener('dragend', () => card.classList.remove('drag'));
+    card.addEventListener('click', () => openModal(card.dataset.id));
+  });
+  host.querySelectorAll('.kb-col').forEach(col => {
+    col.addEventListener('dragover', (e) => { e.preventDefault(); col.classList.add('over'); });
+    col.addEventListener('dragleave', () => col.classList.remove('over'));
+    col.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      col.classList.remove('over');
+      const id = e.dataTransfer.getData('text/plain');
+      const newStatut = col.dataset.statut;
+      await changeStatut(id, newStatut);
+    });
+  });
+}
+
+async function changeStatut(id, newStatut) {
+  const d = distributeurs.find(x => x.id === id);
+  if (!d || d.pipeline_statut === newStatut) return;
+  const prev = d.pipeline_statut;
+  const { error } = await db.from('catalogue_distributeurs').update({ pipeline_statut: newStatut }).eq('id', id);
+  if (error) { toast('Erreur : ' + error.message, true); return; }
+  d.pipeline_statut = newStatut;
+  await db.from('distributeur_interactions').insert({
+    distributeur_id: id, type: 'statut_change',
+    description: `${PIPE_LABELS[prev]} → ${PIPE_LABELS[newStatut]}`
+  });
+  toast(`${d.societe} · ${PIPE_LABELS[newStatut]}`);
+  render();
+}
+
+// ---- Modal fiche distributeur ----
+async function openModal(id) {
+  editingId = id;
+  const isNew = id === 'new';
+  const d = isNew ? {
+    societe: '', canal: 'grossiste', prenom: '', nom_contact: '', email: '', telephone: '',
+    site_web: '', formulaire_url: '', tier: '', pipeline_statut: 'identifie',
+    type_detail: '', source_prospection: '', notes: '', date_prochaine_relance: null,
+    sequence_id: null, sequence_step: 0
+  } : distributeurs.find(x => x.id === id);
+  if (!d) return;
+
+  document.getElementById('d-title').textContent = isNew ? 'Nouveau distributeur' : d.societe;
+  document.getElementById('d-sub').textContent = isNew ? '' : `${d.canal} · ${PIPE_LABELS[d.pipeline_statut] || d.pipeline_statut}`;
+  document.getElementById('d-delete').style.display = isNew ? 'none' : '';
+
+  document.getElementById('f-nom').value = d.societe || '';
+  document.getElementById('f-canal').value = d.canal || 'grossiste';
+  document.getElementById('f-prenom').value = d.prenom || '';
+  document.getElementById('f-nom-contact').value = d.nom_contact || '';
+  document.getElementById('f-tier-form').value = d.tier || '';
+  document.getElementById('f-email').value = d.email || '';
+  document.getElementById('f-telephone').value = d.telephone || '';
+  document.getElementById('f-site').value = d.site_web || '';
+  document.getElementById('f-formulaire').value = d.formulaire_url || '';
+  document.getElementById('f-type-detail').value = d.type_detail || '';
+  document.getElementById('f-source').value = d.source_prospection || '';
+  document.getElementById('f-notes').value = d.notes || '';
+  document.getElementById('f-pipeline').value = d.pipeline_statut || 'identifie';
+  document.getElementById('f-relance').value = d.date_prochaine_relance ? d.date_prochaine_relance.slice(0, 10) : '';
+
+  // Seq state
+  const seqState = document.getElementById('seq-state');
+  if (d.sequence_id) {
+    const totalSteps = templates.filter(t => t.sequence_id === d.sequence_id).length;
+    seqState.innerHTML = `
+      <div class="sequence-card">
+        <strong>${d.sequence_id}</strong>
+        Étape ${d.sequence_step || 0} / ${totalSteps} · ${d.last_email_sent_at ? 'dernier envoi ' + fmtDateTime(d.last_email_sent_at) : 'pas encore envoyé'}
+        ${d.last_email_opened_at ? `<div style="margin-top:4px;font-size:0.72rem;color:var(--vert);">Ouvert ${fmtDateTime(d.last_email_opened_at)}</div>` : ''}
+        ${d.last_email_replied_at ? `<div style="margin-top:4px;font-size:0.72rem;color:var(--rose);font-weight:500;">Répondu ${fmtDateTime(d.last_email_replied_at)}</div>` : ''}
+      </div>
+    `;
+  } else {
+    seqState.innerHTML = '<em style="color:var(--marron);opacity:0.65;font-size:0.84rem;">Aucune séquence déclenchée pour ce contact.</em>';
+  }
+
+  // Timeline
+  await renderTimeline(isNew ? null : id);
+
+  document.getElementById('modal').classList.add('open');
+}
+
+async function renderTimeline(distribId) {
+  const tl = document.getElementById('timeline');
+  if (!distribId) { tl.innerHTML = '<li class="empty">Enregistre le distributeur avant d\'ajouter des interactions.</li>'; return; }
+  const { data, error } = await db.from('distributeur_interactions')
+    .select('*').eq('distributeur_id', distribId)
+    .order('occurred_at', { ascending: false }).limit(50);
+  if (error) { tl.innerHTML = `<li class="empty">Erreur : ${error.message}</li>`; return; }
+  if (!data.length) { tl.innerHTML = '<li class="empty">Aucune interaction enregistrée.</li>'; return; }
+  tl.innerHTML = data.map(i => `
+    <li class="tl-item">
+      <div class="when">${fmtDateTime(i.occurred_at)}</div>
+      <div class="what">
+        <strong>${INTER_LABELS[i.type] || i.type}</strong>
+        ${i.description ? `<em>${i.description}</em>` : ''}
+      </div>
+    </li>
+  `).join('');
+}
+
+function closeModal() { document.getElementById('modal').classList.remove('open'); editingId = null; }
+document.getElementById('d-close').onclick = closeModal;
+document.getElementById('d-cancel').onclick = closeModal;
+
+document.getElementById('d-save').onclick = async () => {
+  const payload = {
+    nom: document.getElementById('f-nom').value.trim(),
+    canal: document.getElementById('f-canal').value,
+    prenom: document.getElementById('f-prenom').value.trim() || null,
+    nom_contact: document.getElementById('f-nom-contact').value.trim() || null,
+    tier: document.getElementById('f-tier-form').value || null,
+    email: document.getElementById('f-email').value.trim() || null,
+    telephone: document.getElementById('f-telephone').value.trim() || null,
+    site_web: document.getElementById('f-site').value.trim() || null,
+    formulaire_url: document.getElementById('f-formulaire').value.trim() || null,
+    type_detail: document.getElementById('f-type-detail').value.trim() || null,
+    source_prospection: document.getElementById('f-source').value.trim() || null,
+    notes: document.getElementById('f-notes').value.trim() || null,
+    pipeline_statut: document.getElementById('f-pipeline').value,
+    date_prochaine_relance: document.getElementById('f-relance').value || null
+  };
+  if (!payload.nom) { toast('Nom de la société requis', true); return; }
+  if (editingId === 'new') {
+    const { error } = await db.from('catalogue_distributeurs').insert(payload);
+    if (error) { toast('Erreur : ' + error.message, true); return; }
+    toast('Distributeur ajouté');
+  } else {
+    const { error } = await db.from('catalogue_distributeurs').update(payload).eq('id', editingId);
+    if (error) { toast('Erreur : ' + error.message, true); return; }
+    toast('Modifications enregistrées');
+  }
+  closeModal();
+  await loadAll();
+};
+
+document.getElementById('d-delete').onclick = async () => {
+  if (!confirm('Supprimer définitivement ce distributeur ?')) return;
+  const { error } = await db.from('catalogue_distributeurs').delete().eq('id', editingId);
+  if (error) { toast('Erreur : ' + error.message, true); return; }
+  toast('Supprimé');
+  closeModal();
+  await loadAll();
+};
+
+document.getElementById('btn-new').onclick = () => openModal('new');
+
+// Ajout interaction
+document.getElementById('btn-add-inter').onclick = () => {
+  document.getElementById('add-inter-form').style.display = '';
+};
+document.getElementById('inter-cancel').onclick = () => {
+  document.getElementById('add-inter-form').style.display = 'none';
+};
+document.getElementById('inter-save').onclick = async () => {
+  if (!editingId || editingId === 'new') { toast('Enregistre d\'abord le distributeur', true); return; }
+  const type = document.getElementById('inter-type').value;
+  const desc = document.getElementById('inter-desc').value.trim();
+  const { error } = await db.from('distributeur_interactions').insert({
+    distributeur_id: editingId, type, description: desc || null
+  });
+  if (error) { toast('Erreur : ' + error.message, true); return; }
+  // MAJ date_dernier_contact
+  await db.from('catalogue_distributeurs').update({ date_dernier_contact: new Date().toISOString() }).eq('id', editingId);
+  document.getElementById('add-inter-form').style.display = 'none';
+  document.getElementById('inter-desc').value = '';
+  await renderTimeline(editingId);
+  toast('Interaction ajoutée');
+};
+
+// Launch séquence
+async function launchSequence(seqId) {
+  if (!editingId || editingId === 'new') { toast('Enregistre d\'abord le distributeur', true); return; }
+  const d = distributeurs.find(x => x.id === editingId);
+  if (!d || !d.email) { toast('Email du distributeur requis', true); return; }
+
+  // Si Brevo pas configuré, on enregistre juste localement (preview mode)
+  try {
+    const r = await fetch('/api/brevo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
+      body: JSON.stringify({
+        action: 'sync',
+        sequence_id: seqId,
+        distributeur: {
+          email: d.email, prenom: d.prenom, nom: d.nom_contact,
+          societe: d.societe, type_distrib: d.canal, tier: d.tier
+        }
+      })
+    });
+    const payload = await r.json();
+    if (!r.ok) {
+      // Fallback : on met à jour la DB locale même si Brevo n'est pas dispo
+      const ok = await tryFallbackSequence(d, seqId, payload.error);
+      if (!ok) return;
+    } else {
+      await db.from('catalogue_distributeurs').update({
+        sequence_id: seqId, sequence_step: 1,
+        last_email_sent_at: new Date().toISOString(),
+        pipeline_statut: d.pipeline_statut === 'identifie' ? 'contacte' : d.pipeline_statut,
+        date_dernier_contact: new Date().toISOString(),
+        brevo_contact_id: payload.brevo_contact_id || null
+      }).eq('id', editingId);
+      await db.from('distributeur_interactions').insert({
+        distributeur_id: editingId, type: 'email_envoye',
+        description: `Séquence ${seqId} démarrée via Brevo (E1)`
+      });
+      toast(`Séquence ${seqId} lancée via Brevo`);
+    }
+    closeModal();
+    await loadAll();
+  } catch (err) {
+    toast('Erreur : ' + err.message, true);
+  }
+}
+
+async function tryFallbackSequence(d, seqId, reason) {
+  const ok = confirm(`Brevo non disponible (${reason || 'config manquante'}). Marquer la séquence comme lancée manuellement ?`);
+  if (!ok) return false;
+  await db.from('catalogue_distributeurs').update({
+    sequence_id: seqId, sequence_step: 1,
+    last_email_sent_at: new Date().toISOString(),
+    pipeline_statut: d.pipeline_statut === 'identifie' ? 'contacte' : d.pipeline_statut,
+    date_dernier_contact: new Date().toISOString()
+  }).eq('id', editingId);
+  await db.from('distributeur_interactions').insert({
+    distributeur_id: editingId, type: 'email_envoye',
+    description: `Séquence ${seqId} démarrée (envoi manuel, Brevo offline)`
+  });
+  toast(`Séquence marquée comme lancée`);
+  return true;
+}
+
+document.getElementById('btn-launch-A').onclick = () => launchSequence('SEQ_A_GROSSISTE');
+document.getElementById('btn-launch-B').onclick = () => launchSequence('SEQ_B_AGENT');
+document.getElementById('btn-launch-C').onclick = () => launchSequence('SEQ_C_PLATEFORME');
+
+// ---- Modal séquences (voir templates) ----
+document.getElementById('btn-seq').onclick = () => {
+  const host = document.getElementById('seq-content');
+  host.innerHTML = sequences.map(s => {
+    const steps = templates.filter(t => t.sequence_id === s.id).sort((a,b) => a.step - b.step);
+    return `
+      <div style="margin-bottom:20px;">
+        <h3 style="font-family:var(--serif);font-style:italic;color:var(--rose);font-size:1.3rem;margin-bottom:4px;">${s.nom}</h3>
+        <div style="font-size:0.78rem;color:var(--marron);opacity:0.7;margin-bottom:10px;">${s.description || ''} · cible ${s.target_type}</div>
+        ${steps.map(t => `
+          <div class="seq-step">
+            <div class="hd">
+              <div><span class="num">E${t.step}</span> · <strong>${t.sujet}</strong></div>
+              <div class="delay">${t.delay_days === 0 ? 'J+0' : 'J+' + t.delay_days}</div>
+            </div>
+            <div class="corps">${t.corps_html.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }).join('');
+  document.getElementById('modal-seq').classList.add('open');
+};
+document.getElementById('seq-close').onclick = () => document.getElementById('modal-seq').classList.remove('open');
+
+// ---- Export CSV Brevo ----
+document.getElementById('btn-export').onclick = () => {
+  const rows = filtered();
+  const headers = ['EMAIL','PRENOM','NOM','SOCIETE','TYPE','TIER','NOTE','SITE','STATUT'];
+  const out = rows.filter(d => d.email).map(d => [
+    d.email, d.prenom || '', d.nom_contact || '', d.societe,
+    d.canal, d.tier || '', (d.notes || '').replace(/\n/g, ' '),
+    d.site_web || '', d.pipeline_statut
+  ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(','));
+  if (!out.length) { toast('Aucun distributeur avec email', true); return; }
+  const csv = '﻿' + [headers.join(','), ...out].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `brevo-${currentFilter.type === 'all' ? 'tous' : currentFilter.type}-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast(`CSV exporté · ${out.length} contacts`);
+};
+
+// ---- Tabs / view / filters ----
+document.querySelectorAll('.main-tab').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('.main-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter.type = btn.dataset.type;
+    render();
+  };
+});
+document.querySelectorAll('.view-switch button[data-view]').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('.view-switch button[data-view]').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    currentView = btn.dataset.view;
+    render();
+  };
+});
+let searchTimer;
+document.getElementById('search').addEventListener('input', (e) => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => { currentFilter.q = e.target.value; render(); }, 150);
+});
+document.getElementById('f-tier').addEventListener('change', (e) => { currentFilter.tier = e.target.value; render(); });
+document.getElementById('f-statut').addEventListener('change', (e) => { currentFilter.statut = e.target.value; render(); });
+
+// Close modals on backdrop
+document.querySelectorAll('.modal-backdrop').forEach(b => {
+  b.onclick = (e) => { if (e.target === b) b.classList.remove('open'); };
+});
+
+(async function init() {
+  if (!(await initAuth())) return;
+  await loadAll();
+})();
+</script>
+
+</body>
+</html>

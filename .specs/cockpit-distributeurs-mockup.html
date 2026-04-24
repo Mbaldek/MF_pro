@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cockpit · Grossistes & agents épicerie fine · Cub'Cakes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Questrial&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #8B3A43;
+    --vieux-rose: #BF646D;
+    --poudre: #E5B7B3;
+    --vert: #968A42;
+    --blanc: #F0F0E6;
+    --marron: #392D31;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Questrial', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--blanc);
+    color: var(--marron);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .header {
+    background: var(--marron);
+    color: var(--blanc);
+    padding: 40px 24px 48px;
+    text-align: center;
+  }
+  .header-label {
+    font-size: 0.66rem; letter-spacing: 0.4em;
+    text-transform: uppercase; color: var(--poudre);
+    margin-bottom: 14px;
+  }
+  .header h1 {
+    font-family: var(--serif); font-style: italic; font-weight: 500;
+    font-size: clamp(1.9rem, 6vw, 2.8rem);
+    line-height: 1.1; margin-bottom: 12px;
+  }
+  .header-sub {
+    font-size: 0.88rem; color: var(--poudre);
+    max-width: 580px; margin: 0 auto;
+  }
+
+  .nav {
+    position: sticky; top: 0;
+    background: var(--blanc);
+    border-bottom: 1px solid var(--poudre);
+    z-index: 20; padding: 10px 0;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+  }
+  .nav-inner { display: flex; gap: 6px; padding: 0 16px; white-space: nowrap; }
+  .nav a {
+    font-size: 0.68rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--marron);
+    text-decoration: none; padding: 6px 12px;
+    border: 1px solid var(--poudre); border-radius: 100px;
+    transition: all 0.15s; flex-shrink: 0;
+  }
+  .nav a:hover, .nav a.active {
+    background: var(--rose); color: var(--blanc);
+    border-color: var(--rose);
+  }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 0 16px 60px; }
+
+  section { margin-top: 48px; }
+  .sec-head {
+    display: flex; align-items: baseline; gap: 14px;
+    margin-bottom: 20px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--poudre);
+  }
+  .sec-num {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.6rem; color: var(--vert); line-height: 1;
+  }
+  .sec-head h2 {
+    font-family: var(--serif); font-style: italic; font-weight: 500;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    color: var(--rose); flex: 1;
+  }
+
+  .warning {
+    background: var(--marron); color: var(--blanc);
+    padding: 20px 22px; border-radius: 6px;
+    margin: 20px 0; font-size: 0.9rem; line-height: 1.7;
+  }
+  .warning-label {
+    font-size: 0.66rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--poudre);
+    margin-bottom: 8px; font-weight: 500;
+  }
+  .warning strong { color: var(--poudre); font-weight: 500; }
+
+  .note {
+    background: var(--poudre); padding: 16px 18px;
+    border-left: 3px solid var(--rose);
+    margin: 16px 0; font-size: 0.87rem; line-height: 1.65;
+    border-radius: 0 4px 4px 0;
+  }
+  .note-label {
+    font-size: 0.66rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--rose);
+    font-weight: 500; margin-bottom: 6px;
+  }
+  .note strong { color: var(--rose); font-weight: 500; }
+
+  .cat-tabs {
+    display: flex; gap: 0; margin-bottom: 16px;
+    border-radius: 6px; overflow: hidden;
+    background: white; border: 1px solid var(--poudre);
+  }
+  .cat-tab {
+    flex: 1; padding: 14px 8px; border: 0;
+    background: white; font-family: var(--sans);
+    font-size: 0.68rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--marron);
+    cursor: pointer; transition: all 0.15s;
+    border-right: 1px solid var(--poudre); text-align: center;
+  }
+  .cat-tab:last-child { border-right: 0; }
+  .cat-tab.active { background: var(--rose); color: var(--blanc); }
+  .cat-count {
+    display: block; font-size: 0.85rem;
+    font-family: var(--serif); font-style: italic; margin-top: 2px;
+  }
+
+  .toolbar {
+    background: white; border: 1px solid var(--poudre);
+    border-radius: 6px; padding: 12px; margin-bottom: 16px;
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+  }
+  .search {
+    flex: 1; min-width: 180px; padding: 10px 12px;
+    border: 1px solid var(--poudre); border-radius: 4px;
+    font-family: var(--sans); font-size: 0.88rem;
+    color: var(--marron); background: var(--blanc);
+  }
+  .search:focus { outline: none; border-color: var(--rose); }
+
+  .btn {
+    font-family: var(--sans); font-size: 0.72rem;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 10px 16px; border: 1px solid var(--rose);
+    background: transparent; color: var(--rose);
+    border-radius: 4px; cursor: pointer; transition: all 0.2s;
+    text-decoration: none; display: inline-flex;
+    align-items: center; gap: 6px; white-space: nowrap;
+  }
+  .btn:hover, .btn.active { background: var(--rose); color: var(--blanc); }
+  .btn-primary { background: var(--rose); color: var(--blanc); }
+  .btn-primary:hover { background: var(--marron); border-color: var(--marron); }
+  .btn-ghost { border-color: var(--poudre); color: var(--marron); }
+
+  .stats {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 10px; margin-bottom: 16px;
+  }
+  @media (min-width: 640px) { .stats { grid-template-columns: repeat(4, 1fr); } }
+  .stat {
+    background: white; border: 1px solid var(--poudre);
+    padding: 14px 16px; border-radius: 4px;
+  }
+  .stat-num {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.8rem; color: var(--rose);
+    line-height: 1; margin-bottom: 4px;
+  }
+  .stat-label {
+    font-size: 0.62rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--marron); opacity: 0.7;
+  }
+
+  .prospect-grid {
+    display: grid; grid-template-columns: 1fr; gap: 12px;
+  }
+  @media (min-width: 720px) { .prospect-grid { grid-template-columns: 1fr 1fr; } }
+
+  .prospect {
+    background: white; border: 1px solid var(--poudre);
+    border-radius: 6px; padding: 18px;
+    display: flex; flex-direction: column; gap: 10px;
+    transition: all 0.15s;
+  }
+  .prospect:hover { border-color: var(--rose); }
+  .prospect.tier-A { border-left: 3px solid var(--rose); }
+  .prospect.tier-B { border-left: 3px solid var(--vert); }
+  .prospect.tier-C { border-left: 3px solid var(--poudre); }
+
+  .p-head {
+    display: flex; justify-content: space-between;
+    align-items: flex-start; gap: 10px;
+  }
+  .p-name {
+    font-family: var(--serif); font-weight: 500;
+    font-size: 1.15rem; color: var(--marron); line-height: 1.25;
+  }
+  .p-type {
+    font-size: 0.62rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--vert); margin-top: 3px;
+  }
+  .p-tier {
+    font-size: 0.6rem; letter-spacing: 0.12em;
+    text-transform: uppercase; padding: 3px 8px;
+    border-radius: 100px; background: var(--blanc);
+    color: var(--marron); border: 1px solid var(--poudre);
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .p-tier.tier-A { background: var(--rose); color: var(--blanc); border-color: var(--rose); }
+  .p-tier.tier-B { background: var(--vert); color: var(--blanc); border-color: var(--vert); }
+
+  .p-pitch {
+    font-size: 0.82rem; line-height: 1.6;
+    color: var(--marron); opacity: 0.85;
+  }
+
+  .p-meta {
+    display: flex; flex-direction: column; gap: 6px;
+    padding-top: 10px; border-top: 1px dashed var(--poudre);
+    font-size: 0.78rem;
+  }
+  .p-row { display: flex; gap: 8px; align-items: baseline; }
+  .p-label {
+    font-size: 0.62rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--vert); min-width: 60px;
+  }
+  .p-value { flex: 1; }
+  .p-value a {
+    color: var(--rose); text-decoration: none; word-break: break-all;
+  }
+  .p-value a:hover { text-decoration: underline; }
+
+  .p-actions {
+    display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;
+  }
+  .btn-sm {
+    font-family: var(--sans); font-size: 0.66rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 7px 12px; border: 1px solid var(--poudre);
+    background: transparent; color: var(--marron);
+    border-radius: 4px; cursor: pointer; transition: all 0.15s;
+    text-decoration: none;
+  }
+  .btn-sm:hover {
+    background: var(--rose); color: var(--blanc);
+    border-color: var(--rose);
+  }
+  .btn-sm.selected {
+    background: var(--vert); color: var(--blanc);
+    border-color: var(--vert);
+  }
+
+  .steps {
+    background: white; border: 1px solid var(--poudre);
+    border-radius: 6px; overflow: hidden;
+  }
+  .step {
+    padding: 18px 20px; border-bottom: 1px solid var(--poudre);
+    display: flex; gap: 16px;
+  }
+  .step:last-child { border-bottom: 0; }
+  .step-num {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.4rem; color: var(--vert);
+    flex-shrink: 0; width: 32px;
+  }
+  .step-content { flex: 1; }
+  .step-title {
+    font-family: var(--serif); font-weight: 500;
+    font-size: 1.1rem; color: var(--marron); margin-bottom: 6px;
+  }
+  .step-text { font-size: 0.88rem; line-height: 1.7; }
+  .step-text a { color: var(--rose); text-decoration: underline; text-underline-offset: 2px; }
+  .step-text code {
+    background: var(--blanc); padding: 2px 8px;
+    border-radius: 3px; font-size: 0.82rem;
+    color: var(--rose); font-family: ui-monospace, monospace;
+  }
+  .step-text strong { color: var(--rose); font-weight: 500; }
+
+  .email-card {
+    background: white; border: 1px solid var(--poudre);
+    border-radius: 6px; margin-bottom: 20px; overflow: hidden;
+  }
+  .email-meta {
+    background: var(--blanc); padding: 12px 16px;
+    border-bottom: 1px solid var(--poudre);
+    display: flex; justify-content: space-between;
+    flex-wrap: wrap; gap: 8px; align-items: center;
+  }
+  .email-title {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.05rem; color: var(--rose);
+  }
+  .email-body { padding: 18px 16px; }
+  .email-field {
+    font-size: 0.66rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--vert); margin-bottom: 6px;
+  }
+  .email-subject {
+    font-family: var(--serif); font-weight: 500;
+    font-size: 1.05rem; margin-bottom: 16px;
+    padding-bottom: 12px; border-bottom: 1px dashed var(--poudre);
+  }
+  .email-content {
+    font-size: 0.9rem; line-height: 1.7; white-space: pre-line;
+  }
+  .email-content strong { color: var(--rose); font-weight: 500; }
+  .email-foot {
+    padding: 10px 16px; background: var(--blanc);
+    border-top: 1px solid var(--poudre);
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+
+  .badge {
+    font-size: 0.6rem; letter-spacing: 0.12em;
+    text-transform: uppercase; padding: 4px 10px;
+    border-radius: 100px;
+  }
+  .badge-rose { background: var(--rose); color: var(--blanc); }
+  .badge-vert { background: var(--vert); color: var(--blanc); }
+  .badge-ghost { background: transparent; color: var(--marron); border: 1px solid var(--poudre); }
+
+  .toast {
+    position: fixed; bottom: 20px; left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--vert); color: var(--blanc);
+    padding: 12px 24px; border-radius: 100px;
+    font-size: 0.76rem; letter-spacing: 0.1em;
+    text-transform: uppercase; transition: transform 0.3s;
+    z-index: 100; box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    white-space: nowrap; max-width: 90vw;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  .footer {
+    text-align: center; padding: 40px 20px 20px;
+    font-size: 0.72rem; color: var(--marron);
+    opacity: 0.55; letter-spacing: 0.1em;
+  }
+
+  .empty {
+    text-align: center; padding: 40px 20px;
+    color: var(--marron); opacity: 0.5; font-size: 0.9rem;
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-label">Cub'Cakes · Maison Félicien</div>
+  <h1>Chasse distributeurs<br>épicerie fine</h1>
+  <p class="header-sub">Grossistes référenceurs · agents commerciaux · plateformes B2B. Les intermédiaires qui portent votre marque dans leur catalogue — pas les boutiques finales.</p>
+</header>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#comprendre">La cible</a>
+    <a href="#prospects">27 distributeurs</a>
+    <a href="#pitch">Pitch adapté</a>
+    <a href="#emails">Emails</a>
+    <a href="#brevo">Brevo setup</a>
+    <a href="#salons">Salons & scale</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<section id="comprendre">
+  <div class="sec-head">
+    <span class="sec-num">01</span>
+    <h2>Comprendre la cible</h2>
+  </div>
+
+  <div class="warning">
+    <div class="warning-label">Recadrage important</div>
+    Un <strong>distributeur</strong> n'est pas un épicier final. C'est un intermédiaire qui <strong>monte un catalogue de 50 à 400 marques</strong> et les revend à 200–2000 épiceries fines, cavistes, traiteurs. Un seul contrat = effet de levier x50 à x200 sur votre distribution. Mais le cycle est long (2–4 mois) et ils exigent un niveau de maturité marque plus élevé qu'un épicier.
+  </div>
+
+  <div class="note">
+    <div class="note-label">Les 3 familles de distributeurs</div>
+    <strong>Grossistes référenceurs</strong> — structures qui achètent votre stock, le stockent, le facturent à leur nom, livrent leur réseau d'épiceries. Margent 20–35% au-dessus de votre prix HT. Ex : BienManger, Nature Expression, Distrazur, Alimentation Fine de France.<br><br>
+    <strong>Agents commerciaux indépendants</strong> — freelances avec un fichier de 100–500 épiceries qu'ils visitent. Ils prennent votre catalogue en représentation, commissionnent 8–15% sur les ventes qu'ils apportent. Vous facturez directement l'épicerie. Ex : Secrets d'Épiciers, freelances de agent-co.fr.<br><br>
+    <strong>Plateformes B2B digitales</strong> — marketplaces où les épiciers commandent en ligne parmi 10 000 marques. Commission 0–25%. Ex : Ankorstore, Faire, Pourdebon.
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-num">×50</div><div class="stat-label">effet levier/contrat</div></div>
+    <div class="stat"><div class="stat-num">2-4</div><div class="stat-label">mois cycle vente</div></div>
+    <div class="stat"><div class="stat-num">20-35%</div><div class="stat-label">marge grossiste</div></div>
+    <div class="stat"><div class="stat-num">12-30k</div><div class="stat-label">CA annuel par contrat</div></div>
+  </div>
+</section>
+
+<section id="prospects">
+  <div class="sec-head">
+    <span class="sec-num">02</span>
+    <h2>Base prospects · 27 distributeurs</h2>
+  </div>
+
+  <div class="note">
+    <div class="note-label">Sourcing</div>
+    Identifiés via Europages, Nature Expression, Distrazur, BienManger, DisGroup, agent-co.fr, salons Gourmet Sélection, CGF (fédération des grossistes), catalogues publics. Tous les contacts sont <strong>publics et professionnels</strong> (pages "devenir fournisseur" / "proposer une marque" / formulaires de référencement).
+    <br><br>
+    <strong>Tier A</strong> = angle parfait Cub'Cakes · <strong>Tier B</strong> = possible à confirmer · <strong>Tier C</strong> = plus spéculatif.
+  </div>
+
+  <div class="cat-tabs">
+    <button class="cat-tab active" data-cat="all">Tous<span class="cat-count" id="c-all">27</span></button>
+    <button class="cat-tab" data-cat="grossiste">Grossistes<span class="cat-count" id="c-grossiste">12</span></button>
+    <button class="cat-tab" data-cat="agent">Agents<span class="cat-count" id="c-agent">9</span></button>
+    <button class="cat-tab" data-cat="plateforme">Plateformes<span class="cat-count" id="c-plateforme">6</span></button>
+  </div>
+
+  <div class="toolbar">
+    <input type="text" class="search" id="search" placeholder="Rechercher nom, spécialité…">
+    <button class="btn btn-ghost" id="select-all">Tout sélectionner</button>
+    <button class="btn btn-primary" id="export-csv">Exporter CSV sélection</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-num" id="stat-visible">27</div><div class="stat-label">visibles</div></div>
+    <div class="stat"><div class="stat-num" id="stat-selected">0</div><div class="stat-label">sélectionnés</div></div>
+    <div class="stat"><div class="stat-num" id="stat-tierA">13</div><div class="stat-label">tier A · match fort</div></div>
+    <div class="stat"><div class="stat-num" id="stat-tierB">11</div><div class="stat-label">tier B · possible</div></div>
+  </div>
+
+  <div class="prospect-grid" id="prospect-grid"></div>
+  <div class="empty" id="empty-state" style="display:none;">Aucun résultat pour cette recherche.</div>
+</section>
+
+<section id="pitch">
+  <div class="sec-head">
+    <span class="sec-num">03</span>
+    <h2>Pitch adapté · distributeur ≠ épicier</h2>
+  </div>
+
+  <div class="warning">
+    <div class="warning-label">Erreur à ne pas faire</div>
+    L'email qui parle de « passer déposer 3 cubes » ne marche <strong>pas</strong> sur un distributeur. Un acheteur de grossiste reçoit 30 propositions de marques par semaine — il faut cocher ses cases à lui, pas celles d'un épicier de quartier.
+  </div>
+
+  <div class="note">
+    <div class="note-label">Ce qu'un acheteur grossiste veut voir en 30 secondes</div>
+    <strong>1. Preuve de marché</strong> — Combien d'épiceries déjà ? Quelle rotation ? Quelle progression CA ?<br>
+    <strong>2. Capacité de production</strong> — Peut-on commander 500 unités ? 2000 ? Délai max ?<br>
+    <strong>3. Conditions logistiques</strong> — DLC, palettisation, mode d'expédition, incoterm.<br>
+    <strong>4. Marge distributeur</strong> — PPC conseillé, tarif grossiste HT, marge brute possible.<br>
+    <strong>5. Support marketing</strong> — PLV, argumentaire produit, photos HD, animations disponibles ?<br>
+    <strong>6. Différenciation</strong> — Pourquoi cette marque vs les 120 déjà référencées ?
+  </div>
+
+  <div class="note" style="background: rgba(150, 138, 66, 0.12); border-left-color: var(--vert);">
+    <div class="note-label" style="color: var(--vert);">Ce qu'un agent commercial veut savoir</div>
+    <strong>1. Commission proposée</strong> — 10% ? 12% ? Sur quelle base (CA collecté ou marge) ?<br>
+    <strong>2. Exclusivité territoriale</strong> — Il protège son fichier clients.<br>
+    <strong>3. Taux de transformation attendu</strong> — « Si je présente à 10 épiceries, combien signent ? »<br>
+    <strong>4. Autonomie sur la négo</strong> — Peut-il décider des conditions ou chaque deal repasse par vous ?<br>
+    <strong>5. Paiement des commissions</strong> — Mensuel ? Trimestriel ? Acompte sur signature ?
+  </div>
+</section>
+
+<section id="emails">
+  <div class="sec-head">
+    <span class="sec-num">04</span>
+    <h2>Templates emails · 3 séquences</h2>
+  </div>
+
+  <div class="note">
+    <div class="note-label">Trois séquences distinctes</div>
+    Ne <strong>jamais</strong> envoyer le même email à un grossiste et à un agent commercial. Les objets et les corps sont différents. Les templates sont formatés Brevo avec les variables <code>{{ contact.PRENOM }}</code>, <code>{{ contact.SOCIETE }}</code>.
+  </div>
+
+  <h3 style="font-family: var(--serif); font-style: italic; font-size: 1.4rem; color: var(--rose); margin: 30px 0 14px;">Séquence A · Grossistes référenceurs</h3>
+
+  <article class="email-card">
+    <div class="email-meta">
+      <span class="email-title">A1 · Demande de référencement</span>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <span class="badge badge-rose">J+0</span>
+        <span class="badge badge-ghost">Mardi 10h</span>
+      </div>
+    </div>
+    <div class="email-body">
+      <div class="email-field">Objet</div>
+      <div class="email-subject" id="sA1">Proposition marque Cub'Cakes · pâtisserie artisanale pour votre catalogue</div>
+
+      <div class="email-field">Corps</div>
+      <div class="email-content" id="bA1">Bonjour{{#if contact.PRENOM}} {{ contact.PRENOM }}{{/if}},
+
+Je dirige Maison Félicien, pâtisserie artisanale parisienne. Je vous contacte pour proposer le référencement de notre marque <strong>Cub'Cakes</strong> dans le catalogue de {{ contact.SOCIETE }}.
+
+<strong>Le concept</strong>
+5 cakes format cube, fournée hebdomadaire numérotée, origines tracées. Chocolat Arriba Équateur, pistache Bronte IGP, yuzu Kochi, framboise Ardèche, caramel Guérande AOP. Zéro arôme, zéro conservateur.
+
+<strong>Positionnement tarifaire</strong>
+• PPC conseillé : 5,80–6,50 € TTC / unité
+• Tarif grossiste HT : [X] € / unité
+• Marge grossiste : 28–32% avant votre marge distributeur épicier
+
+<strong>Capacité & logistique</strong>
+• Capacité production : 8 000 unités/semaine (évolutive)
+• Palettisation : carton de 24 unités · 42 cartons/palette Europe
+• DLC : 5 jours à réception (contrainte assumée du positionnement frais-artisanal)
+• Expédition : groupée J+1 depuis Paris, transporteur frigo
+
+<strong>Matériel disponible</strong>
+Kit PLV (présentoir bois 5 formules, fiches origines, stickers DLC), photos HD, argumentaire formation 2 pages, animations dégustation possibles.
+
+Je peux vous envoyer la <strong>fiche marque complète (PDF 4 pages)</strong> et organiser une dégustation dans vos bureaux si le positionnement vous intéresse.
+
+Belle journée,
+Charlotte
+Maison Félicien
+06 XX XX XX XX · pro@maison-felicien.com</div>
+    </div>
+    <div class="email-foot">
+      <button class="btn copy" data-target="sA1">Copier objet</button>
+      <button class="btn copy" data-target="bA1">Copier corps</button>
+    </div>
+  </article>
+
+  <article class="email-card">
+    <div class="email-meta">
+      <span class="email-title">A2 · Relance J+10</span>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;"><span class="badge badge-rose">J+10</span></div>
+    </div>
+    <div class="email-body">
+      <div class="email-field">Objet</div>
+      <div class="email-subject" id="sA2">Re : Cub'Cakes · fiche marque disponible</div>
+
+      <div class="email-field">Corps</div>
+      <div class="email-content" id="bA2">Bonjour{{#if contact.PRENOM}} {{ contact.PRENOM }}{{/if}},
+
+Petit rappel de mon message d'il y a 10 jours concernant le référencement Cub'Cakes. Je comprends que le flux de propositions chez {{ contact.SOCIETE }} est important.
+
+<strong>Une donnée qui peut vous intéresser</strong> : sur les 12 épiceries indépendantes qui ont lancé Cub'Cakes en test, la rotation moyenne est de <strong>3,8 jours</strong> sur un MOQ de 6 unités/formule — taux de réassort : 91%.
+
+Pour aller plus vite, je peux vous proposer 2 options :
+• <strong>Envoi d'un colis dégustation gratuit</strong> à votre siège (5 formules, fiche marque, PLV miniature) — je vous laisse 10 jours pour décider, sans relance
+• <strong>Appel de 15 minutes</strong> si vous préférez commencer par les conditions commerciales
+
+Vous me dites ce qui vous convient ?
+
+Charlotte
+Maison Félicien</div>
+    </div>
+    <div class="email-foot">
+      <button class="btn copy" data-target="sA2">Copier objet</button>
+      <button class="btn copy" data-target="bA2">Copier corps</button>
+    </div>
+  </article>
+
+  <article class="email-card">
+    <div class="email-meta">
+      <span class="email-title">A3 · Dernière tentative J+21</span>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;"><span class="badge badge-rose">J+21</span></div>
+    </div>
+    <div class="email-body">
+      <div class="email-field">Objet</div>
+      <div class="email-subject" id="sA3">Je ferme le dossier Cub'Cakes pour {{ contact.SOCIETE }}</div>
+
+      <div class="email-field">Corps</div>
+      <div class="email-content" id="bA3">Bonjour{{#if contact.PRENOM}} {{ contact.PRENOM }}{{/if}},
+
+Sans retour de votre part, je clos le dossier Cub'Cakes côté {{ contact.SOCIETE }} et je ne vous recontacterai plus sur ce sujet.
+
+Deux possibilités :
+• Ce n'est pas la bonne période → dites-moi simplement un trimestre où je peux revenir
+• Ce n'est pas la bonne catégorie pour vous → pas de souci, je ferme
+
+Si je ne me trompe pas complètement et qu'il y avait un intérêt, un mot de votre part suffit.
+
+Belle continuation,
+Charlotte
+Maison Félicien</div>
+    </div>
+    <div class="email-foot">
+      <button class="btn copy" data-target="sA3">Copier objet</button>
+      <button class="btn copy" data-target="bA3">Copier corps</button>
+    </div>
+  </article>
+
+  <h3 style="font-family: var(--serif); font-style: italic; font-size: 1.4rem; color: var(--rose); margin: 40px 0 14px;">Séquence B · Agents commerciaux</h3>
+
+  <article class="email-card">
+    <div class="email-meta">
+      <span class="email-title">B1 · Proposition de représentation</span>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;"><span class="badge badge-vert">J+0</span></div>
+    </div>
+    <div class="email-body">
+      <div class="email-field">Objet</div>
+      <div class="email-subject" id="sB1">Carte Cub'Cakes à ajouter à votre portefeuille ?</div>
+
+      <div class="email-field">Corps</div>
+      <div class="email-content" id="bB1">Bonjour{{#if contact.PRENOM}} {{ contact.PRENOM }}{{/if}},
+
+Charlotte de Maison Félicien (pâtisserie artisanale parisienne). Je cherche à développer la distribution de <strong>Cub'Cakes</strong> — notre gamme de 5 cakes format cube, fournée numérotée, origines tracées — auprès du réseau des épiceries fines indépendantes.
+
+Votre profil d'agent commercial avec un fichier actif en épicerie fine correspond exactement à ce dont on a besoin.
+
+<strong>Conditions proposées</strong>
+• Commission : <strong>12% du CA HT collecté</strong> sur les clients que vous signez
+• Paiement mensuel à 30j (versé le 10 du mois suivant)
+• Exclusivité territoriale possible sur demande (1 région = 1 agent)
+• Outils fournis : catalogue PDF, fiche prix, échantillons dégustation, argumentaire 2 pages
+• Ticket moyen première commande observé : 340–480 € HT (6 unités × 5 formules × 4 semaines)
+
+<strong>Ce qui peut vous rassurer</strong>
+• Sur 12 épiceries déjà signées : rotation 3,8 jours, taux réassort 91%
+• Reprise invendus garantie 4 semaines (aucune friction commerciale)
+• Support logistique direct — vous ne portez pas le SAV
+
+Je peux vous envoyer le <strong>pack agent</strong> complet (catalogue, grille tarifaire, contrat-type) par retour si le profil vous intéresse.
+
+Belle journée,
+Charlotte
+pro@maison-felicien.com · 06 XX XX XX XX</div>
+    </div>
+    <div class="email-foot">
+      <button class="btn copy" data-target="sB1">Copier objet</button>
+      <button class="btn copy" data-target="bB1">Copier corps</button>
+    </div>
+  </article>
+
+  <article class="email-card">
+    <div class="email-meta">
+      <span class="email-title">B2 · Relance J+7 agent</span>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;"><span class="badge badge-vert">J+7</span></div>
+    </div>
+    <div class="email-body">
+      <div class="email-field">Objet</div>
+      <div class="email-subject" id="sB2">Re : Cub'Cakes · 12% + exclusivité possible</div>
+
+      <div class="email-field">Corps</div>
+      <div class="email-content" id="bB2">Bonjour{{#if contact.PRENOM}} {{ contact.PRENOM }}{{/if}},
+
+Je relance rapidement sur Cub'Cakes — 12% de commission, pack agent prêt, territoires encore libres.
+
+Simple question : est-ce que le profil « pâtisserie artisanale · DLC 5j · origines tracées · marge 38–42% pour vos épiciers » fit votre portefeuille actuel ?
+
+• Si <strong>oui</strong>, je vous envoie le pack agent par retour.
+• Si <strong>non</strong>, dites-le-moi et je vous laisse tranquille.
+
+Charlotte · Maison Félicien</div>
+    </div>
+    <div class="email-foot">
+      <button class="btn copy" data-target="sB2">Copier objet</button>
+      <button class="btn copy" data-target="bB2">Copier corps</button>
+    </div>
+  </article>
+
+  <h3 style="font-family: var(--serif); font-style: italic; font-size: 1.4rem; color: var(--rose); margin: 40px 0 14px;">Séquence C · Plateformes B2B (Ankorstore, Faire…)</h3>
+
+  <div class="note">
+    <div class="note-label">Spécificité</div>
+    Les plateformes B2B n'ont généralement <strong>pas d'acheteur humain à convaincre</strong> pour se référencer — on s'inscrit directement comme marque via leur <em>brand portal</em>. L'email sert uniquement à contacter un <strong>gestionnaire de compte marques</strong> pour accélérer la validation ou obtenir un placement éditorial (featured, newsletter, homepage).
+  </div>
+
+  <article class="email-card">
+    <div class="email-meta">
+      <span class="email-title">C1 · Contact brand manager plateforme</span>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;"><span class="badge badge-ghost">Post-inscription</span></div>
+    </div>
+    <div class="email-body">
+      <div class="email-field">Objet</div>
+      <div class="email-subject" id="sC1">Marque Cub'Cakes · candidate mise en avant {{ contact.SOCIETE }}</div>
+
+      <div class="email-field">Corps</div>
+      <div class="email-content" id="bC1">Bonjour{{#if contact.PRENOM}} {{ contact.PRENOM }}{{/if}},
+
+Je viens d'inscrire <strong>Cub'Cakes</strong> (Maison Félicien) sur {{ contact.SOCIETE }}. Pâtisserie artisanale parisienne, 5 cakes format cube, origines tracées, fournée numérotée hebdomadaire.
+
+Je me permets de vous solliciter directement pour deux raisons :
+
+<strong>1.</strong> Notre positionnement (artisanal · haut de gamme · DLC courte · storytelling origines) correspond à la curation que {{ contact.SOCIETE }} pousse auprès des épiceries fines indépendantes.
+
+<strong>2.</strong> On lance une offre pro exclusive <strong>-15% sur la première commande</strong> et livraison offerte jusqu'au 30 avril — ce qui peut nourrir une mise en avant éditoriale (newsletter « nouvelles marques », feature homepage, collection « pâtisserie fraîche »).
+
+Si vous avez 10 minutes pour en discuter cette semaine, je peux vous montrer le produit, les chiffres de rotation sur nos épiceries actuelles, et le kit visuel haute résolution.
+
+Merci d'avance,
+Charlotte
+Maison Félicien · pro@maison-felicien.com</div>
+    </div>
+    <div class="email-foot">
+      <button class="btn copy" data-target="sC1">Copier objet</button>
+      <button class="btn copy" data-target="bC1">Copier corps</button>
+    </div>
+  </article>
+</section>
+
+<section id="brevo">
+  <div class="sec-head">
+    <span class="sec-num">05</span>
+    <h2>Brevo · setup & workflow</h2>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <span class="step-num">01</span>
+      <div class="step-content">
+        <div class="step-title">Créer le compte Brevo</div>
+        <div class="step-text">Aller sur <a href="https://www.brevo.com/fr/" target="_blank">brevo.com/fr</a> → « Créer un compte gratuit ». Utiliser <code>pro@maison-felicien.com</code>. Aucune carte bancaire demandée. Plan gratuit = <strong>300 emails/jour</strong>.</div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">02</span>
+      <div class="step-content">
+        <div class="step-title">Valider le domaine (CRITIQUE)</div>
+        <div class="step-text">Dans Brevo → <code>Expéditeurs & IP</code> → <code>Domaines</code> → ajouter <code>maison-felicien.com</code>. Brevo donne 4 enregistrements DNS (DKIM, SPF, DMARC). À ajouter sur <strong>Gandi.net</strong> → DNS du domaine. Propagation 1–4h. <strong>Sans cette étape, les emails de prospection B2B partent en spam chez 80% des destinataires pro.</strong></div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">03</span>
+      <div class="step-content">
+        <div class="step-title">Créer 3 listes distinctes</div>
+        <div class="step-text">Menu <code>Contacts</code> → <code>Listes</code>. Créer :
+        <br>• <strong>Prospects grossistes</strong>
+        <br>• <strong>Prospects agents commerciaux</strong>
+        <br>• <strong>Prospects plateformes B2B</strong>
+        <br><br>
+        Chaque liste a sa propre automation et son propre template. Ne jamais mélanger.</div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">04</span>
+      <div class="step-content">
+        <div class="step-title">Importer les CSV depuis ce cockpit</div>
+        <div class="step-text">Filtre par catégorie ci-dessus (Grossistes / Agents / Plateformes) → « Tout sélectionner » → <code>Exporter CSV sélection</code>. Dans Brevo → <code>Contacts</code> → <code>Importer</code> → glisser le CSV dans la bonne liste. Les colonnes <code>EMAIL</code>, <code>PRENOM</code>, <code>SOCIETE</code>, <code>TYPE</code> se mappent automatiquement.</div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">05</span>
+      <div class="step-content">
+        <div class="step-title">Créer 3 automations</div>
+        <div class="step-text">Menu <code>Automation</code> → <code>Nouveau scénario</code> → 3 fois, une par séquence.
+        <br><br>
+        <strong>Cadence différente par cible :</strong>
+        <br>• Grossistes : A1 J+0 · A2 J+10 · A3 J+21 (cycle long)
+        <br>• Agents : B1 J+0 · B2 J+7 (cycle court)
+        <br>• Plateformes : C1 one-shot post-inscription
+        <br><br>
+        Pour chaque scénario, cocher <strong>« Sortir du scénario si le contact répond »</strong>.</div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">06</span>
+      <div class="step-content">
+        <div class="step-title">Warming : montée progressive</div>
+        <div class="step-text">Jour 1 : importer 10 contacts (grossistes tier A). Jour 3 : ajouter 10 de plus. Jour 7 : les agents. Jour 10 : le reste.
+        <br><br>
+        Ne <strong>jamais</strong> importer 27 contacts d'un coup le premier jour : Gmail/Outlook détectent les pics d'envoi et classent en spam pour 3 mois.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="salons">
+  <div class="sec-head">
+    <span class="sec-num">06</span>
+    <h2>Salons & scale · les rendez-vous qui comptent</h2>
+  </div>
+
+  <div class="note">
+    <div class="note-label">Pourquoi les salons</div>
+    Dans l'épicerie fine, <strong>une large part des référencements distributeurs se fait en salon</strong>. Les acheteurs y viennent dégustations ouvertes, carnet de commande à la main. Un stand ou même une visite bien préparée = équivalent de plusieurs mois d'emails froids.
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <span class="step-num">01</span>
+      <div class="step-content">
+        <div class="step-title">Gourmet Sélection · Paris (oct-nov annuel)</div>
+        <div class="step-text"><a href="https://www.gourmetselection.com/" target="_blank">gourmetselection.com</a> — <strong>LE salon</strong> de l'épicerie fine en France. Tous les grossistes y viennent sourcer. Stand complet ~4000€ HT, mais présence visiteur B2B gratuite sur inscription. Prévoir 200 cartes de dégustation format cube en échantillon.</div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">02</span>
+      <div class="step-content">
+        <div class="step-title">SIAL Paris (oct, biennal)</div>
+        <div class="step-text"><a href="https://www.sialparis.fr/" target="_blank">sialparis.fr</a> — Plus gros mais plus GMS. Bon pour rencontrer les grossistes nationaux et export. Stand cher (8–15k€), viser le pavillon « Saveurs & Découvertes » pour les artisans, ou utiliser le service PRE-SIAL de mise en relation B2B.</div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">03</span>
+      <div class="step-content">
+        <div class="step-title">Salon du Fromage & Produits Laitiers · Paris (fév)</div>
+        <div class="step-text">Pour les distributeurs positionnés « artisanal premium » — souvent les mêmes qui cherchent des marques de pâtisserie fraîche. Accès visiteur B2B gratuit sur inscription.</div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">04</span>
+      <div class="step-content">
+        <div class="step-title">Prix Épicures de l'Épicerie Fine</div>
+        <div class="step-text">Concours annuel de la revue <em>Le Monde de l'Épicerie Fine</em>. Gagner (ou même être nommé) = label obtenu par les grossistes référenceurs. Candidature gratuite, jury indépendant. <strong>À faire cette année</strong> : candidater Cub'Cakes F-02 Pistache ou F-03 Yuzu en catégorie « innovation ».</div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">05</span>
+      <div class="step-content">
+        <div class="step-title">CGF (Confédération des Grossistes de France)</div>
+        <div class="step-text">Annuaire des membres : <a href="https://www.cgf-grossistes.fr/" target="_blank">cgf-grossistes.fr</a>. Contact direct Isabelle Bernet-Denin : <a href="mailto:i.bernet-denin@cgf-grossistes.fr">i.bernet-denin@cgf-grossistes.fr</a> · 01 44 55 35 06. Un appel = elle oriente vers les 3–5 grossistes alignés avec votre positionnement.</div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">06</span>
+      <div class="step-content">
+        <div class="step-title">Agent-co.fr · mission inversée</div>
+        <div class="step-text">Sur <a href="https://www.agent-co.fr/" target="_blank">agent-co.fr</a>, poster une <strong>offre de mission</strong> (~90€) : « Maison Félicien recherche agents commerciaux épicerie fine ». Les candidats viennent à vous. 50–80 candidatures attendues en 3 semaines sur une marque premium bien positionnée. Tri rapide, 5–10 entretiens, 2–3 signatures.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  Maison Félicien × Cub'Cakes · Cockpit distributeurs · pro@maison-felicien.com
+</div>
+
+</div>
+
+<div class="toast" id="toast">Copié</div>
+
+<script>
+const prospects = [
+  // === GROSSISTES RÉFÉRENCEURS ===
+  {societe:"Nature Expression", type:"Grossiste · épicerie sucrée/salée", prenom:"", email:"contact@nature-expression.com", site:"nature-expression.com", tier:"A", note:"Spécialiste épicerie fine + concept stores. Catalogue sucré actif. Récompenses Gourmet Sélection Best Of. Match quasi-parfait pour Cub'Cakes.", formulaire:"nature-expression.com/grossiste-en-epicerie-fine"},
+  {societe:"BienManger Pro", type:"Grossiste · 400 réf / 120 marques", prenom:"", email:"pro@bienmanger.com", site:"grossiste-epicerie-fine.com", tier:"A", note:"Grossiste national pour épiceries fines. Comité de dégustation hebdo. Circuit rapide de référencement.", formulaire:"grossiste-epicerie-fine.com"},
+  {societe:"Alimentation Fine de France", type:"Grossiste épicerie fine", prenom:"", email:"contact@alimentationfinedefrance.com", site:"alimentationfinedefrance.com", tier:"A", note:"Se présente comme grossiste épicerie fine de référence. Sélection qualitative rigoureuse.", formulaire:""},
+  {societe:"Distrazur (Saveurs du Clavon)", type:"Grossiste · 1000+ produits", prenom:"", email:"contact@lessaveursduclavon.com", site:"lessaveursduclavon.com", tier:"A", note:"Grande diversité de distributeurs référencés (cartographie publique). Entrée possible via leur réseau.", formulaire:""},
+  {societe:"Casa di Cecco", type:"Grossiste italien", prenom:"", email:"commercial@casadicecco.fr", site:"casadicecco.fr", tier:"B", note:"Spécialisé italien. F-02 Pistache Bronte = angle parfait. Mais risque catalogue 100% italien.", formulaire:""},
+  {societe:"Fenêtre sur Goût", type:"Grossiste artisanal terroirs", prenom:"", email:"contact@fenetresurgout.com", site:"fenetresurgout.com", tier:"A", note:"Spécialisé artisanal terroirs. Pas de conservateurs, pas d'arômes artificiels = positionnement identique au nôtre.", formulaire:""},
+  {societe:"DisGroup", type:"Distributeur boulangerie/pâtisserie", prenom:"", email:"contact@disgroup.fr", site:"disgroup.fr", tier:"A", note:"55 distributeurs indépendants en France. Réseau B2B pâtisserie. Excellent levier si référencement obtenu.", formulaire:"disgroup.fr"},
+  {societe:"Culture Miel", type:"Grossiste épicerie sucrée", prenom:"", email:"contact@culturemiel.fr", site:"culturemiel.fr", tier:"B", note:"Core business miel mais élargit épicerie sucrée gourmande. Possible complémentarité.", formulaire:""},
+  {societe:"Somexport", type:"Grossiste centrales d'achat", prenom:"", email:"contact@somexport.fr", site:"somexport.fr", tier:"C", note:"Approvisionne centrales d'achat + export. Taille conséquente mais risque marge écrasée.", formulaire:""},
+  {societe:"Épicerie d'Aquitaine", type:"Grossiste Dordogne/Gironde", prenom:"", email:"contact@epiceriedaquitaine.fr", site:"epiceriedaquitaine.fr", tier:"B", note:"Régional mais actif réseau épiceries Sud-Ouest. Bon point d'entrée territoire.", formulaire:""},
+  {societe:"Solinest", type:"Distributeur multicatégoriel", prenom:"", email:"contact@solinest.fr", site:"solinest.com", tier:"C", note:"Groupe de 450 personnes, 40 marques partenaires. Grand levier mais sélection très exigeante (produits devant-caisse).", formulaire:"solinest.com"},
+  {societe:"Épiciers de France", type:"Fédération pro + formations", prenom:"", email:"contact@epiciersdefrance.fr", site:"epiciersdefrance.fr", tier:"B", note:"Fédération + salon Les Épicures. Pas grossiste direct mais connecte aux bons acheteurs.", formulaire:""},
+
+  // === AGENTS COMMERCIAUX ===
+  {societe:"Secrets d'Épiciers", type:"Agent commercial · 40 producteurs", prenom:"Marie", email:"contact@secrets-epiciers.com", site:"secrets-epiciers.com", tier:"A", note:"Agence ~40 producteurs artisanaux, réseau épiceries fines France. Déjà identifié prioritaire. Tél 06 08 62 15 40.", formulaire:""},
+  {societe:"Agent-co.fr (poster mission)", type:"Plateforme agents indépendants", prenom:"", email:"contact@agent-co.fr", site:"agent-co.fr", tier:"A", note:"Annuaire principal des agents commerciaux FR. Poster offre de mission ~90€ pour attirer 50-80 candidats qualifiés.", formulaire:"agent-co.fr"},
+  {societe:"La Typique (via Autruches Saudraye)", type:"Agent · fichier épicerie fine actif", prenom:"", email:"contact@ferme-autruches.com", site:"latypique-epicerie.com", tier:"B", note:"Représente déjà conserves fines. Fichier épiceries établi. Cross-sell naturel vers sucré premium.", formulaire:""},
+  {societe:"Conserverie Artisanale Bretonne", type:"Agent + producteur Bretagne", prenom:"Sandra", email:"contact@conserverie-artisanale-bretonne.com", site:"conserverie-artisanale-bretonne.com", tier:"B", note:"Cherche distributeurs/épiceries. Réseau actif France. Même ADN artisanal premium.", formulaire:""},
+  {societe:"API & YOU (agence partenaires)", type:"Agence marketing artisans", prenom:"", email:"contact@api-and-you.com", site:"api-and-you.com", tier:"B", note:"Pas agent direct mais écosystème d'artisans qu'elle accompagne. Peut référer vers réseau.", formulaire:""},
+  {societe:"FNAC Agents Commerciaux · IDF Agro", type:"Syndicat agent-co agro IDF", prenom:"", email:"", site:"agentcommercial.fr", tier:"B", note:"Branche alimentaire Île-de-France. Contact via annuaire des membres du site.", formulaire:"agentcommercial.fr"},
+  {societe:"CGF · Confédération Grossistes France", type:"Fédération · référent marques", prenom:"Isabelle", email:"i.bernet-denin@cgf-grossistes.fr", site:"cgf-grossistes.fr", tier:"A", note:"Isabelle Bernet-Denin oriente marques vers grossistes alignés. Tél 01 44 55 35 06. Un appel = 3-5 intros qualifiées.", formulaire:""},
+  {societe:"SIAL Paris · Service PRE-SIAL", type:"Mise en relation marques/acheteurs", prenom:"", email:"contact@sialparis.fr", site:"sialparis.fr", tier:"B", note:"Service PRE-SIAL : l'équipe organise des RDV B2B ciblés avec acheteurs avant le salon.", formulaire:"sialparis.fr"},
+  {societe:"Gourmet Sélection Paris", type:"Salon référencement épicerie fine", prenom:"", email:"info@gourmetselection.com", site:"gourmetselection.com", tier:"A", note:"LE salon français de l'épicerie fine. Participer comme exposant ou visiteur = rencontrer l'essentiel des grossistes FR en 3 jours.", formulaire:"gourmetselection.com"},
+
+  // === PLATEFORMES B2B ===
+  {societe:"Ankorstore", type:"Marketplace B2B · 300K commerçants", prenom:"", email:"brands@ankorstore.com", site:"ankorstore.com/brands", tier:"A", note:"0% commission premier mois. 85K acheteurs ayant acheté épicerie fine. Inscription directe via brand portal puis email pour featured.", formulaire:"ankorstore.com/brands"},
+  {societe:"Faire.com", type:"Marketplace B2B · concept stores", prenom:"", email:"brand-support@faire.com", site:"faire.com/brand-portal", tier:"A", note:"Audience concept stores/lifestyle premium. Positionnement Cub'Cakes aligné. Free shipping + net 60 par défaut.", formulaire:"faire.com/brand-portal"},
+  {societe:"La Ruche Qui Dit Oui · Pro", type:"Circuit court réseau ruches", prenom:"", email:"producteurs@laruchequiditoui.fr", site:"laruchequiditoui.fr", tier:"B", note:"Orienté bio/local. À voir si format Cub'Cakes (parisien, pas local à chaque ruche) passe leur charte.", formulaire:"laruchequiditoui.fr"},
+  {societe:"Pourdebon", type:"Marketplace producteurs premium", prenom:"", email:"contact@pourdebon.com", site:"pourdebon.com", tier:"B", note:"Plateforme producteurs français haut de gamme. Clientèle CSP+ particuliers mais aussi réassort épiceries fines.", formulaire:"pourdebon.com"},
+  {societe:"MyProviz", type:"Plateforme B2B food & gourmet", prenom:"", email:"contact@myproviz.com", site:"myproviz.com", tier:"B", note:"Jeune plateforme B2B France. Audience à construire mais peu de concurrence dans le premium sucré.", formulaire:""},
+  {societe:"Epicery Pro", type:"Service livraison + marketplace épicier", prenom:"", email:"pro@epicery.com", site:"epicery.com", tier:"C", note:"Plutôt client final que distributeur mais segment Pro émergent. À surveiller.", formulaire:"epicery.com"}
+];
+
+const grid = document.getElementById('prospect-grid');
+const search = document.getElementById('search');
+const catTabs = document.querySelectorAll('.cat-tab');
+const selectAllBtn = document.getElementById('select-all');
+const exportBtn = document.getElementById('export-csv');
+const emptyState = document.getElementById('empty-state');
+const toast = document.getElementById('toast');
+
+let currentCat = 'all';
+let selected = new Set();
+
+function catMatch(p, cat) {
+  if (cat === 'all') return true;
+  const t = p.type.toLowerCase();
+  if (cat === 'grossiste') return t.includes('grossiste') || t.includes('distributeur') || t.includes('fédération');
+  if (cat === 'agent') return t.includes('agent') || t.includes('salon') || t.includes('syndicat') || t.includes('producteur') || t.includes('mise en relation') || t.includes('agence');
+  if (cat === 'plateforme') return t.includes('marketplace') || t.includes('plateforme') || t.includes('circuit') || t.includes('service livraison');
+  return true;
+}
+
+function render() {
+  const q = search.value.toLowerCase().trim();
+  grid.innerHTML = '';
+  let count = 0;
+  prospects.forEach((p, i) => {
+    const matchSearch = !q || p.societe.toLowerCase().includes(q) ||
+      p.type.toLowerCase().includes(q) || p.note.toLowerCase().includes(q);
+    const matchCat = catMatch(p, currentCat);
+    if (!(matchSearch && matchCat)) return;
+    count++;
+
+    const card = document.createElement('div');
+    card.className = `prospect tier-${p.tier}`;
+    const isSelected = selected.has(i);
+    card.innerHTML = `
+      <div class="p-head">
+        <div>
+          <div class="p-name">${p.societe}</div>
+          <div class="p-type">${p.type}</div>
+        </div>
+        <span class="p-tier tier-${p.tier}">Tier ${p.tier}</span>
+      </div>
+      <div class="p-pitch">${p.note}</div>
+      <div class="p-meta">
+        ${p.email ? `<div class="p-row"><span class="p-label">Email</span><span class="p-value"><a href="mailto:${p.email}">${p.email}</a></span></div>` : ''}
+        ${p.site ? `<div class="p-row"><span class="p-label">Site</span><span class="p-value"><a href="https://${p.site}" target="_blank">${p.site} ↗</a></span></div>` : ''}
+      </div>
+      <div class="p-actions">
+        <button class="btn-sm select ${isSelected?'selected':''}" data-idx="${i}">${isSelected?'✓ Sélectionné':'+ Sélectionner'}</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  emptyState.style.display = count === 0 ? 'block' : 'none';
+  document.getElementById('stat-visible').textContent = count;
+  document.getElementById('stat-selected').textContent = selected.size;
+}
+
+function exportCSV() {
+  if (selected.size === 0) {
+    showToast('Sélectionne au moins un distributeur');
+    return;
+  }
+  const chosen = Array.from(selected).sort((a,b)=>a-b).map(i => prospects[i]);
+  const headers = ['EMAIL','PRENOM','SOCIETE','TYPE','SITE','TIER','NOTE'];
+  const rows = chosen.map(p => [
+    p.email, p.prenom, p.societe, p.type, p.site, p.tier, p.note
+  ].map(v => `"${(v||'').replace(/"/g,'""')}"`).join(','));
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `distributeurs-cubcakes-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast(`CSV exporté · ${selected.size} distributeurs`);
+}
+
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2200);
+}
+
+document.querySelectorAll('.copy').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = document.getElementById(btn.dataset.target);
+    const text = target.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = btn.textContent;
+      btn.textContent = '✓ Copié';
+      btn.classList.add('active');
+      showToast('Copié');
+      setTimeout(() => { btn.textContent = orig; btn.classList.remove('active'); }, 1800);
+    });
+  });
+});
+
+catTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    catTabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentCat = tab.dataset.cat;
+    render();
+  });
+});
+
+search.addEventListener('input', render);
+
+grid.addEventListener('click', e => {
+  const btn = e.target.closest('.btn-sm.select');
+  if (!btn) return;
+  const idx = parseInt(btn.dataset.idx);
+  if (selected.has(idx)) selected.delete(idx);
+  else selected.add(idx);
+  render();
+});
+
+selectAllBtn.addEventListener('click', () => {
+  const q = search.value.toLowerCase().trim();
+  const visible = prospects.map((p,i) => ({p, i}))
+    .filter(({p}) => {
+      const matchSearch = !q || p.societe.toLowerCase().includes(q) ||
+        p.type.toLowerCase().includes(q) || p.note.toLowerCase().includes(q);
+      return matchSearch && catMatch(p, currentCat);
+    });
+  const allSelected = visible.every(({i}) => selected.has(i));
+  visible.forEach(({i}) => allSelected ? selected.delete(i) : selected.add(i));
+  render();
+});
+
+exportBtn.addEventListener('click', exportCSV);
+
+const navLinks = document.querySelectorAll('.nav a');
+const sections = document.querySelectorAll('section');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => {
+    if (pageYOffset >= s.offsetTop - 120) cur = s.id;
+  });
+  navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+});
+
+document.getElementById('c-all').textContent = prospects.length;
+document.getElementById('c-grossiste').textContent = prospects.filter(p => catMatch(p,'grossiste')).length;
+document.getElementById('c-agent').textContent = prospects.filter(p => catMatch(p,'agent')).length;
+document.getElementById('c-plateforme').textContent = prospects.filter(p => catMatch(p,'plateforme')).length;
+document.getElementById('stat-tierA').textContent = prospects.filter(p => p.tier === 'A').length;
+document.getElementById('stat-tierB').textContent = prospects.filter(p => p.tier === 'B').length;
+
+render();
+</script>
+
+</body>
+</html>
